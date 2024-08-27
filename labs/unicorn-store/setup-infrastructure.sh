@@ -22,4 +22,3 @@ cdk deploy UnicornStoreInfrastructure --require-approval never --outputs-file ta
 aws lambda invoke --function-name $(cat target/output.json | jq -r '.UnicornStoreInfrastructure.DbSetupArn') /dev/stdout | cat;
 
 cd ~/environment/aws-lambda-java-workshop/labs/unicorn-store
-./setup-vpc-peering.sh

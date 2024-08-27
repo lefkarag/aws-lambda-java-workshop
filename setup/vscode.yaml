@@ -577,3 +577,14 @@ Outputs:
       Fn::GetAtt:
         - javaonawsworkshopPasswordResource45B4A7F3
         - RandomString
+  IdeVpcId:
+    Description: Workshop VPC ID
+    Value: !Ref javaonawsworkshopIdeVPC0F0320A4
+    Export:
+      Name: VSCodeVpcId
+  IdeRouteTableId:
+    Description: Workshop Route Table ID
+    Value: !Ref javaonawsworkshopIdeVPCPublicSubnet1RouteTable28BB44D2
+    Export:
+      Name: VSCodeRouteTableId
+

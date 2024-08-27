@@ -98,8 +98,14 @@ public class InfrastructureStack extends Stack {
                 .vpcName("UnicornVPC")
                 .natGateways(0)
                 .build();
-        new CfnOutput(this, "UnicornStoreVpcId", CfnOutputProps.builder().value(vpc.getVpcId()).build());
-        return vpc;
+         vpc.applyRemovalPolicy(RemovalPolicy.DESTROY);
+         
+         new CfnOutput(this, "UnicornStoreVpcId", CfnOutputProps.builder().value(vpc.getVpcId()).exportName("UnicornStoreVpcId").build());
+         if (vpc.getIsolatedSubnets().size() > 1) {
+        	 new CfnOutput(this, "UnicornStoreIsolatedSubnet1RouteTableId", CfnOutputProps.builder().value(vpc.getIsolatedSubnets().get(0).getRouteTable().getRouteTableId()).exportName("UnicornStoreIsolatedSubnet1RouteTableId").build());
+        	 new CfnOutput(this, "UnicornStoreIsolatedSubnet2RouteTableId", CfnOutputProps.builder().value(vpc.getIsolatedSubnets().get(1).getRouteTable().getRouteTableId()).exportName("UnicornStoreIsolatedSubnet2RouteTableId").build());
+         }
+         return vpc;
     }
 
     public EventBus getEventBridge() {
