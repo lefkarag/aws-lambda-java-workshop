@@ -1,11 +1,19 @@
 package com.unicorn.core;
 
-import com.unicorn.constructs.DatabaseSetupConstruct;
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.ec2.*;
-import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.events.EventBus;
-import software.amazon.awscdk.services.rds.*;
+import software.amazon.awscdk.services.rds.AuroraPostgresClusterEngineProps;
+import software.amazon.awscdk.services.rds.ServerlessV2ClusterInstanceProps;
+import software.amazon.awscdk.services.rds.AuroraPostgresEngineVersion;
+import software.amazon.awscdk.services.rds.Credentials;
+import software.amazon.awscdk.services.rds.ClusterInstance;
+import software.amazon.awscdk.services.rds.DatabaseCluster;
+import software.amazon.awscdk.services.rds.DatabaseClusterEngine;
+import software.amazon.awscdk.services.rds.DatabaseSecret;
+import software.amazon.awscdk.services.ssm.ParameterTier;
+import software.amazon.awscdk.services.ssm.StringParameter;
+import software.amazon.awscdk.services.secretsmanager.Secret;
 import software.constructs.Construct;
 
 import java.util.List;
@@ -13,31 +21,48 @@ import java.util.List;
 public class InfrastructureStack extends Stack {
 
     private final DatabaseSecret databaseSecret;
-    private final DatabaseInstance database;
+    private final DatabaseCluster database;
     private final EventBus eventBridge;
     private final IVpc vpc;
     private final ISecurityGroup applicationSecurityGroup;
-
+    private final StringParameter paramDBConnectionString;
+    private final Secret secretPassword;
 
     public InfrastructureStack(final Construct scope, final String id, final StackProps props) {
-        super(scope, id, props);
+        super(scope, id, StackProps.builder()
+                .env(Environment.builder()
+                        .account(System.getenv("ACCOUNT_ID"))
+                        .region(System.getenv("AWS_REGION"))
+                        .build())
+                .build());
 
-        vpc = createUnicornVpc();
+        vpc = findVpc();
         databaseSecret = createDatabaseSecret();
-        database = createRDSPostgresInstance(vpc, databaseSecret);
+        database = createDatabase(vpc, databaseSecret);
         eventBridge = createEventBus();
         applicationSecurityGroup = new SecurityGroup(this, "ApplicationSecurityGroup",
                 SecurityGroupProps
                         .builder()
-                        .securityGroupName("applicationSG")
+                        .securityGroupName("unicornstore-application-sg")
                         .vpc(vpc)
                         .allowAllOutbound(true)
                         .build());
-        createEventBridgeVpcEndpoint();
-        createDynamoDBVpcEndpoint();
-        new DatabaseSetupConstruct(this, "UnicornDatabaseConstruct");
+
+        paramDBConnectionString = createParamDBConnectionString();
+        secretPassword = createSecretPassword();
+
+        // Execute Database setup
+        var databaseSetup = new DatabaseSetup(this, "UnicornDatabaseConstruct", this);
+        databaseSetup.getNode().addDependency(getDatabase());
     }
 
+    private IVpc findVpc() {
+        var vpc = Vpc.fromLookup(this, "ImportedVpcId", VpcLookupOptions.builder()
+                .vpcId(System.getenv("VPC_ID"))
+                .build());
+
+        return vpc;
+    }
 
     private EventBus createEventBus() {
         return EventBus.Builder.create(this, "UnicornEventBus")
@@ -47,7 +72,7 @@ public class InfrastructureStack extends Stack {
 
     private SecurityGroup createDatabaseSecurityGroup(IVpc vpc) {
         var databaseSecurityGroup = SecurityGroup.Builder.create(this, "DatabaseSG")
-                .securityGroupName("DatabaseSG")
+                .securityGroupName("unicornstore-db-sg")
                 .allowAllOutbound(false)
                 .vpc(vpc)
                 .build();
@@ -57,33 +82,35 @@ public class InfrastructureStack extends Stack {
                 Port.tcp(5432),
                 "Allow Database Traffic from local network");
 
-        databaseSecurityGroup.addIngressRule(
-                Peer.ipv4("192.168.0.0/16"),
-                Port.tcp(5432),
-                "Allow Database Traffic from IDE network");
-
         return databaseSecurityGroup;
     }
 
-    private DatabaseInstance createRDSPostgresInstance(IVpc vpc, DatabaseSecret databaseSecret) {
-
+    private DatabaseCluster createDatabase(IVpc vpc, DatabaseSecret databaseSecret) {
         var databaseSecurityGroup = createDatabaseSecurityGroup(vpc);
-        var engine = DatabaseInstanceEngine.postgres(PostgresInstanceEngineProps.builder().version(PostgresEngineVersion.VER_16).build());
 
-        return DatabaseInstance.Builder.create(this, "UnicornInstance")
-                .engine(engine)
+        var dbCluster = DatabaseCluster.Builder.create(this, "UnicornStoreDatabase")
+                .engine(DatabaseClusterEngine.auroraPostgres(
+                        AuroraPostgresClusterEngineProps.builder().version(AuroraPostgresEngineVersion.VER_16_4).build()))
+                .serverlessV2MinCapacity(0.5)
+                .serverlessV2MaxCapacity(4)
+                .writer(ClusterInstance.serverlessV2("UnicornStoreDatabaseWriter", ServerlessV2ClusterInstanceProps.builder()
+                        .instanceIdentifier("unicornstore-db-writer")
+                        .autoMinorVersionUpgrade(true)
+                        .build()))
+                .enableDataApi(true)
+                .defaultDatabaseName("unicorns")
+                .clusterIdentifier("unicornstore-db-cluster")
+                .instanceIdentifierBase("unicornstore-db-instance")
                 .vpc(vpc)
-                .allowMajorVersionUpgrade(true)
-                .backupRetention(Duration.days(0))
-                .databaseName("unicorns")
-                .instanceIdentifier("UnicornInstance")
-                .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MEDIUM))
                 .vpcSubnets(SubnetSelection.builder()
-                        .subnetType(SubnetType.PRIVATE_ISOLATED)
+                        .subnetType(SubnetType.PRIVATE_WITH_EGRESS)
                         .build())
                 .securityGroups(List.of(databaseSecurityGroup))
                 .credentials(Credentials.fromSecret(databaseSecret))
+                .removalPolicy(RemovalPolicy.DESTROY)
                 .build();
+
+        return dbCluster;
     }
 
     private DatabaseSecret createDatabaseSecret() {
@@ -93,13 +120,35 @@ public class InfrastructureStack extends Stack {
                 .username("postgres").build();
     }
 
-    private IVpc createUnicornVpc() {
-         IVpc vpc = Vpc.Builder.create(this, "UnicornVpc")
-                .vpcName("UnicornVPC")
-                .natGateways(0)
+    private Secret createSecretPassword() {
+        // Separate password value for services which cannot get specific field from Secret json
+        return Secret.Builder.create(this, "dbSecretPassword")
+                .secretName("unicornstore-db-password-secret")
+                .secretStringValue(SecretValue.secretsManager(databaseSecret.getSecretName(),
+                        SecretsManagerSecretOptions.builder().jsonField("password").build()))
                 .build();
-        new CfnOutput(this, "UnicornStoreVpcId", CfnOutputProps.builder().value(vpc.getVpcId()).build());
-        return vpc;
+    }
+
+    public Secret getSecretPassword() {
+        return secretPassword;
+    }
+
+    private StringParameter createParamDBConnectionString() {
+        return StringParameter.Builder.create(this, "SsmParameterDBConnectionString")
+                .allowedPattern(".*")
+                .description("Database Connection String")
+                .parameterName("unicornstore-db-connection-string")
+                .stringValue(getDatabaseJDBCConnectionString())
+                .tier(ParameterTier.STANDARD)
+                .build();
+    }
+
+    public String getDatabaseJDBCConnectionString(){
+        return "jdbc:postgresql://" + database.getClusterEndpoint().getHostname() + ":5432/unicorns";
+    }
+
+    public StringParameter getParamDBConnectionString() {
+        return paramDBConnectionString;
     }
 
     public EventBus getEventBridge() {
@@ -118,22 +167,11 @@ public class InfrastructureStack extends Stack {
         return databaseSecret.secretValueFromJson("password").toString();
     }
 
-    public String getDatabaseJDBCConnectionString(){
-        return "jdbc:postgresql://" + database.getDbInstanceEndpointAddress() + ":5432/unicorns";
+    public DatabaseSecret getDatabaseSecret(){
+        return databaseSecret;
     }
 
-    private IInterfaceVpcEndpoint createEventBridgeVpcEndpoint() {
-        return InterfaceVpcEndpoint.Builder.create(this, "EventBridgeEndpoint")
-                .service(InterfaceVpcEndpointAwsService.EVENTBRIDGE)
-                .vpc(this.getVpc())
-                .build();
+    public DatabaseCluster getDatabase() {
+        return database;
     }
-
-    private IGatewayVpcEndpoint createDynamoDBVpcEndpoint() {
-        return GatewayVpcEndpoint.Builder.create(this, "DynamoDBVpcEndpoint")
-                .service(GatewayVpcEndpointAwsService.DYNAMODB)
-                .vpc(this.getVpc())
-                .build();
-    }
-
 }

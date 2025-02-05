@@ -1,6 +1,5 @@
 #bin/sh
 
-## go to tmp directory
 cd /tmp
 
 # temporarily disable the libuv use of io_uring https://github.com/amazonlinux/amazon-linux-2023/issues/840
@@ -69,12 +68,11 @@ aws configure set default.region ${AWS_REGION}
 aws configure get default.region
 test -n "$AWS_REGION" && echo AWS_REGION is "$AWS_REGION" || echo AWS_REGION is not set
 
-## Pre-Download Maven dependencies for Unicorn Store
+## Build the unicorn application
 cd ~/environment/aws-lambda-java-workshop/labs/unicorn-store
-./mvnw dependency:go-offline -f infrastructure/db-setup/pom.xml
-./mvnw dependency:go-offline -f software/unicorn-store-spring/pom.xml
-./mvnw dependency:go-offline -f software/alternatives/unicorn-store-micronaut/pom.xml
-./mvnw dependency:go-offline -f software/alternatives/unicorn-store-quarkus/pom.xml
+./mvnw clean package -f software/unicorn-store-spring/pom.xml
+./mvnw clean package -f software/alternatives/unicorn-store-micronaut/pom.xml
+./mvnw clean package -f software/alternatives/unicorn-store-quarkus/pom.xml
 
 ##  Download & install Session Manager plugin
 curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" -o "session-manager-plugin.rpm"

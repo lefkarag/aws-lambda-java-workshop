@@ -1,7 +1,11 @@
-package com.unicorn;
+package com.unicorn.core;
 
 import com.unicorn.core.InfrastructureStack;
-import software.amazon.awscdk.*;
+import software.amazon.awscdk.CfnOutput;
+import software.amazon.awscdk.CfnOutputProps;
+import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.RestApi;
 import software.amazon.awscdk.services.lambda.Alias;
@@ -13,18 +17,13 @@ import software.constructs.Construct;
 import java.util.List;
 import java.util.Map;
 
-public class UnicornStoreStack extends Stack {
+public class UnicornStoreSpring extends Construct {
 
     private final InfrastructureStack infrastructureStack;
 
-    public UnicornStoreStack(final Construct scope, final String id, final StackProps props,
+    public UnicornStoreSpring(final Construct scope, final String id,
                              final InfrastructureStack infrastructureStack) {
-        super(scope, id, StackProps.builder()
-                .env(Environment.builder()
-                        .account(System.getenv("ACCOUNT_ID"))
-                        .region(System.getenv("AWS_REGION"))
-                        .build())
-                .build());
+        super(scope, id);
 
         //Get previously created infrastructure stack
         this.infrastructureStack = infrastructureStack;

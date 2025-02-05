@@ -41,6 +41,6 @@ build/
 
 ### Other
 
-labs/unicorn-store/infrastructure/cdk/output*
+infrastructure/cdk/output*
 dependency-reduced-pom.xml
 
