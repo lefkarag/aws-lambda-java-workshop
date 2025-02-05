@@ -1,5 +1,10 @@
 package com.unicorn.core;
 
+import com.unicorn.UnicornStoreStack;
+import com.unicorn.alternatives.UnicornAuditService;
+import com.unicorn.alternatives.UnicornStoreMicronaut;
+import com.unicorn.alternatives.UnicornStoreQuarkus;
+import com.unicorn.alternatives.UnicornStoreSpringGraalVM;
 import com.unicorn.constructs.VSCodeIde;
 import com.unicorn.constructs.WorkshopVpc;
 import software.amazon.awscdk.*;
@@ -48,9 +53,7 @@ public class InfrastructureStack extends Stack {
                 "amazonwebservices.amazon-q-vscode",
                 "vscjava.vscode-java-pack"
         ));
-        var ide = new VSCodeIde(this, "UnicornStoreIde", ideProps);
-        var ideRole = ideProps.getRole();
-        var ideInternalSecurityGroup = ide.getIdeInternalSecurityGroup();
+        new VSCodeIde(this, "UnicornStoreIde", ideProps);
 
         // Create Core infrastructure
         var infrastructureCore = new InfrastructureCore(this, "InfrastructureCore", vpc);
@@ -58,6 +61,13 @@ public class InfrastructureStack extends Stack {
         // Execute Database setup
         var databaseSetup = new DatabaseSetup(this, "UnicornDatabaseConstruct", infrastructureCore);
         databaseSetup.getNode().addDependency(infrastructureCore.getDatabase());
+
+        // Create Lambda functions
+        new UnicornStoreStack(this, "UnicornStoreSpringApp", StackProps.builder().build(), infrastructureCore);
+        new UnicornStoreMicronaut(this, "UnicornStoreMicronautApp", StackProps.builder().build(), infrastructureCore);
+        new UnicornStoreSpringGraalVM(this, "UnicornStoreSpringGraalVMApp", StackProps.builder().build(), infrastructureCore);
+        new UnicornStoreQuarkus(this, "UnicornStoreQuarkusApp", StackProps.builder().build(), infrastructureCore);
+        new UnicornAuditService(this, "UnicornAuditServiceApp", StackProps.builder().build(), infrastructureCore);
 
         // Create Workshop CodeBuild
 //        var codeBuildProps = new CodeBuildResourceProps();

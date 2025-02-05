@@ -1,6 +1,6 @@
 package com.unicorn.alternatives;
 
-import com.unicorn.core.InfrastructureStack;
+import com.unicorn.core.InfrastructureCore;
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.RestApi;
@@ -15,15 +15,15 @@ import java.util.List;
 
 public class UnicornStoreQuarkus extends Stack {
 
-    private final InfrastructureStack infrastructureStack;
+    private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreQuarkus(final Construct scope, final String id, final StackProps props, final InfrastructureStack infrastructureStack) {
+    public UnicornStoreQuarkus(final Construct scope, final String id, final StackProps props, final InfrastructureCore infrastructureCore) {
         super(scope, id, props);
-        this.infrastructureStack = infrastructureStack;
+        this.infrastructureCore = infrastructureCore;
 
         //Quarkus app
         var unicornStoreQuarkus = createUnicornLambdaFunction();
-        infrastructureStack.getEventBridge().grantPutEventsTo(unicornStoreQuarkus);
+        infrastructureCore.getEventBridge().grantPutEventsTo(unicornStoreQuarkus);
 
         var restApi = setupRestApi(unicornStoreQuarkus);
 
@@ -47,12 +47,12 @@ public class UnicornStoreQuarkus extends Stack {
                 .timeout(Duration.seconds(29))
                 .code(Code.fromAsset("../../software/alternatives/unicorn-store-quarkus/target/function.zip"))
                 .handler("io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest")
-                .vpc(infrastructureStack.getVpc())
-                .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
+                .vpc(infrastructureCore.getVpc())
+                .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
                 .snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS)
                 .environment(new HashMap<>() {{
-                    put("QUARKUS_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString());
-                    put("QUARKUS_DATASOURCE_JDBC_URL", infrastructureStack.getDatabaseJDBCConnectionString());
+                    put("QUARKUS_DATASOURCE_PASSWORD", infrastructureCore.getDatabaseSecretString());
+                    put("QUARKUS_DATASOURCE_JDBC_URL", infrastructureCore.getDatabaseConnectionString());
                     put("QUARKUS_DATASOURCE_JDBC_INITIAL_SIZE", "1");
                     put("QUARKUS_DATASOURCE_JDBC_MIN_SIZE", "0");
                     put("QUARKUS_DATASOURCE_JDBC_MAX_SIZE", "1");

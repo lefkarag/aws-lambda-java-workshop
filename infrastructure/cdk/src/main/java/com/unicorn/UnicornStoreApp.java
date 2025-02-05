@@ -23,22 +23,6 @@ public class UnicornStoreApp {
         var infrastructureStack = new InfrastructureStack(app, "UnicornStoreInfrastructure", StackProps.builder()
                 .build());
 
-        var unicornStoreSpring = new UnicornStoreStack(app, "UnicornStoreSpringApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-        var unicornStoreMicronaut = new UnicornStoreMicronaut(app, "UnicornStoreMicronautApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-        var unicornStoreSpringGraalVM = new UnicornStoreSpringGraalVM(app, "UnicornStoreSpringGraalVMApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-        var unicornStoreQuarkus = new UnicornStoreQuarkus(app, "UnicornStoreQuarkusApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-        var unicornAuditService = new UnicornAuditService(app, "UnicornAuditServiceApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-
         //Add CDK-NAG checks: https://github.com/cdklabs/cdk-nag
         //Add suppression to exclude certain findings that are not needed for Workshop environment
         Aspects.of(app).add(new AwsSolutionsChecks());
@@ -63,11 +47,6 @@ public class UnicornStoreApp {
         );
 
         NagSuppressions.addStackSuppressions(infrastructureStack, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreSpring, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreMicronaut, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreSpringGraalVM, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreQuarkus, suppression);
-        NagSuppressions.addStackSuppressions(unicornAuditService, suppression);
 
         app.synth();
     }

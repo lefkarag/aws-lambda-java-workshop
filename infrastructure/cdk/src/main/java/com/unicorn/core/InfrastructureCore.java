@@ -131,12 +131,12 @@ public class InfrastructureCore extends Construct {
                 .allowedPattern(".*")
                 .description("Database Connection String")
                 .parameterName("unicornstore-db-connection-string")
-                .stringValue(getDBConnectionString())
+                .stringValue(getDatabaseConnectionString())
                 .tier(ParameterTier.STANDARD)
                 .build();
     }
 
-    public String getDBConnectionString(){
+    public String getDatabaseConnectionString(){
         return "jdbc:postgresql://" + database.getClusterEndpoint().getHostname() + ":5432/unicorns";
     }
 
@@ -156,11 +156,11 @@ public class InfrastructureCore extends Construct {
         return applicationSecurityGroup;
     }
 
-    public String getDatabaseSecretString(){
+    public String getDatabaseSecretString() {
         return databaseSecret.secretValueFromJson("password").toString();
     }
 
-    public DatabaseSecret getDatabaseSecret(){
+    public DatabaseSecret getDatabaseSecret() {
         return databaseSecret;
     }
 

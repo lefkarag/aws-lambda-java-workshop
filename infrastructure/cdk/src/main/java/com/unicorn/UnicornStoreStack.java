@@ -1,6 +1,6 @@
 package com.unicorn;
 
-import com.unicorn.core.InfrastructureStack;
+import com.unicorn.core.InfrastructureCore;
 import software.amazon.awscdk.CfnOutput;
 import software.amazon.awscdk.CfnOutputProps;
 import software.amazon.awscdk.Duration;
@@ -19,15 +19,15 @@ import java.util.Map;
 
 public class UnicornStoreStack extends Stack {
 
-    private final InfrastructureStack infrastructureStack;
+    private final InfrastructureCore infrastructureCore;
 
     public UnicornStoreStack(final Construct scope, final String id, final StackProps props,
-                             final InfrastructureStack infrastructureStack) {
+                             final InfrastructureCore infrastructureCore) {
         super(scope, id, props);
 
         //Get previously created infrastructure stack
-        this.infrastructureStack = infrastructureStack;
-        var eventBridge = infrastructureStack.getEventBridge();
+        this.infrastructureCore = infrastructureCore;
+        var eventBridge = infrastructureCore.getEventBridge();
 
         //Create Spring Lambda function
         var unicornStoreSpringLambda = createUnicornLambdaFunction();
@@ -63,12 +63,12 @@ public class UnicornStoreStack extends Stack {
                 .timeout(Duration.seconds(29))
                 .code(Code.fromAsset("../../software/unicorn-store-spring/target/store-spring-1.0.0.jar"))
                 .handler("com.amazonaws.serverless.proxy.spring.SpringDelegatingLambdaContainerHandler")
-                .vpc(infrastructureStack.getVpc())
-                .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
+                .vpc(infrastructureCore.getVpc())
+                .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
                 .environment(Map.of(
                     "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                    "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
-                    "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
+                    "SPRING_DATASOURCE_PASSWORD", infrastructureCore.getDatabaseSecretString(),
+                    "SPRING_DATASOURCE_URL", infrastructureCore.getDatabaseConnectionString(),
                     "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1",
                     "AWS_SERVERLESS_JAVA_CONTAINER_INIT_GRACE_TIME", "500"
                 ))

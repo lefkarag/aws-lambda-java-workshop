@@ -3,7 +3,7 @@ package com.unicorn.alternatives;
 import java.util.HashMap;
 import java.util.List;
 
-import com.unicorn.core.InfrastructureStack;
+import com.unicorn.core.InfrastructureCore;
 
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
@@ -14,15 +14,15 @@ import software.constructs.Construct;
 
 public class UnicornStoreMicronaut extends Stack {
 
-    private final InfrastructureStack infrastructureStack;
+    private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreMicronaut(final Construct scope, final String id, final StackProps props, final InfrastructureStack infrastructureStack) {
+    public UnicornStoreMicronaut(final Construct scope, final String id, final StackProps props, final InfrastructureCore infrastructureCore) {
         super(scope, id, props);
-        this.infrastructureStack = infrastructureStack;
+        this.infrastructureCore = infrastructureCore;
 
         //Micronaut app
         var unicornStoreMicronaut = createUnicornLambdaFunction();
-        infrastructureStack.getEventBridge().grantPutEventsTo(unicornStoreMicronaut);
+        infrastructureCore.getEventBridge().grantPutEventsTo(unicornStoreMicronaut);
 
         var restApi = setupRestApi(unicornStoreMicronaut);
 
@@ -46,12 +46,12 @@ public class UnicornStoreMicronaut extends Stack {
                 .timeout(Duration.seconds(29))
                 .code(Code.fromAsset("../../software/alternatives/unicorn-store-micronaut/target/store-micronaut-2.0.0.jar"))
                 .handler("io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction")
-                .vpc(infrastructureStack.getVpc())
+                .vpc(infrastructureCore.getVpc())
                 .snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS)
-                .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
+                .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
                 .environment(new HashMap<>() {{
-                    put("DATASOURCES_DEFAULT_PASSWORD", infrastructureStack.getDatabaseSecretString());
-                    put("DATASOURCES_DEFAULT_URL", infrastructureStack.getDatabaseJDBCConnectionString());
+                    put("DATASOURCES_DEFAULT_PASSWORD", infrastructureCore.getDatabaseSecretString());
+                    put("DATASOURCES_DEFAULT_URL", infrastructureCore.getDatabaseConnectionString());
                     put("DATASOURCES_DEFAULT_maxPoolSize", "1");
                 }})
                 .build();

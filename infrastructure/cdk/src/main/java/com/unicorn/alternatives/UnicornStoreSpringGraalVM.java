@@ -1,6 +1,6 @@
 package com.unicorn.alternatives;
 
-import com.unicorn.core.InfrastructureStack;
+import com.unicorn.core.InfrastructureCore;
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.RestApi;
@@ -14,14 +14,14 @@ import java.util.Map;
 
 public class UnicornStoreSpringGraalVM extends Stack {
 
-    private final InfrastructureStack infrastructureStack;
+    private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreSpringGraalVM(final Construct scope, final String id, final StackProps props, final InfrastructureStack infrastructureStack) {
+    public UnicornStoreSpringGraalVM(final Construct scope, final String id, final StackProps props, final InfrastructureCore infrastructureCore) {
         super(scope, id, props);
-        this.infrastructureStack = infrastructureStack;
+        this.infrastructureCore = infrastructureCore;
 
         var unicornStoreSpringGraalVM = createUnicornLambdaFunction();
-        infrastructureStack.getEventBridge().grantPutEventsTo(unicornStoreSpringGraalVM);
+        infrastructureCore.getEventBridge().grantPutEventsTo(unicornStoreSpringGraalVM);
 
         var restApi = setupRestApi(unicornStoreSpringGraalVM);
 
@@ -50,12 +50,12 @@ public class UnicornStoreSpringGraalVM extends Stack {
                 .timeout(Duration.seconds(29))
                 .code(Code.fromAsset("../../software/alternatives/unicorn-store-spring-graalvm/lambda-spring-graalvm.zip"))
                 .handler("com.amazonaws.serverless.proxy.spring.SpringDelegatingLambdaContainerHandler")
-                .vpc(infrastructureStack.getVpc())
-                .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
+                .vpc(infrastructureCore.getVpc())
+                .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
                 .environment(Map.of(
                     "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                    "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
-                    "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
+                    "SPRING_DATASOURCE_PASSWORD", infrastructureCore.getDatabaseSecretString(),
+                    "SPRING_DATASOURCE_URL", infrastructureCore.getDatabaseConnectionString(),
                     "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1")
                 )
                 .build();
