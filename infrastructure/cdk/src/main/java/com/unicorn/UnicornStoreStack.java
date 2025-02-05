@@ -1,86 +1,84 @@
 package com.unicorn;
 
+import com.unicorn.UnicornStoreStack;
+import com.unicorn.alternatives.UnicornAuditService;
+import com.unicorn.alternatives.UnicornStoreMicronaut;
+import com.unicorn.alternatives.UnicornStoreQuarkus;
+import com.unicorn.alternatives.UnicornStoreSpringGraalVM;
+import com.unicorn.constructs.VSCodeIde;
+import com.unicorn.constructs.WorkshopVpc;
+import com.unicorn.core.DatabaseSetup;
 import com.unicorn.core.InfrastructureCore;
-import software.amazon.awscdk.CfnOutput;
-import software.amazon.awscdk.CfnOutputProps;
-import software.amazon.awscdk.Duration;
-import software.amazon.awscdk.Stack;
-import software.amazon.awscdk.StackProps;
-import software.amazon.awscdk.services.apigateway.LambdaRestApi;
-import software.amazon.awscdk.services.apigateway.RestApi;
-import software.amazon.awscdk.services.lambda.Alias;
-import software.amazon.awscdk.services.lambda.Code;
-import software.amazon.awscdk.services.lambda.Function;
-import software.amazon.awscdk.services.lambda.Runtime;
+import com.unicorn.core.UnicornStoreSpring;
+import software.amazon.awscdk.*;
+import software.amazon.awscdk.services.ec2.*;
+import software.amazon.awscdk.services.ec2.InstanceType;
 import software.constructs.Construct;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
 
 public class UnicornStoreStack extends Stack {
 
-    private final InfrastructureCore infrastructureCore;
+    private final static String BOOTSTRAP_SCRIPT = """
+        date
 
-    public UnicornStoreStack(final Construct scope, final String id, final StackProps props,
-                             final InfrastructureCore infrastructureCore) {
-        super(scope, id, props);
+        echo '=== Clone Git repository ==='
+        sudo -H -u ec2-user bash -c "git clone https://github.com/aws-samples/aws-lambda-java-workshop ~/aws-lambda-java-workshop/"
+        # sudo -H -u ec2-user bash -c "cd ~/aws-lambda-java-workshop && git checkout refactoring"
 
-        //Get previously created infrastructure stack
-        this.infrastructureCore = infrastructureCore;
-        var eventBridge = infrastructureCore.getEventBridge();
+        echo '=== Setup IDE ==='
+        sudo -H -i -u ec2-user bash -c "~/aws-lambda-java-workshop/infrastructure/scripts/setup/ide.sh"
 
-        //Create Spring Lambda function
-        var unicornStoreSpringLambda = createUnicornLambdaFunction();
+        echo '=== Additional Setup ==='
+        sudo -H -i -u ec2-user bash -c "~/java-on-aws/infrastructure/scripts/setup/app.sh"
+        sudo -H -i -u ec2-user bash -c "~/java-on-aws/infrastructure/scripts/setup/eks.sh"
+        """;
 
-        //Permission for Spring Boot Lambda Function
-        eventBridge.grantPutEventsTo(unicornStoreSpringLambda);
-
-        //Setup a Proxy-Rest API to access the Spring Lambda function
-        var restApi = setupRestApi(unicornStoreSpringLambda);
-
-        //Create output values for later reference
-        new CfnOutput(this, "unicorn-store-spring-function-arn", CfnOutputProps.builder()
-                .value(unicornStoreSpringLambda.getFunctionArn())
+    public UnicornStoreStack(final Construct scope, final String id, final StackProps props) {
+        super(scope, id, StackProps.builder()
+                .synthesizer(new DefaultStackSynthesizer(DefaultStackSynthesizerProps.builder()
+                        .generateBootstrapVersionRule(false)  // This disables the bootstrap version parameter
+                        .build()))
                 .build());
 
-        new CfnOutput(this, "ApiEndpointSpring", CfnOutputProps.builder()
-                .value(restApi.getUrl())
-                .build());
+        // Create VPC
+        var vpc = new WorkshopVpc(this, "UnicornStoreVpc", "unicornstore-vpc").getVpc();
+
+        // Create Workshop IDE
+        var ideProps = new VSCodeIde.VSCodeIdeProps();
+        ideProps.setBootstrapScript(BOOTSTRAP_SCRIPT);
+        ideProps.setVpc(vpc);
+        ideProps.setInstanceName("unicornstore-ide");
+        ideProps.setEnableAppSecurityGroup(true);
+        ideProps.setInstanceType(InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM));
+        ideProps.setExtensions(Arrays.asList(
+                "amazonwebservices.aws-toolkit-vscode",
+                "amazonwebservices.amazon-q-vscode",
+                "vscjava.vscode-java-pack"
+        ));
+        new VSCodeIde(this, "UnicornStoreIde", ideProps);
+
+        // Create Core infrastructure
+        var infrastructureCore = new InfrastructureCore(this, "InfrastructureCore", vpc);
+
+        // Execute Database setup
+        var databaseSetup = new DatabaseSetup(this, "UnicornDatabaseConstruct", infrastructureCore);
+        databaseSetup.getNode().addDependency(infrastructureCore.getDatabase());
+
+        // Create Lambda functions
+        new UnicornStoreSpring(this, "UnicornStoreSpringApp", infrastructureCore);
+//        new UnicornStoreMicronaut(this, "UnicornStoreMicronautApp", StackProps.builder().build(), infrastructureCore);
+//        new UnicornStoreSpringGraalVM(this, "UnicornStoreSpringGraalVMApp", StackProps.builder().build(), infrastructureCore);
+//        new UnicornStoreQuarkus(this, "UnicornStoreQuarkusApp", StackProps.builder().build(), infrastructureCore);
+//        new UnicornAuditService(this, "UnicornAuditServiceApp", StackProps.builder().build(), infrastructureCore);
+
+        // Create Workshop CodeBuild
+//        var codeBuildProps = new CodeBuildResourceProps();
+//        codeBuildProps.setProjectName("unicornstore-codebuild");
+//        codeBuildProps.setBuildspec(buildspec);
+//        codeBuildProps.setVpc(vpc);
+//        codeBuildProps.setAdditionalIamPolicies(Arrays.asList(
+//                ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess")));
+//        new CodeBuildResource(this, "UnicornStoreCodeBuild", codeBuildProps);
     }
-
-    private RestApi setupRestApi(Alias unicornStoreSpringLambdaAlias) {
-        return LambdaRestApi.Builder.create(this, "UnicornStoreSpringApi")
-                .restApiName("UnicornStoreSpringApi")
-                .handler(unicornStoreSpringLambdaAlias)
-                .build();
-    }
-
-    private Alias createUnicornLambdaFunction() {
-        var lambda = Function.Builder.create(this, "UnicornStoreSpringFunction")
-                .runtime(Runtime.JAVA_21)
-                .functionName("unicorn-store-spring")
-                .memorySize(512)
-                .timeout(Duration.seconds(29))
-                .code(Code.fromAsset("../../software/unicorn-store-spring/target/store-spring-1.0.0.jar"))
-                .handler("com.amazonaws.serverless.proxy.spring.SpringDelegatingLambdaContainerHandler")
-                .vpc(infrastructureCore.getVpc())
-                .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
-                .environment(Map.of(
-                    "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                    "SPRING_DATASOURCE_PASSWORD", infrastructureCore.getDatabaseSecretString(),
-                    "SPRING_DATASOURCE_URL", infrastructureCore.getDatabaseConnectionString(),
-                    "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1",
-                    "AWS_SERVERLESS_JAVA_CONTAINER_INIT_GRACE_TIME", "500"
-                ))
-                .build();
-
-        // Create an alias for the latest version
-        var alias = Alias.Builder.create(this, "UnicornStoreSpringFunctionAlias")
-                .aliasName("live")
-                .version(lambda.getLatestVersion())
-                .build();
-
-        return alias;
-    }
-
 }
