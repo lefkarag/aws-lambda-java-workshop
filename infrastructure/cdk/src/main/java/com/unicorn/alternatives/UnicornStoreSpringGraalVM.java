@@ -12,12 +12,12 @@ import software.constructs.Construct;
 import java.util.List;
 import java.util.Map;
 
-public class UnicornStoreSpringGraalVM extends Stack {
+public class UnicornStoreSpringGraalVM extends Construct {
 
     private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreSpringGraalVM(final Construct scope, final String id, final StackProps props, final InfrastructureCore infrastructureCore) {
-        super(scope, id, props);
+    public UnicornStoreSpringGraalVM(final Construct scope, final String id, final InfrastructureCore infrastructureCore) {
+        super(scope, id);
         this.infrastructureCore = infrastructureCore;
 
         var unicornStoreSpringGraalVM = createUnicornLambdaFunction();
@@ -48,15 +48,15 @@ public class UnicornStoreSpringGraalVM extends Stack {
                 .functionName("unicorn-store-spring-graalvm")
                 .memorySize(2048)
                 .timeout(Duration.seconds(29))
-                .code(Code.fromAsset("../../software/alternatives/unicorn-store-spring-graalvm/lambda-spring-graalvm.zip"))
+                .code(Code.fromAsset("../../labs/unicorn-store/software/alternatives/unicorn-store-spring-graalvm/lambda-spring-graalvm.zip"))
                 .handler("com.amazonaws.serverless.proxy.spring.SpringDelegatingLambdaContainerHandler")
                 .vpc(infrastructureCore.getVpc())
                 .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
                 .environment(Map.of(
-                    "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                    "SPRING_DATASOURCE_PASSWORD", infrastructureCore.getDatabaseSecretString(),
-                    "SPRING_DATASOURCE_URL", infrastructureCore.getDatabaseConnectionString(),
-                    "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1")
+                        "MAIN_CLASS", "com.unicorn.store.StoreApplication",
+                        "SPRING_DATASOURCE_PASSWORD", infrastructureCore.getDatabaseSecretString(),
+                        "SPRING_DATASOURCE_URL", infrastructureCore.getDatabaseConnectionString(),
+                        "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1")
                 )
                 .build();
     }

@@ -1,6 +1,5 @@
 package com.unicorn;
 
-import com.unicorn.UnicornStoreStack;
 import com.unicorn.alternatives.UnicornAuditService;
 import com.unicorn.alternatives.UnicornStoreMicronaut;
 import com.unicorn.alternatives.UnicornStoreQuarkus;
@@ -20,19 +19,19 @@ import java.util.Arrays;
 public class UnicornStoreStack extends Stack {
 
     private final static String BOOTSTRAP_SCRIPT = """
-        date
-
-        echo '=== Clone Git repository ==='
-        sudo -H -u ec2-user bash -c "git clone https://github.com/aws-samples/aws-lambda-java-workshop ~/aws-lambda-java-workshop/"
-        # sudo -H -u ec2-user bash -c "cd ~/aws-lambda-java-workshop && git checkout refactoring"
-
-        echo '=== Setup IDE ==='
-        sudo -H -i -u ec2-user bash -c "~/aws-lambda-java-workshop/infrastructure/scripts/setup/ide.sh"
-
-        echo '=== Additional Setup ==='
-        sudo -H -i -u ec2-user bash -c "~/java-on-aws/infrastructure/scripts/setup/app.sh"
-        sudo -H -i -u ec2-user bash -c "~/java-on-aws/infrastructure/scripts/setup/eks.sh"
-        """;
+            date
+            
+            echo '=== Clone Git repository ==='
+            sudo -H -u ec2-user bash -c "git clone https://github.com/aws-samples/aws-lambda-java-workshop ~/aws-lambda-java-workshop/"
+            # sudo -H -u ec2-user bash -c "cd ~/aws-lambda-java-workshop && git checkout refactoring"
+            
+            echo '=== Setup IDE ==='
+            sudo -H -i -u ec2-user bash -c "~/aws-lambda-java-workshop/infrastructure/scripts/setup/ide.sh"
+            
+            echo '=== Additional Setup ==='
+            sudo -H -i -u ec2-user bash -c "~/java-on-aws/infrastructure/scripts/setup/app.sh"
+            sudo -H -i -u ec2-user bash -c "~/java-on-aws/infrastructure/scripts/setup/eks.sh"
+            """;
 
     public UnicornStoreStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, StackProps.builder()
@@ -67,10 +66,10 @@ public class UnicornStoreStack extends Stack {
 
         // Create Lambda functions
         new UnicornStoreSpring(this, "UnicornStoreSpringApp", infrastructureCore);
-//        new UnicornStoreMicronaut(this, "UnicornStoreMicronautApp", StackProps.builder().build(), infrastructureCore);
-//        new UnicornStoreSpringGraalVM(this, "UnicornStoreSpringGraalVMApp", StackProps.builder().build(), infrastructureCore);
-//        new UnicornStoreQuarkus(this, "UnicornStoreQuarkusApp", StackProps.builder().build(), infrastructureCore);
-//        new UnicornAuditService(this, "UnicornAuditServiceApp", StackProps.builder().build(), infrastructureCore);
+        new UnicornStoreMicronaut(this, "UnicornStoreMicronautApp", infrastructureCore);
+        new UnicornStoreSpringGraalVM(this, "UnicornStoreSpringGraalVMApp", infrastructureCore);
+        new UnicornStoreQuarkus(this, "UnicornStoreQuarkusApp", infrastructureCore);
+        new UnicornAuditService(this, "UnicornAuditServiceApp", infrastructureCore);
 
         // Create Workshop CodeBuild
 //        var codeBuildProps = new CodeBuildResourceProps();

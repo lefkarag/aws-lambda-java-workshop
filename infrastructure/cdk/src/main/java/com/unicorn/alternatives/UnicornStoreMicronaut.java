@@ -12,12 +12,13 @@ import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.lambda.Runtime;
 import software.constructs.Construct;
 
-public class UnicornStoreMicronaut extends Stack {
+public class UnicornStoreMicronaut extends Construct {
 
     private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreMicronaut(final Construct scope, final String id, final StackProps props, final InfrastructureCore infrastructureCore) {
-        super(scope, id, props);
+    public UnicornStoreMicronaut(final Construct scope, final String id,
+                                 final InfrastructureCore infrastructureCore) {
+        super(scope, id);
         this.infrastructureCore = infrastructureCore;
 
         //Micronaut app
@@ -44,7 +45,7 @@ public class UnicornStoreMicronaut extends Stack {
                 .functionName("unicorn-store-micronaut")
                 .memorySize(2048)
                 .timeout(Duration.seconds(29))
-                .code(Code.fromAsset("../../software/alternatives/unicorn-store-micronaut/target/store-micronaut-2.0.0.jar"))
+                .code(Code.fromAsset("../../labs/unicorn-store/software/alternatives/unicorn-store-micronaut/target/store-micronaut-2.0.0.jar"))
                 .handler("io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction")
                 .vpc(infrastructureCore.getVpc())
                 .snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS)

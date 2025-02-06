@@ -12,13 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 
 
-
-public class UnicornStoreQuarkus extends Stack {
+public class UnicornStoreQuarkus extends Construct {
 
     private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreQuarkus(final Construct scope, final String id, final StackProps props, final InfrastructureCore infrastructureCore) {
-        super(scope, id, props);
+    public UnicornStoreQuarkus(final Construct scope, final String id, final InfrastructureCore infrastructureCore) {
+        super(scope, id);
         this.infrastructureCore = infrastructureCore;
 
         //Quarkus app
@@ -40,12 +39,12 @@ public class UnicornStoreQuarkus extends Stack {
     }
 
     private Version createUnicornLambdaFunction() {
-        var lambda =  Function.Builder.create(this, "UnicornStoreQuarkusFunction")
+        var lambda = Function.Builder.create(this, "UnicornStoreQuarkusFunction")
                 .runtime(Runtime.JAVA_21)
                 .functionName("unicorn-store-quarkus")
                 .memorySize(2048)
                 .timeout(Duration.seconds(29))
-                .code(Code.fromAsset("../../software/alternatives/unicorn-store-quarkus/target/function.zip"))
+                .code(Code.fromAsset("../../labs/unicorn-store/software/alternatives/unicorn-store-quarkus/target/function.zip"))
                 .handler("io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest")
                 .vpc(infrastructureCore.getVpc())
                 .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
