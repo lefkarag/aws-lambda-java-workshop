@@ -14,7 +14,7 @@ public class UnicornStoreApp {
     public static void main(final String[] args) {
         App app = new App();
 
-        var unicornStoreStack = new UnicornStoreStack(app, "UnicornStoreInfrastructure", StackProps.builder()
+        var unicornStoreStack = new UnicornStoreStack(app, "UnicornStoreStack", StackProps.builder()
                 .build());
 
         //Add CDK-NAG checks: https://github.com/cdklabs/cdk-nag

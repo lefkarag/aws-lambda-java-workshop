@@ -22,15 +22,14 @@ public class UnicornStoreStack extends Stack {
             date
             
             echo '=== Clone Git repository ==='
-            sudo -H -u ec2-user bash -c "git clone https://github.com/aws-samples/aws-lambda-java-workshop ~/aws-lambda-java-workshop/"
-            # sudo -H -u ec2-user bash -c "cd ~/aws-lambda-java-workshop && git checkout refactoring"
+            sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/aws-lambda-java-workshop/"
+            # sudo -H -u ec2-user bash -c "cd ~/aws-lambda-java-workshop && git checkout cdk-refactoring"
             
             echo '=== Setup IDE ==='
             sudo -H -i -u ec2-user bash -c "~/aws-lambda-java-workshop/infrastructure/scripts/setup/ide.sh"
             
             echo '=== Additional Setup ==='
-            sudo -H -i -u ec2-user bash -c "~/java-on-aws/infrastructure/scripts/setup/app.sh"
-            sudo -H -i -u ec2-user bash -c "~/java-on-aws/infrastructure/scripts/setup/eks.sh"
+            sudo -H -i -u ec2-user bash -c "~/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
             """;
 
     public UnicornStoreStack(final Construct scope, final String id, final StackProps props) {
@@ -70,14 +69,5 @@ public class UnicornStoreStack extends Stack {
         new UnicornStoreSpringGraalVM(this, "UnicornStoreSpringGraalVMApp", infrastructureCore);
         new UnicornStoreQuarkus(this, "UnicornStoreQuarkusApp", infrastructureCore);
         new UnicornAuditService(this, "UnicornAuditServiceApp", infrastructureCore);
-
-        // Create Workshop CodeBuild
-//        var codeBuildProps = new CodeBuildResourceProps();
-//        codeBuildProps.setProjectName("unicornstore-codebuild");
-//        codeBuildProps.setBuildspec(buildspec);
-//        codeBuildProps.setVpc(vpc);
-//        codeBuildProps.setAdditionalIamPolicies(Arrays.asList(
-//                ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess")));
-//        new CodeBuildResource(this, "UnicornStoreCodeBuild", codeBuildProps);
     }
 }

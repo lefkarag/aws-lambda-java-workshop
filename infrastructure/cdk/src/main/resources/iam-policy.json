@@ -2,34 +2,6 @@
 	"Version": "2012-10-17",
 	"Statement": [
 		{
-			"Sid": "AllowedServicesEKS",
-			"Action": [
-				"cloudwatch:*",
-				"codewhisperer:*",
-				"ecr:*",
-				"eks:*",
-				"iam:CreateOpenIDConnectProvider",
-				"iam:TagOpenIDConnectProvider",
-				"events:*",
-				"q:*",
-				"secretsmanager:*",
-				"ssm:*",
-				"sts:*"
-			],
-			"Resource": "*",
-			"Effect": "Allow"
-		},
-		{
-			"Sid": "PassRoleEKS",
-			"Action": [
-				"iam:PassRole"
-			],
-			"Resource": [
-				"arn:aws:iam::{{.AccountId}}:role/unicorn*"
-			],
-			"Effect": "Allow"
-		},
-		{
 			"Sid": "IamLimitedAccessForUnicorns",
 			"Effect": "Allow",
 			"Action": [
@@ -59,18 +31,28 @@
 			"Effect": "Allow",
 			"Action": [
 				"cloudformation:*",
+				"codecommit:*",
+				"codebuild:*",
+				"codedeploy:*",
+				"codepipeline:*",
+				"codewhisperer:*",
 				"codeartifact:*",
-				"apprunner:*",
+				"codedeploy-commands-secure:*",
 				"ec2:*",
-				"ecs:*",
-				"elasticloadbalancing:*",
+				"rds:*",
+				"ssm:*",
+				"secretsmanager:*",
+				"kms:*",
+				"cloudtrail:*",
+				"events:*",
+				"cloudwatch:*",
 				"xray:*",
 				"logs:*",
 				"lambda:*",
 				"dynamodb:*",
 				"s3:*",
 				"tag:*",
-				"application-signals:*"
+				"sts:*"
 			],
 			"Resource": "*"
 		},
