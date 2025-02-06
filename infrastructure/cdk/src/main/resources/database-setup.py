@@ -14,7 +14,7 @@ def lambda_handler(event, context):
 
     if event['RequestType'] == 'Delete':
         cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
-    else:sql
+    else:
         try:
             # Get secret name and SQL from resource properties
             secret_name = event['ResourceProperties']['SecretName']

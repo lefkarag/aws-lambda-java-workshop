@@ -1,8 +1,6 @@
 package com.unicorn.core;
 
-import software.amazon.awscdk.CfnOutput;
-import software.amazon.awscdk.CfnOutputProps;
-import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.RestApi;
 import software.amazon.awscdk.services.lambda.Alias;
@@ -14,13 +12,13 @@ import software.constructs.Construct;
 import java.util.List;
 import java.util.Map;
 
-public class UnicornStoreSpring extends Construct {
+public class UnicornStoreSpring extends Stack {
 
     private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreSpring(final Construct scope, final String id,
+    public UnicornStoreSpring(final Construct scope, final String id, final StackProps props,
                               final InfrastructureCore infrastructureCore) {
-        super(scope, id);
+        super(scope, id, props);
 
         //Get previously created infrastructure stack
         this.infrastructureCore = infrastructureCore;

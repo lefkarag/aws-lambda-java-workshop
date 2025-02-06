@@ -32,6 +32,8 @@ public class UnicornStoreStack extends Stack {
             sudo -H -i -u ec2-user bash -c "~/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
             """;
 
+    private final InfrastructureCore infrastructureCore;
+
     public UnicornStoreStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, StackProps.builder()
                 .synthesizer(new DefaultStackSynthesizer(DefaultStackSynthesizerProps.builder()
@@ -57,17 +59,12 @@ public class UnicornStoreStack extends Stack {
         new VSCodeIde(this, "UnicornStoreIde", ideProps);
 
         // Create Core infrastructure
-        var infrastructureCore = new InfrastructureCore(this, "InfrastructureCore", vpc);
+        infrastructureCore = new InfrastructureCore(this, "InfrastructureCore", vpc);
 
         // Execute Database setup
         var databaseSetup = new DatabaseSetup(this, "UnicornDatabaseConstruct", infrastructureCore);
         databaseSetup.getNode().addDependency(infrastructureCore.getDatabase());
-
-        // Create Lambda functions
-        new UnicornStoreSpring(this, "UnicornStoreSpringApp", infrastructureCore);
-        new UnicornStoreMicronaut(this, "UnicornStoreMicronautApp", infrastructureCore);
-        new UnicornStoreSpringGraalVM(this, "UnicornStoreSpringGraalVMApp", infrastructureCore);
-        new UnicornStoreQuarkus(this, "UnicornStoreQuarkusApp", infrastructureCore);
-        new UnicornAuditService(this, "UnicornAuditServiceApp", infrastructureCore);
     }
+
+    public InfrastructureCore getInfrastructureCore() { return infrastructureCore; }
 }

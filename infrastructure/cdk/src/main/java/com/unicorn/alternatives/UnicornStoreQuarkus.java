@@ -12,12 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class UnicornStoreQuarkus extends Construct {
+public class UnicornStoreQuarkus extends Stack {
 
     private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreQuarkus(final Construct scope, final String id, final InfrastructureCore infrastructureCore) {
-        super(scope, id);
+    public UnicornStoreQuarkus(final Construct scope, final String id, final StackProps props,
+                               final InfrastructureCore infrastructureCore) {
+        super(scope, id, props);
         this.infrastructureCore = infrastructureCore;
 
         //Quarkus app

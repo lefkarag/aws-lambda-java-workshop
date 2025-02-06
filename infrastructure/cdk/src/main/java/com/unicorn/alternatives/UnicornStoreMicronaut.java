@@ -12,13 +12,13 @@ import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.lambda.Runtime;
 import software.constructs.Construct;
 
-public class UnicornStoreMicronaut extends Construct {
+public class UnicornStoreMicronaut extends Stack {
 
     private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreMicronaut(final Construct scope, final String id,
+    public UnicornStoreMicronaut(final Construct scope, final String id, final StackProps props,
                                  final InfrastructureCore infrastructureCore) {
-        super(scope, id);
+        super(scope, id, props);
         this.infrastructureCore = infrastructureCore;
 
         //Micronaut app

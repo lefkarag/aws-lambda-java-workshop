@@ -12,12 +12,13 @@ import software.constructs.Construct;
 import java.util.List;
 import java.util.Map;
 
-public class UnicornStoreSpringGraalVM extends Construct {
+public class UnicornStoreSpringGraalVM extends Stack {
 
     private final InfrastructureCore infrastructureCore;
 
-    public UnicornStoreSpringGraalVM(final Construct scope, final String id, final InfrastructureCore infrastructureCore) {
-        super(scope, id);
+    public UnicornStoreSpringGraalVM(final Construct scope, final String id, final StackProps props,
+                                     final InfrastructureCore infrastructureCore) {
+        super(scope, id, props);
         this.infrastructureCore = infrastructureCore;
 
         var unicornStoreSpringGraalVM = createUnicornLambdaFunction();
