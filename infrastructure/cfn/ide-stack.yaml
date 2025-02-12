@@ -60,7 +60,7 @@ Metadata:
       - reason: "Suppress warnings see: https://github.com/cdklabs/cdk-nag/issues/817"
         id: CdkNagValidationFailure
 Resources:
-  UnicornStoreVpc647929A5:
+  IdeVpcE831425F:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.0.0.0/16
@@ -69,8 +69,8 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: unicornstore-vpc
-  UnicornStoreVpcPublicSubnet1Subnet5A587A94:
+          Value: ide-vpc
+  IdeVpcPublicSubnet1Subnet5568D48C:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
@@ -85,57 +85,57 @@ Resources:
         - Key: aws-cdk:subnet-type
           Value: Public
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PublicSubnet1
+          Value: ide-stack/IdeVpc/Vpc/PublicSubnet1
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreVpcPublicSubnet1RouteTableA6A1DD76:
+        Ref: IdeVpcE831425F
+  IdeVpcPublicSubnet1RouteTableA7BDEA5B:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PublicSubnet1
+          Value: ide-stack/IdeVpc/Vpc/PublicSubnet1
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreVpcPublicSubnet1RouteTableAssociation3D94AF82:
+        Ref: IdeVpcE831425F
+  IdeVpcPublicSubnet1RouteTableAssociationA08234BF:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: UnicornStoreVpcPublicSubnet1RouteTableA6A1DD76
+        Ref: IdeVpcPublicSubnet1RouteTableA7BDEA5B
       SubnetId:
-        Ref: UnicornStoreVpcPublicSubnet1Subnet5A587A94
-  UnicornStoreVpcPublicSubnet1DefaultRoute72D8F029:
+        Ref: IdeVpcPublicSubnet1Subnet5568D48C
+  IdeVpcPublicSubnet1DefaultRoute7516054E:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId:
-        Ref: UnicornStoreVpcIGW37028CE1
+        Ref: IdeVpcIGWDE157DA5
       RouteTableId:
-        Ref: UnicornStoreVpcPublicSubnet1RouteTableA6A1DD76
+        Ref: IdeVpcPublicSubnet1RouteTableA7BDEA5B
     DependsOn:
-      - UnicornStoreVpcVPCGW825EF84F
-  UnicornStoreVpcPublicSubnet1EIP9D77368A:
+      - IdeVpcVPCGWC86E365B
+  IdeVpcPublicSubnet1EIP7CBA47EE:
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
       Tags:
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PublicSubnet1
-  UnicornStoreVpcPublicSubnet1NATGateway1B70C1D9:
+          Value: ide-stack/IdeVpc/Vpc/PublicSubnet1
+  IdeVpcPublicSubnet1NATGatewayE2DDFAB1:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId:
         Fn::GetAtt:
-          - UnicornStoreVpcPublicSubnet1EIP9D77368A
+          - IdeVpcPublicSubnet1EIP7CBA47EE
           - AllocationId
       SubnetId:
-        Ref: UnicornStoreVpcPublicSubnet1Subnet5A587A94
+        Ref: IdeVpcPublicSubnet1Subnet5568D48C
       Tags:
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PublicSubnet1
+          Value: ide-stack/IdeVpc/Vpc/PublicSubnet1
     DependsOn:
-      - UnicornStoreVpcPublicSubnet1DefaultRoute72D8F029
-      - UnicornStoreVpcPublicSubnet1RouteTableAssociation3D94AF82
-  UnicornStoreVpcPublicSubnet2Subnet6C10127F:
+      - IdeVpcPublicSubnet1DefaultRoute7516054E
+      - IdeVpcPublicSubnet1RouteTableAssociationA08234BF
+  IdeVpcPublicSubnet2Subnet8D75E006:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
@@ -150,35 +150,35 @@ Resources:
         - Key: aws-cdk:subnet-type
           Value: Public
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PublicSubnet2
+          Value: ide-stack/IdeVpc/Vpc/PublicSubnet2
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreVpcPublicSubnet2RouteTable9C89D84E:
+        Ref: IdeVpcE831425F
+  IdeVpcPublicSubnet2RouteTable3725D67C:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PublicSubnet2
+          Value: ide-stack/IdeVpc/Vpc/PublicSubnet2
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreVpcPublicSubnet2RouteTableAssociationEF6ADCD0:
+        Ref: IdeVpcE831425F
+  IdeVpcPublicSubnet2RouteTableAssociation47C63A38:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: UnicornStoreVpcPublicSubnet2RouteTable9C89D84E
+        Ref: IdeVpcPublicSubnet2RouteTable3725D67C
       SubnetId:
-        Ref: UnicornStoreVpcPublicSubnet2Subnet6C10127F
-  UnicornStoreVpcPublicSubnet2DefaultRoute6F034F39:
+        Ref: IdeVpcPublicSubnet2Subnet8D75E006
+  IdeVpcPublicSubnet2DefaultRouteE1DC8F35:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId:
-        Ref: UnicornStoreVpcIGW37028CE1
+        Ref: IdeVpcIGWDE157DA5
       RouteTableId:
-        Ref: UnicornStoreVpcPublicSubnet2RouteTable9C89D84E
+        Ref: IdeVpcPublicSubnet2RouteTable3725D67C
     DependsOn:
-      - UnicornStoreVpcVPCGW825EF84F
-  UnicornStoreVpcPrivateSubnet1Subnet1D81DF60:
+      - IdeVpcVPCGWC86E365B
+  IdeVpcPrivateSubnet1Subnet3363A401:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
@@ -193,33 +193,33 @@ Resources:
         - Key: aws-cdk:subnet-type
           Value: Private
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PrivateSubnet1
+          Value: ide-stack/IdeVpc/Vpc/PrivateSubnet1
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreVpcPrivateSubnet1RouteTable3F4F42C3:
+        Ref: IdeVpcE831425F
+  IdeVpcPrivateSubnet1RouteTable6779C22E:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PrivateSubnet1
+          Value: ide-stack/IdeVpc/Vpc/PrivateSubnet1
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751:
+        Ref: IdeVpcE831425F
+  IdeVpcPrivateSubnet1RouteTableAssociation72F37D3B:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: UnicornStoreVpcPrivateSubnet1RouteTable3F4F42C3
+        Ref: IdeVpcPrivateSubnet1RouteTable6779C22E
       SubnetId:
-        Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
-  UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313:
+        Ref: IdeVpcPrivateSubnet1Subnet3363A401
+  IdeVpcPrivateSubnet1DefaultRoute47208AFC:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId:
-        Ref: UnicornStoreVpcPublicSubnet1NATGateway1B70C1D9
+        Ref: IdeVpcPublicSubnet1NATGatewayE2DDFAB1
       RouteTableId:
-        Ref: UnicornStoreVpcPrivateSubnet1RouteTable3F4F42C3
-  UnicornStoreVpcPrivateSubnet2Subnet4710EC68:
+        Ref: IdeVpcPrivateSubnet1RouteTable6779C22E
+  IdeVpcPrivateSubnet2Subnet3BCC8DC4:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
@@ -234,46 +234,46 @@ Resources:
         - Key: aws-cdk:subnet-type
           Value: Private
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PrivateSubnet2
+          Value: ide-stack/IdeVpc/Vpc/PrivateSubnet2
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreVpcPrivateSubnet2RouteTableC066B309:
+        Ref: IdeVpcE831425F
+  IdeVpcPrivateSubnet2RouteTable15B55B5E:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
         - Key: Name
-          Value: UnicornStoreStack/UnicornStoreVpc/Vpc/PrivateSubnet2
+          Value: ide-stack/IdeVpc/Vpc/PrivateSubnet2
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6:
+        Ref: IdeVpcE831425F
+  IdeVpcPrivateSubnet2RouteTableAssociation19AF163A:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId:
-        Ref: UnicornStoreVpcPrivateSubnet2RouteTableC066B309
+        Ref: IdeVpcPrivateSubnet2RouteTable15B55B5E
       SubnetId:
-        Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
-  UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992:
+        Ref: IdeVpcPrivateSubnet2Subnet3BCC8DC4
+  IdeVpcPrivateSubnet2DefaultRouteF6817B2D:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId:
-        Ref: UnicornStoreVpcPublicSubnet1NATGateway1B70C1D9
+        Ref: IdeVpcPublicSubnet1NATGatewayE2DDFAB1
       RouteTableId:
-        Ref: UnicornStoreVpcPrivateSubnet2RouteTableC066B309
-  UnicornStoreVpcIGW37028CE1:
+        Ref: IdeVpcPrivateSubnet2RouteTable15B55B5E
+  IdeVpcIGWDE157DA5:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
-          Value: unicornstore-vpc
-  UnicornStoreVpcVPCGW825EF84F:
+          Value: ide-vpc
+  IdeVpcVPCGWC86E365B:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       InternetGatewayId:
-        Ref: UnicornStoreVpcIGW37028CE1
+        Ref: IdeVpcIGWDE157DA5
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreIdeIdeRole81A2CEAA:
+        Ref: IdeVpcE831425F
+  VSCodeIdeIdeRole21951A1F:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -294,9 +294,9 @@ Resources:
             - - "arn:"
               - Ref: AWS::Partition
               - :iam::aws:policy/AmazonSSMManagedInstanceCore
-        - Ref: UnicornStoreIdeWorkshopIdeUserPolicy4FE3EC67
-      RoleName: unicornstore-ide-user
-  UnicornStoreIdeIdeRoleDefaultPolicy7083F507:
+        - Ref: VSCodeIdeWorkshopIdeUserPolicy98DFEC00
+      RoleName: ide-user
+  VSCodeIdeIdeRoleDefaultPolicyB89C55CF:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -307,19 +307,19 @@ Resources:
             Effect: Allow
             Resource:
               Fn::GetAtt:
-                - UnicornStoreIdeIdeLogGroup7A5EFA50
+                - VSCodeIdeIdeLogGroup364F2B78
                 - Arn
           - Action:
               - secretsmanager:GetSecretValue
               - secretsmanager:DescribeSecret
             Effect: Allow
             Resource:
-              Ref: UnicornStoreIdeIdePasswordSecret514252E2
+              Ref: VSCodeIdeIdePasswordSecret39AD78F3
         Version: "2012-10-17"
-      PolicyName: UnicornStoreIdeIdeRoleDefaultPolicy7083F507
+      PolicyName: VSCodeIdeIdeRoleDefaultPolicyB89C55CF
       Roles:
-        - Ref: UnicornStoreIdeIdeRole81A2CEAA
-  UnicornStoreIdeWorkshopIdeUserPolicy4FE3EC67:
+        - Ref: VSCodeIdeIdeRole21951A1F
+  VSCodeIdeWorkshopIdeUserPolicy98DFEC00:
     Type: AWS::IAM::ManagedPolicy
     Properties:
       Description: ""
@@ -405,14 +405,14 @@ Resources:
             Resource: "*"
             Sid: DenyReservations
         Version: "2012-10-17"
-  UnicornStoreIdeIdeLogGroup7A5EFA50:
+  VSCodeIdeIdeLogGroup364F2B78:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: unicornstore-ide-bootstrap-log-20250212-084314
+      LogGroupName: ide-bootstrap-log-20250212-101412
       RetentionInDays: 7
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
-  UnicornStoreIdeIdePrefixListFunctionServiceRole32E30C10:
+  VSCodeIdeIdePrefixListFunctionServiceRoleE64D8247:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -428,7 +428,7 @@ Resources:
             - - "arn:"
               - Ref: AWS::Partition
               - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-  UnicornStoreIdeIdePrefixListFunctionServiceRoleDefaultPolicy33F10FE5:
+  VSCodeIdeIdePrefixListFunctionServiceRoleDefaultPolicy244F9A17:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -437,10 +437,10 @@ Resources:
             Effect: Allow
             Resource: "*"
         Version: "2012-10-17"
-      PolicyName: UnicornStoreIdeIdePrefixListFunctionServiceRoleDefaultPolicy33F10FE5
+      PolicyName: VSCodeIdeIdePrefixListFunctionServiceRoleDefaultPolicy244F9A17
       Roles:
-        - Ref: UnicornStoreIdeIdePrefixListFunctionServiceRole32E30C10
-  UnicornStoreIdeIdePrefixListFunctionA6A4129C:
+        - Ref: VSCodeIdeIdePrefixListFunctionServiceRoleE64D8247
+  VSCodeIdeIdePrefixListFunction06300AAE:
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -480,64 +480,64 @@ Resources:
                       responseData = {'Error': tb_err}
                   finally:
                       cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
-      FunctionName: unicornstore-ide-prefix-list-lambda
+      FunctionName: ide-prefix-list-lambda
       Handler: index.lambda_handler
       Role:
         Fn::GetAtt:
-          - UnicornStoreIdeIdePrefixListFunctionServiceRole32E30C10
+          - VSCodeIdeIdePrefixListFunctionServiceRoleE64D8247
           - Arn
       Runtime: python3.13
       Timeout: 180
     DependsOn:
-      - UnicornStoreIdeIdePrefixListFunctionServiceRoleDefaultPolicy33F10FE5
-      - UnicornStoreIdeIdePrefixListFunctionServiceRole32E30C10
-  UnicornStoreIdeIdePrefixListResource228B9344:
+      - VSCodeIdeIdePrefixListFunctionServiceRoleDefaultPolicy244F9A17
+      - VSCodeIdeIdePrefixListFunctionServiceRoleE64D8247
+  VSCodeIdeIdePrefixListResourceF63186FA:
     Type: AWS::CloudFormation::CustomResource
     Properties:
       ServiceToken:
         Fn::GetAtt:
-          - UnicornStoreIdeIdePrefixListFunctionA6A4129C
+          - VSCodeIdeIdePrefixListFunction06300AAE
           - Arn
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
-  UnicornStoreIdeIdeSecurityGroupD6434416:
+  VSCodeIdeIdeSecurityGroup69EC68AF:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: IDE security group
-      GroupName: unicornstore-ide-cloudfront-ide-sg
+      GroupName: ide-cloudfront-ide-sg
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           Description: Allow all outbound traffic by default
           IpProtocol: "-1"
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreIdeIdeSecurityGroupfromIndirectPeer80C455E18A:
+        Ref: IdeVpcE831425F
+  VSCodeIdeIdeSecurityGroupfromIndirectPeer80614C2C39:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       Description: HTTP from CloudFront only
       FromPort: 80
       GroupId:
         Fn::GetAtt:
-          - UnicornStoreIdeIdeSecurityGroupD6434416
+          - VSCodeIdeIdeSecurityGroup69EC68AF
           - GroupId
       IpProtocol: tcp
       SourcePrefixListId:
         Fn::GetAtt:
-          - UnicornStoreIdeIdePrefixListResource228B9344
+          - VSCodeIdeIdePrefixListResourceF63186FA
           - PrefixListId
       ToPort: 80
-  UnicornStoreIdeIdeInstanceProfileCEFB2BB2:
+  VSCodeIdeIdeInstanceProfileD50529DC:
     Type: AWS::IAM::InstanceProfile
     Properties:
       InstanceProfileName:
-        Ref: UnicornStoreIdeIdeRole81A2CEAA
+        Ref: VSCodeIdeIdeRole21951A1F
       Roles:
-        - Ref: UnicornStoreIdeIdeRole81A2CEAA
-  UnicornStoreIdeIdeElasticIP832AF6A3:
+        - Ref: VSCodeIdeIdeRole21951A1F
+  VSCodeIdeIdeElasticIP9EC1C0FF:
     Type: AWS::EC2::EIP
     Properties:
       Domain: vpc
-  UnicornStoreIdeIdeEC2Instance5F393FC5:
+  VSCodeIdeIdeEC2Instance846AE373:
     Type: AWS::EC2::Instance
     Properties:
       AvailabilityZone:
@@ -552,112 +552,112 @@ Resources:
             VolumeSize: 50
             VolumeType: gp3
       IamInstanceProfile:
-        Ref: UnicornStoreIdeIdeInstanceProfileCEFB2BB2
+        Ref: VSCodeIdeIdeInstanceProfileD50529DC
       ImageId:
         Ref: SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter
-      InstanceType: t3.medium
+      InstanceType: m5.xlarge
       SecurityGroupIds:
         - Fn::GetAtt:
-            - UnicornStoreIdeIdeSecurityGroupD6434416
+            - VSCodeIdeIdeSecurityGroup69EC68AF
             - GroupId
         - Fn::GetAtt:
-            - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+            - VSCodeIdeIdeInternalSecurityGroup84C0CB7B
             - GroupId
         - Fn::GetAtt:
-            - UnicornStoreIdeAppSecurityGroupA4858227
+            - VSCodeIdeAppSecurityGroup3CD2EECD
             - GroupId
       SubnetId:
-        Ref: UnicornStoreVpcPublicSubnet1Subnet5A587A94
+        Ref: IdeVpcPublicSubnet1Subnet5568D48C
       Tags:
         - Key: Name
-          Value: unicornstore-ide
+          Value: ide
       UserData:
         Fn::Base64: "#!/bin/bash"
     DependsOn:
-      - UnicornStoreIdeIdePasswordSecret514252E2
-      - UnicornStoreIdeIdeRoleDefaultPolicy7083F507
-      - UnicornStoreIdeIdeRole81A2CEAA
-  UnicornStoreIdeIdeEipAssociation14729AD1:
+      - VSCodeIdeIdePasswordSecret39AD78F3
+      - VSCodeIdeIdeRoleDefaultPolicyB89C55CF
+      - VSCodeIdeIdeRole21951A1F
+  VSCodeIdeIdeEipAssociation5CF25E52:
     Type: AWS::EC2::EIPAssociation
     Properties:
       AllocationId:
         Fn::GetAtt:
-          - UnicornStoreIdeIdeElasticIP832AF6A3
+          - VSCodeIdeIdeElasticIP9EC1C0FF
           - AllocationId
       InstanceId:
-        Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
-  UnicornStoreIdeIdeInternalSecurityGroup29539F21:
+        Ref: VSCodeIdeIdeEC2Instance846AE373
+  VSCodeIdeIdeInternalSecurityGroup84C0CB7B:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: IDE internal security group
-      GroupName: unicornstore-ide-internal-sg
+      GroupName: ide-internal-sg
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreIdeIdeInternalSecurityGroupfromUnicornStoreStackUnicornStoreIdeIdeInternalSecurityGroup39AB77AAALLTRAFFIC24661CB2:
+        Ref: IdeVpcE831425F
+  VSCodeIdeIdeInternalSecurityGroupfromidestackVSCodeIdeIdeInternalSecurityGroup1B3E620BALLTRAFFIC5FBB443A:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       Description: Allow all internal traffic
       GroupId:
         Fn::GetAtt:
-          - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+          - VSCodeIdeIdeInternalSecurityGroup84C0CB7B
           - GroupId
       IpProtocol: "-1"
       SourceSecurityGroupId:
         Fn::GetAtt:
-          - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+          - VSCodeIdeIdeInternalSecurityGroup84C0CB7B
           - GroupId
-  UnicornStoreIdeIdeInternalSecurityGrouptoUnicornStoreStackUnicornStoreIdeIdeInternalSecurityGroup39AB77AAALLTRAFFIC730659A6:
+  VSCodeIdeIdeInternalSecurityGrouptoidestackVSCodeIdeIdeInternalSecurityGroup1B3E620BALLTRAFFIC7F2B7031:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       Description: Allow all internal traffic
       DestinationSecurityGroupId:
         Fn::GetAtt:
-          - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+          - VSCodeIdeIdeInternalSecurityGroup84C0CB7B
           - GroupId
       GroupId:
         Fn::GetAtt:
-          - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+          - VSCodeIdeIdeInternalSecurityGroup84C0CB7B
           - GroupId
       IpProtocol: "-1"
-  UnicornStoreIdeAppSecurityGroupA4858227:
+  VSCodeIdeAppSecurityGroup3CD2EECD:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: App security group
-      GroupName: unicornstore-ide-cloudfront-app-sg
+      GroupName: ide-cloudfront-app-sg
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           Description: Allow all outbound traffic by default
           IpProtocol: "-1"
       VpcId:
-        Ref: UnicornStoreVpc647929A5
-  UnicornStoreIdeAppSecurityGroupfromIndirectPeer808018449A72:
+        Ref: IdeVpcE831425F
+  VSCodeIdeAppSecurityGroupfromIndirectPeer808079F80B17:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       Description: Port 8080 to App from CloudFront only
       FromPort: 8080
       GroupId:
         Fn::GetAtt:
-          - UnicornStoreIdeAppSecurityGroupA4858227
+          - VSCodeIdeAppSecurityGroup3CD2EECD
           - GroupId
       IpProtocol: tcp
       SourcePrefixListId:
         Fn::GetAtt:
-          - UnicornStoreIdeIdePrefixListResource228B9344
+          - VSCodeIdeIdePrefixListResourceF63186FA
           - PrefixListId
       ToPort: 8080
-  UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1:
+  VSCodeIdeIdeBootstrapWaitConditionHandle0A599C82:
     Type: AWS::CloudFormation::WaitConditionHandle
-  UnicornStoreIdeIdeBootstrapWaitConditionE9768A2E:
+  VSCodeIdeIdeBootstrapWaitConditionEDA1E0E7:
     Type: AWS::CloudFormation::WaitCondition
     Properties:
       Count: 1
       Handle:
-        Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
+        Ref: VSCodeIdeIdeBootstrapWaitConditionHandle0A599C82
       Timeout: "1800"
     DependsOn:
-      - UnicornStoreIdeIdeBootstrapDocumentE330810B
-      - UnicornStoreIdeIdeEC2Instance5F393FC5
-  UnicornStoreIdeIdeDistribution9A9F0B03:
+      - VSCodeIdeIdeBootstrapDocument8DDB05AD
+      - VSCodeIdeIdeEC2Instance846AE373
+  VSCodeIdeIdeDistribution613960F4:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
@@ -674,7 +674,7 @@ Resources:
             Compress: true
             OriginRequestPolicyId: 216adef6-5c7f-47e4-b989-5492eafa07d3
             PathPattern: /app/*
-            TargetOriginId: UnicornStoreStackUnicornStoreIdeIdeDistributionOrigin2A4960D95
+            TargetOriginId: idestackVSCodeIdeIdeDistributionOrigin2E04D1E2A
             ViewerProtocolPolicy: allow-all
         DefaultCacheBehavior:
           AllowedMethods:
@@ -688,7 +688,7 @@ Resources:
           CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
           Compress: true
           OriginRequestPolicyId: 216adef6-5c7f-47e4-b989-5492eafa07d3
-          TargetOriginId: UnicornStoreStackUnicornStoreIdeIdeDistributionOrigin1C0099829
+          TargetOriginId: idestackVSCodeIdeIdeDistributionOrigin12E9C5C1A
           ViewerProtocolPolicy: allow-all
         Enabled: true
         HttpVersion: http2
@@ -701,9 +701,9 @@ Resources:
                 - TLSv1.2
             DomainName:
               Fn::GetAtt:
-                - UnicornStoreIdeIdeEC2Instance5F393FC5
+                - VSCodeIdeIdeEC2Instance846AE373
                 - PublicDnsName
-            Id: UnicornStoreStackUnicornStoreIdeIdeDistributionOrigin1C0099829
+            Id: idestackVSCodeIdeIdeDistributionOrigin12E9C5C1A
           - CustomOriginConfig:
               HTTPPort: 8080
               OriginProtocolPolicy: http-only
@@ -711,14 +711,14 @@ Resources:
                 - TLSv1.2
             DomainName:
               Fn::GetAtt:
-                - UnicornStoreIdeIdeEC2Instance5F393FC5
+                - VSCodeIdeIdeEC2Instance846AE373
                 - PublicDnsName
-            Id: UnicornStoreStackUnicornStoreIdeIdeDistributionOrigin2A4960D95
+            Id: idestackVSCodeIdeIdeDistributionOrigin2E04D1E2A
     DependsOn:
-      - UnicornStoreIdeIdeEipAssociation14729AD1
+      - VSCodeIdeIdeEipAssociation5CF25E52
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
-  UnicornStoreIdeIdePasswordSecret514252E2:
+  VSCodeIdeIdePasswordSecret39AD78F3:
     Type: AWS::SecretsManager::Secret
     Properties:
       GenerateSecretString:
@@ -728,10 +728,10 @@ Resources:
         IncludeSpace: false
         PasswordLength: 32
         SecretStringTemplate: '{"password":""}'
-      Name: unicornstore-ide-password-lambda
+      Name: ide-password-lambda
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
-  UnicornStoreIdeIdePasswordExporterFunctionServiceRoleE9BF6179:
+  VSCodeIdeIdePasswordExporterFunctionServiceRoleAC3A4C16:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -747,7 +747,7 @@ Resources:
             - - "arn:"
               - Ref: AWS::Partition
               - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-  UnicornStoreIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0EF930BA:
+  VSCodeIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0FACB966:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -757,20 +757,20 @@ Resources:
               - secretsmanager:DescribeSecret
             Effect: Allow
             Resource:
-              Ref: UnicornStoreIdeIdePasswordSecret514252E2
+              Ref: VSCodeIdeIdePasswordSecret39AD78F3
         Version: "2012-10-17"
-      PolicyName: UnicornStoreIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0EF930BA
+      PolicyName: VSCodeIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0FACB966
       Roles:
-        - Ref: UnicornStoreIdeIdePasswordExporterFunctionServiceRoleE9BF6179
-  UnicornStoreIdeIdePasswordExporterFunction456E6CFA:
+        - Ref: VSCodeIdeIdePasswordExporterFunctionServiceRoleAC3A4C16
+  VSCodeIdeIdePasswordExporterFunction9E9A4082:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         ZipFile: |-
-          import string
-          import random
           import traceback
           import cfnresponse
+          import boto3
+          import json
 
           def lambda_handler(event, context):
               print('Event: {}'.format(event))
@@ -783,8 +783,15 @@ Resources:
                   cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
               else:
                   try:
-                      res = ''.join(random.choices(string.ascii_uppercase + string.digits, k=24))
-                      responseData = {'RandomString': str(res)}
+                      passwordName = event['ResourceProperties']['PasswordName']
+
+                      secretsmanager = boto3.client('secretsmanager')
+
+                      response = secretsmanager.get_secret_value(
+                          SecretId=passwordName,
+                      )
+
+                      responseData = json.loads(response['SecretString'])
                   except Exception as e:
                       status = cfnresponse.FAILED
                       tb_err = traceback.format_exc()
@@ -792,23 +799,23 @@ Resources:
                       responseData = {'Error': tb_err}
                   finally:
                       cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
-      FunctionName: unicornstore-ide-password-lambda
+      FunctionName: ide-password-lambda
       Handler: index.lambda_handler
       Role:
         Fn::GetAtt:
-          - UnicornStoreIdeIdePasswordExporterFunctionServiceRoleE9BF6179
+          - VSCodeIdeIdePasswordExporterFunctionServiceRoleAC3A4C16
           - Arn
       Runtime: python3.13
       Timeout: 180
     DependsOn:
-      - UnicornStoreIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0EF930BA
-      - UnicornStoreIdeIdePasswordExporterFunctionServiceRoleE9BF6179
-  UnicornStoreIdeIdePasswordExporter0662A4D7:
+      - VSCodeIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0FACB966
+      - VSCodeIdeIdePasswordExporterFunctionServiceRoleAC3A4C16
+  VSCodeIdeIdePasswordExporter93551A8E:
     Type: AWS::CloudFormation::CustomResource
     Properties:
       ServiceToken:
         Fn::GetAtt:
-          - UnicornStoreIdeIdePasswordExporterFunction456E6CFA
+          - VSCodeIdeIdePasswordExporterFunction9E9A4082
           - Arn
       PasswordName:
         Fn::Join:
@@ -821,7 +828,7 @@ Resources:
                         - 6
                         - Fn::Split:
                             - ":"
-                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                            - Ref: VSCodeIdeIdePasswordSecret39AD78F3
             - Fn::Select:
                 - 1
                 - Fn::Split:
@@ -830,7 +837,7 @@ Resources:
                         - 6
                         - Fn::Split:
                             - ":"
-                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                            - Ref: VSCodeIdeIdePasswordSecret39AD78F3
             - Fn::Select:
                 - 2
                 - Fn::Split:
@@ -839,19 +846,10 @@ Resources:
                         - 6
                         - Fn::Split:
                             - ":"
-                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
-            - Fn::Select:
-                - 3
-                - Fn::Split:
-                    - "-"
-                    - Fn::Select:
-                        - 6
-                        - Fn::Split:
-                            - ":"
-                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                            - Ref: VSCodeIdeIdePasswordSecret39AD78F3
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
-  UnicornStoreIdeIdeBootstrapDocumentE330810B:
+  VSCodeIdeIdeBootstrapDocument8DDB05AD:
     Type: AWS::SSM::Document
     Properties:
       Content:
@@ -873,7 +871,6 @@ Resources:
 
                       echo "Retrieving IDE password..."
                       
-
                       ${customBootstrapScript}
                       HEREDOC
 
@@ -882,19 +879,22 @@ Resources:
                       /opt/aws/bin/cfn-signal -e $exit_code '${waitConditionHandleUrl}'
 
                       exit $exit_code
-                    - extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
+                    - terminalOnStartup: "true"
+                      readmeUrl: ""
+                      instanceIamRoleName:
+                        Ref: VSCodeIdeIdeRole21951A1F
+                      codeServerVersion: 4.96.4
+                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
                       environmentContentsZip: ""
                       domain: ""
                       customBootstrapScript: |
                         date
-
-
                       waitConditionHandleUrl:
-                        Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
+                        Ref: VSCodeIdeIdeBootstrapWaitConditionHandle0A599C82
                       splashUrl: ""
                       instanceIamRoleArn:
                         Fn::GetAtt:
-                          - UnicornStoreIdeIdeRole81A2CEAA
+                          - VSCodeIdeIdeRole21951A1F
                           - Arn
                       passwordName:
                         Fn::Join:
@@ -907,7 +907,7 @@ Resources:
                                         - 6
                                         - Fn::Split:
                                             - ":"
-                                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                                            - Ref: VSCodeIdeIdePasswordSecret39AD78F3
                             - Fn::Select:
                                 - 1
                                 - Fn::Split:
@@ -916,7 +916,7 @@ Resources:
                                         - 6
                                         - Fn::Split:
                                             - ":"
-                                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                                            - Ref: VSCodeIdeIdePasswordSecret39AD78F3
                             - Fn::Select:
                                 - 2
                                 - Fn::Split:
@@ -925,28 +925,14 @@ Resources:
                                         - 6
                                         - Fn::Split:
                                             - ":"
-                                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
-                            - Fn::Select:
-                                - 3
-                                - Fn::Split:
-                                    - "-"
-                                    - Fn::Select:
-                                        - 6
-                                        - Fn::Split:
-                                            - ":"
-                                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
-                      terminalOnStartup: "true"
-                      readmeUrl: ""
-                      instanceIamRoleName:
-                        Ref: UnicornStoreIdeIdeRole81A2CEAA
-                      codeServerVersion: 4.96.4
+                                            - Ref: VSCodeIdeIdePasswordSecret39AD78F3
             name: IdeBootstrapFunction
             action: aws:runShellScript
       DocumentFormat: YAML
       DocumentType: Command
-      Name: unicornstore-ide-bootstrap-document
+      Name: ide-bootstrap-document
       UpdateMethod: NewVersion
-  UnicornStoreIdeIdeBootstrapFunctionServiceRole3CD8C4AA:
+  VSCodeIdeIdeBootstrapFunctionServiceRole45BD56C6:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -962,7 +948,7 @@ Resources:
             - - "arn:"
               - Ref: AWS::Partition
               - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-  UnicornStoreIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA8D6D12D:
+  VSCodeIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA4D18BC6:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -971,7 +957,7 @@ Resources:
             Effect: Allow
             Resource:
               Fn::GetAtt:
-                - UnicornStoreIdeIdeRole81A2CEAA
+                - VSCodeIdeIdeRole21951A1F
                 - Arn
           - Action:
               - ec2:DescribeInstances
@@ -982,10 +968,10 @@ Resources:
             Effect: Allow
             Resource: "*"
         Version: "2012-10-17"
-      PolicyName: UnicornStoreIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA8D6D12D
+      PolicyName: VSCodeIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA4D18BC6
       Roles:
-        - Ref: UnicornStoreIdeIdeBootstrapFunctionServiceRole3CD8C4AA
-  UnicornStoreIdeIdeBootstrapFunctionF57074A6:
+        - Ref: VSCodeIdeIdeBootstrapFunctionServiceRole45BD56C6
+  VSCodeIdeIdeBootstrapFunctionADFBCE22:
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -1059,393 +1045,30 @@ Resources:
                       responseData = {'Error': tb_err}
                   finally:
                       cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
-      FunctionName: unicornstore-ide-bootstrap-lambda
+      FunctionName: ide-bootstrap-lambda
       Handler: index.lambda_handler
       Role:
         Fn::GetAtt:
-          - UnicornStoreIdeIdeBootstrapFunctionServiceRole3CD8C4AA
+          - VSCodeIdeIdeBootstrapFunctionServiceRole45BD56C6
           - Arn
       Runtime: python3.13
       Timeout: 900
     DependsOn:
-      - UnicornStoreIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA8D6D12D
-      - UnicornStoreIdeIdeBootstrapFunctionServiceRole3CD8C4AA
-  UnicornStoreIdeIdeBootstrapResourceB07B1E57:
+      - VSCodeIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA4D18BC6
+      - VSCodeIdeIdeBootstrapFunctionServiceRole45BD56C6
+  VSCodeIdeIdeBootstrapResourceC2C4DC11:
     Type: AWS::CloudFormation::CustomResource
     Properties:
       ServiceToken:
         Fn::GetAtt:
-          - UnicornStoreIdeIdeBootstrapFunctionF57074A6
+          - VSCodeIdeIdeBootstrapFunctionADFBCE22
           - Arn
       LogGroupName:
-        Ref: UnicornStoreIdeIdeLogGroup7A5EFA50
+        Ref: VSCodeIdeIdeLogGroup364F2B78
       SsmDocument:
-        Ref: UnicornStoreIdeIdeBootstrapDocumentE330810B
+        Ref: VSCodeIdeIdeBootstrapDocument8DDB05AD
       InstanceId:
-        Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
-    UpdateReplacePolicy: Delete
-    DeletionPolicy: Delete
-  InfrastructureCorepostgresB0D0C6BB:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      Description:
-        Fn::Join:
-          - ""
-          - - "Generated by the CDK for stack: "
-            - Ref: AWS::StackName
-      GenerateSecretString:
-        ExcludeCharacters: " %+~`#$&*()|[]{}:;<>?!'/@\"\\"
-        GenerateStringKey: password
-        PasswordLength: 30
-        SecretStringTemplate: '{"username":"postgres"}'
-      Name: unicornstore-db-secret
-    UpdateReplacePolicy: Delete
-    DeletionPolicy: Delete
-  InfrastructureCorepostgresAttachmentE2B30E5B:
-    Type: AWS::SecretsManager::SecretTargetAttachment
-    Properties:
-      SecretId:
-        Ref: InfrastructureCorepostgresB0D0C6BB
-      TargetId:
-        Ref: InfrastructureCoreUnicornInstance6758A25D
-      TargetType: AWS::RDS::DBInstance
-  InfrastructureCoreDatabaseSG7319389B:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: UnicornStoreStack/InfrastructureCore/DatabaseSG
-      GroupName: unicornstore-db-sg
-      SecurityGroupEgress:
-        - CidrIp: 255.255.255.255/32
-          Description: Disallow all traffic
-          FromPort: 252
-          IpProtocol: icmp
-          ToPort: 86
-      SecurityGroupIngress:
-        - CidrIp: 10.0.0.0/16
-          Description: Allow Database Traffic from local network
-          FromPort: 5432
-          IpProtocol: tcp
-          ToPort: 5432
-      VpcId:
-        Ref: UnicornStoreVpc647929A5
-  InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2:
-    Type: AWS::RDS::DBSubnetGroup
-    Properties:
-      DBSubnetGroupDescription: Subnet group for UnicornInstance database
-      SubnetIds:
-        - Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
-        - Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
-  InfrastructureCoreUnicornInstance6758A25D:
-    Type: AWS::RDS::DBInstance
-    Properties:
-      AllocatedStorage: "100"
-      AllowMajorVersionUpgrade: true
-      BackupRetentionPeriod: 0
-      CopyTagsToSnapshot: true
-      DBInstanceClass: db.t3.medium
-      DBInstanceIdentifier: unicorninstance
-      DBName: unicorns
-      DBSubnetGroupName:
-        Ref: InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
-      Engine: postgres
-      EngineVersion: "16"
-      MasterUserPassword:
-        Fn::Join:
-          - ""
-          - - "{{resolve:secretsmanager:"
-            - Ref: InfrastructureCorepostgresB0D0C6BB
-            - :SecretString:password::}}
-      MasterUsername:
-        Fn::Join:
-          - ""
-          - - "{{resolve:secretsmanager:"
-            - Ref: InfrastructureCorepostgresB0D0C6BB
-            - :SecretString:username::}}
-      PubliclyAccessible: false
-      StorageType: gp2
-      VPCSecurityGroups:
-        - Fn::GetAtt:
-            - InfrastructureCoreDatabaseSG7319389B
-            - GroupId
-    UpdateReplacePolicy: Snapshot
-    DeletionPolicy: Snapshot
-  InfrastructureCoreUnicornEventBusBBADDC7E:
-    Type: AWS::Events::EventBus
-    Properties:
-      Name: unicorns
-  InfrastructureCoreApplicationSecurityGroup914702B5:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: UnicornStoreStack/InfrastructureCore/ApplicationSecurityGroup
-      GroupName: unicornstore-application-sg
-      SecurityGroupEgress:
-        - CidrIp: 0.0.0.0/0
-          Description: Allow all outbound traffic by default
-          IpProtocol: "-1"
-      VpcId:
-        Ref: UnicornStoreVpc647929A5
-  InfrastructureCoreSsmParameterDBConnectionString2EE427D4:
-    Type: AWS::SSM::Parameter
-    Properties:
-      AllowedPattern: .*
-      Description: Database Connection String
-      Name: unicornstore-db-connection-string
-      Tier: Standard
-      Type: String
-      Value:
-        Fn::Join:
-          - ""
-          - - jdbc:postgresql://
-            - Fn::GetAtt:
-                - InfrastructureCoreUnicornInstance6758A25D
-                - Endpoint.Address
-            - :5432/unicorns
-  InfrastructureCoredbSecretPassword1EC1CF00:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      Name: unicornstore-db-password-secret
-      SecretString:
-        Fn::Join:
-          - ""
-          - - "{{resolve:secretsmanager:"
-            - Fn::Join:
-                - "-"
-                - - Fn::Select:
-                      - 0
-                      - Fn::Split:
-                          - "-"
-                          - Fn::Select:
-                              - 6
-                              - Fn::Split:
-                                  - ":"
-                                  - Ref: InfrastructureCorepostgresB0D0C6BB
-                  - Fn::Select:
-                      - 1
-                      - Fn::Split:
-                          - "-"
-                          - Fn::Select:
-                              - 6
-                              - Fn::Split:
-                                  - ":"
-                                  - Ref: InfrastructureCorepostgresB0D0C6BB
-                  - Fn::Select:
-                      - 2
-                      - Fn::Split:
-                          - "-"
-                          - Fn::Select:
-                              - 6
-                              - Fn::Split:
-                                  - ":"
-                                  - Ref: InfrastructureCorepostgresB0D0C6BB
-            - :SecretString:password::}}
-    UpdateReplacePolicy: Delete
-    DeletionPolicy: Delete
-  UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Statement:
-          - Action: sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-        Version: "2012-10-17"
-      ManagedPolicyArns:
-        - Fn::Join:
-            - ""
-            - - "arn:"
-              - Ref: AWS::Partition
-              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - Fn::Join:
-            - ""
-            - - "arn:"
-              - Ref: AWS::Partition
-              - :iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-    DependsOn:
-      - InfrastructureCoreUnicornInstance6758A25D
-      - InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
-      - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
-      - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
-      - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
-      - UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6
-  UnicornDatabaseConstructDatabaseSetupFunctionServiceRoleDefaultPolicy3FC0A7F3:
-    Type: AWS::IAM::Policy
-    Properties:
-      PolicyDocument:
-        Statement:
-          - Action:
-              - secretsmanager:GetSecretValue
-              - secretsmanager:DescribeSecret
-            Effect: Allow
-            Resource:
-              Ref: InfrastructureCorepostgresB0D0C6BB
-        Version: "2012-10-17"
-      PolicyName: UnicornDatabaseConstructDatabaseSetupFunctionServiceRoleDefaultPolicy3FC0A7F3
-      Roles:
-        - Ref: UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5
-    DependsOn:
-      - InfrastructureCoreUnicornInstance6758A25D
-      - InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
-      - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
-      - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
-      - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
-      - UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6
-  UnicornDatabaseConstructDatabaseSetupFunction8C55B639:
-    Type: AWS::Lambda::Function
-    Properties:
-      Code:
-        ZipFile: |
-          import traceback
-          import cfnresponse
-          import boto3
-          import json
-
-          def get_cluster_arn(cluster_id, region, account_id):
-              return f"arn:aws:rds:{region}:{account_id}:cluster:{cluster_id}"
-
-          def lambda_handler(event, context):
-              print('Event: {}'.format(event))
-              print('context: {}'.format(context))
-              responseData = {}
-              status = cfnresponse.SUCCESS
-
-              if event['RequestType'] == 'Delete':
-                  cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
-              else:
-                  try:
-                      # Get secret name and SQL from resource properties
-                      secret_name = event['ResourceProperties']['SecretName']
-                      sql_statements = event['ResourceProperties']['SqlStatements']
-
-                      # Get AWS account ID and region
-                      sts = boto3.client('sts')
-                      caller_identity = sts.get_caller_identity()
-                      account_id = caller_identity['Account']
-                      region = boto3.session.Session().region_name
-                      caller_arn = caller_identity['Arn']
-                      print(f"Account ID: {account_id}, Region: {region}")
-                      print(f"Caller ARN: {caller_arn}")
-
-                      # Get the secret
-                      secretsmanager = boto3.client('secretsmanager')
-                      secret_details = secretsmanager.describe_secret(
-                          SecretId=secret_name
-                      )
-                      secret_arn = secret_details['ARN']
-                      print(f"Secret ARN: {secret_arn}")
-
-                      secret_response = secretsmanager.get_secret_value(
-                          SecretId=secret_name
-                      )
-
-                      # Parse the secret JSON
-                      secret = json.loads(secret_response['SecretString'])
-                      # print(f"Secret: {secret}")
-
-                      # Construct cluster ARN
-                      cluster_arn = get_cluster_arn(
-                          secret['dbClusterIdentifier'],
-                          region,
-                          account_id
-                      )
-                      print(f"Cluster ARN: {cluster_arn}")
-
-                      # Initialize RDS Data API client
-                      rds_data = boto3.client('rds-data')
-
-                      # Execute each SQL statement
-                      for sql in sql_statements.split(';'):
-                          sql = sql.strip()
-                          if sql:  # Skip empty statements
-                              try:
-                                  response = rds_data.execute_statement(
-                                      resourceArn=cluster_arn,
-                                      secretArn=secret_arn,
-                                      database=secret['dbname'],
-                                      sql=sql
-                                  )
-                                  print(f"Executed SQL: {sql}")
-                                  print(f"Response: {response}")
-                              except Exception as sql_error:
-                                  print(f"Error executing SQL: {sql}")
-                                  print(f"Error: {str(sql_error)}")
-                                  raise sql_error
-
-                      responseData = {'Success': 'Finished database setup.'}
-
-                  except Exception as e:
-                      status = cfnresponse.FAILED
-                      tb_err = traceback.format_exc()
-                      print(tb_err)
-                      responseData = {'Error': tb_err}
-                  finally:
-                      cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
-      FunctionName: unicornstore-db-setup-lambda
-      Handler: index.lambda_handler
-      Role:
-        Fn::GetAtt:
-          - UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5
-          - Arn
-      Runtime: python3.13
-      Timeout: 180
-      VpcConfig:
-        SecurityGroupIds:
-          - Fn::GetAtt:
-              - InfrastructureCoreApplicationSecurityGroup914702B5
-              - GroupId
-        SubnetIds:
-          - Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
-          - Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
-    DependsOn:
-      - InfrastructureCoreUnicornInstance6758A25D
-      - InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
-      - UnicornDatabaseConstructDatabaseSetupFunctionServiceRoleDefaultPolicy3FC0A7F3
-      - UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5
-      - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
-      - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
-      - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
-      - UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6
-  UnicornDatabaseConstructDatabaseSetupResourceE1449E29:
-    Type: AWS::CloudFormation::CustomResource
-    Properties:
-      ServiceToken:
-        Fn::GetAtt:
-          - UnicornDatabaseConstructDatabaseSetupFunction8C55B639
-          - Arn
-      SecretName:
-        Fn::Join:
-          - "-"
-          - - Fn::Select:
-                - 0
-                - Fn::Split:
-                    - "-"
-                    - Fn::Select:
-                        - 6
-                        - Fn::Split:
-                            - ":"
-                            - Ref: InfrastructureCorepostgresB0D0C6BB
-            - Fn::Select:
-                - 1
-                - Fn::Split:
-                    - "-"
-                    - Fn::Select:
-                        - 6
-                        - Fn::Split:
-                            - ":"
-                            - Ref: InfrastructureCorepostgresB0D0C6BB
-            - Fn::Select:
-                - 2
-                - Fn::Split:
-                    - "-"
-                    - Fn::Select:
-                        - 6
-                        - Fn::Split:
-                            - ":"
-                            - Ref: InfrastructureCorepostgresB0D0C6BB
-      SqlStatements: CREATE TABLE IF NOT EXISTS unicorns(id TEXT DEFAULT gen_random_uuid() PRIMARY KEY, name TEXT, age TEXT, size TEXT, type TEXT);
-    DependsOn:
-      - InfrastructureCoreUnicornInstance6758A25D
-      - InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
+        Ref: VSCodeIdeIdeEC2Instance846AE373
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
 Outputs:
@@ -1456,18 +1079,18 @@ Outputs:
         - ""
         - - https://
           - Fn::GetAtt:
-              - UnicornStoreIdeIdeDistribution9A9F0B03
+              - VSCodeIdeIdeDistribution613960F4
               - DomainName
     Export:
-      Name: unicornstore-ide-url
+      Name: ide-url
   IdePassword:
     Description: Workshop IDE Password
     Value:
       Fn::GetAtt:
-        - UnicornStoreIdeIdePasswordExporter0662A4D7
+        - VSCodeIdeIdePasswordExporter93551A8E
         - password
     Export:
-      Name: unicornstore-ide-password
+      Name: ide-password
 Parameters:
   SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>

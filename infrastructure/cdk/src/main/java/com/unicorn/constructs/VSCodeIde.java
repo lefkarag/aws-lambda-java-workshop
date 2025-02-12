@@ -420,7 +420,7 @@ public class VSCodeIde extends Construct {
                         Map.entry("codeServerVersion", props.getCodeServerVersion()),
                         Map.entry("waitConditionHandleUrl", waitHandle.getRef()),
                         Map.entry("customBootstrapScript", props.getBootstrapScript()),
-                        Map.entry("installGitea", addGiteaToSSMTemplate(props.isEnableGitea())),
+//                        Map.entry("installGitea", addGiteaToSSMTemplate(props.isEnableGitea())),
                         Map.entry("splashUrl", props.getSplashUrl()),
                         Map.entry("readmeUrl", props.getReadmeUrl()),
                         Map.entry("environmentContentsZip", props.getEnvironmentContentsZip()),

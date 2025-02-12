@@ -33,7 +33,6 @@ public class DatabaseSetup extends Construct {
                     .build();
 
             infrastructureStore.getDatabaseSecret().grantRead(databaseSetupFunction);
-            infrastructureStore.getDatabase().grantDataApiAccess(databaseSetupFunction);
 
             databaseSetupResource = CustomResource.Builder.create(this, "DatabaseSetupResource")
                     .serviceToken(databaseSetupFunction.getFunctionArn())

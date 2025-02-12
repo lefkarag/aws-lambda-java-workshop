@@ -1,26 +1,13 @@
 package com.unicorn.core;
 
-import software.amazon.awscdk.services.ec2.IVpc;
-import software.amazon.awscdk.services.ec2.Port;
-import software.amazon.awscdk.services.ec2.Peer;
-import software.amazon.awscdk.services.ec2.SecurityGroup;
-import software.amazon.awscdk.services.ec2.SubnetSelection;
-import software.amazon.awscdk.services.ec2.SubnetType;
-import software.amazon.awscdk.services.ec2.ISecurityGroup;
-import software.amazon.awscdk.services.ec2.SecurityGroupProps;
+import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.services.ec2.*;
+import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.events.EventBus;
-import software.amazon.awscdk.services.rds.AuroraPostgresClusterEngineProps;
-import software.amazon.awscdk.services.rds.ServerlessV2ClusterInstanceProps;
-import software.amazon.awscdk.services.rds.AuroraPostgresEngineVersion;
-import software.amazon.awscdk.services.rds.Credentials;
-import software.amazon.awscdk.services.rds.ClusterInstance;
-import software.amazon.awscdk.services.rds.DatabaseCluster;
-import software.amazon.awscdk.services.rds.DatabaseClusterEngine;
-import software.amazon.awscdk.services.rds.DatabaseSecret;
+import software.amazon.awscdk.services.rds.*;
 import software.amazon.awscdk.services.ssm.ParameterTier;
 import software.amazon.awscdk.services.ssm.StringParameter;
 import software.amazon.awscdk.services.secretsmanager.Secret;
-import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.SecretValue;
 import software.amazon.awscdk.SecretsManagerSecretOptions;
 import software.constructs.Construct;
@@ -30,7 +17,7 @@ import java.util.List;
 public class InfrastructureCore extends Construct {
 
     private final DatabaseSecret databaseSecret;
-    private final DatabaseCluster database;
+    private final DatabaseInstance database;
     private final EventBus eventBridge;
     private final IVpc vpc;
     private final ISecurityGroup applicationSecurityGroup;
@@ -77,33 +64,25 @@ public class InfrastructureCore extends Construct {
         return databaseSecurityGroup;
     }
 
-    private DatabaseCluster createDatabase(IVpc vpc, DatabaseSecret databaseSecret) {
+    private DatabaseInstance createDatabase(IVpc vpc, DatabaseSecret databaseSecret) {
 
         var databaseSecurityGroup = createDatabaseSecurityGroup(vpc);
+        var engine = DatabaseInstanceEngine.postgres(PostgresInstanceEngineProps.builder().version(PostgresEngineVersion.VER_16).build());
 
-        var dbCluster = DatabaseCluster.Builder.create(this, "UnicornStoreDatabase")
-                .engine(DatabaseClusterEngine.auroraPostgres(
-                        AuroraPostgresClusterEngineProps.builder().version(AuroraPostgresEngineVersion.VER_16_4).build()))
-                .serverlessV2MinCapacity(0.5)
-                .serverlessV2MaxCapacity(4)
-                .writer(ClusterInstance.serverlessV2("UnicornStoreDatabaseWriter", ServerlessV2ClusterInstanceProps.builder()
-                        .instanceIdentifier("unicornstore-db-writer")
-                        .autoMinorVersionUpgrade(true)
-                        .build()))
-                .enableDataApi(true)
-                .defaultDatabaseName("unicorns")
-                .clusterIdentifier("unicornstore-db-cluster")
-                .instanceIdentifierBase("unicornstore-db-instance")
+        return DatabaseInstance.Builder.create(this, "UnicornInstance")
+                .engine(engine)
                 .vpc(vpc)
+                .allowMajorVersionUpgrade(true)
+                .backupRetention(Duration.days(0))
+                .databaseName("unicorns")
+                .instanceIdentifier("UnicornInstance")
+                .instanceType(InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MEDIUM))
                 .vpcSubnets(SubnetSelection.builder()
                         .subnetType(SubnetType.PRIVATE_WITH_EGRESS)
                         .build())
                 .securityGroups(List.of(databaseSecurityGroup))
                 .credentials(Credentials.fromSecret(databaseSecret))
-                .removalPolicy(RemovalPolicy.DESTROY)
                 .build();
-
-        return dbCluster;
     }
 
     private DatabaseSecret createDatabaseSecret() {
@@ -137,7 +116,7 @@ public class InfrastructureCore extends Construct {
     }
 
     public String getDatabaseConnectionString(){
-        return "jdbc:postgresql://" + database.getClusterEndpoint().getHostname() + ":5432/unicorns";
+        return "jdbc:postgresql://" + database.getDbInstanceEndpointAddress() + ":5432/unicorns";
     }
 
     public StringParameter getParamDBConnectionString() {
@@ -164,7 +143,7 @@ public class InfrastructureCore extends Construct {
         return databaseSecret;
     }
 
-    public DatabaseCluster getDatabase() {
+    public DatabaseInstance getDatabase() {
         return database;
     }
 }
