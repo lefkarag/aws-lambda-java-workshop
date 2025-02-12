@@ -408,7 +408,7 @@ Resources:
   VSCodeIdeIdeLogGroup364F2B78:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: ide-bootstrap-log-20250212-101412
+      LogGroupName: ide-bootstrap-log-20250212-110648
       RetentionInDays: 7
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
@@ -857,9 +857,9 @@ Resources:
         description: Bootstrap IDE
         parameters:
           BootstrapScript:
+            default: ""
             description: (Optional) Custom bootstrap script to run.
             type: String
-            default: ""
         mainSteps:
           - inputs:
               runCommand:
@@ -870,7 +870,74 @@ Resources:
                       set -o xtrace
 
                       echo "Retrieving IDE password..."
-                      
+                      PASSWORD_SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id "${passwordName}" --query 'SecretString' --output text)
+                      export IDE_PASSWORD=$(echo "$PASSWORD_SECRET_VALUE" | jq -r '.password')
+
+                      # Install AWS CLI
+                      curl -L -o /tmp/aws-cli.zip https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip
+                      unzip -d /tmp /tmp/aws-cli.zip
+                      /tmp/aws/install --update
+                      rm -rf /tmp/aws
+
+                      # Install docker and base package
+                      dnf install -y docker git
+                      service docker start
+                      usermod -aG docker ec2-user
+
+                      # Install code-server
+                      codeServer=$(dnf list installed code-server | wc -l)
+                      if [ "\$codeServer" -eq "0" ]; then
+                        sudo -u ec2-user "codeServerVersion=${codeServerVersion}" bash -c 'curl -fsSL https://code-server.dev/install.sh | sh -s -- --version ${codeServerVersion}'
+                        systemctl enable --now code-server@ec2-user
+                      fi
+
+                      sudo -u ec2-user bash -c 'mkdir -p ~/.config/code-server'
+                      sudo -u ec2-user bash -c 'touch ~/.config/code-server/config.yaml'
+                      tee /home/ec2-user/.config/code-server/config.yaml <<EOF
+                      cert: false
+                      auth: password
+                      password: "$IDE_PASSWORD"
+                      bind-addr: 127.0.0.1:8889
+                      EOF
+
+                      sudo -u ec2-user bash -c 'mkdir -p ~/.local/share/code-server/User'
+                      sudo -u ec2-user bash -c 'touch ~/.local/share/code-server/User/settings.json'
+                      tee /home/ec2-user/.local/share/code-server/User/settings.json <<EOF
+                      {
+                        "extensions.autoUpdate": false,
+                        "extensions.autoCheckUpdates": false,
+                        "security.workspace.trust.enabled": false,
+                        "workbench.startupEditor": "terminal",
+                        "task.allowAutomaticTasks": "on",
+                        "telemetry.telemetryLevel": "off",
+                        "update.mode": "none",
+                        "update.showReleaseNotes": false
+                      }
+                      EOF
+
+                      systemctl restart code-server@ec2-user
+
+                      # Install caddy
+                      dnf copr enable -y @caddy/caddy epel-9-x86_64
+                      dnf install -y caddy
+                      systemctl enable --now caddy
+
+                      tee /etc/caddy/Caddyfile <<EOF
+                      http://${domain} {
+                        reverse_proxy 127.0.0.1:8889
+                      }
+                      EOF
+
+                      systemctl restart caddy
+
+                      # Create default directory for workspace
+                      sudo -u ec2-user bash -c 'mkdir -p ~/environment'
+
+                      if [ ! -f "/home/ec2-user/.local/share/code-server/coder.json" ]; then
+                        sudo -u ec2-user bash -c 'touch ~/.local/share/code-server/coder.json'
+                        echo '{ "query": { "folder": "/home/ec2-user/environment" } }' > /home/ec2-user/.local/share/code-server/coder.json
+                      fi
+
                       ${customBootstrapScript}
                       HEREDOC
 
@@ -879,17 +946,7 @@ Resources:
                       /opt/aws/bin/cfn-signal -e $exit_code '${waitConditionHandleUrl}'
 
                       exit $exit_code
-                    - terminalOnStartup: "true"
-                      readmeUrl: ""
-                      instanceIamRoleName:
-                        Ref: VSCodeIdeIdeRole21951A1F
-                      codeServerVersion: 4.96.4
-                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
-                      environmentContentsZip: ""
-                      domain: ""
-                      customBootstrapScript: |
-                        date
-                      waitConditionHandleUrl:
+                    - waitConditionHandleUrl:
                         Ref: VSCodeIdeIdeBootstrapWaitConditionHandle0A599C82
                       splashUrl: ""
                       instanceIamRoleArn:
@@ -926,6 +983,16 @@ Resources:
                                         - Fn::Split:
                                             - ":"
                                             - Ref: VSCodeIdeIdePasswordSecret39AD78F3
+                      terminalOnStartup: "true"
+                      readmeUrl: ""
+                      instanceIamRoleName:
+                        Ref: VSCodeIdeIdeRole21951A1F
+                      codeServerVersion: 4.96.4
+                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
+                      environmentContentsZip: ""
+                      domain: ""
+                      customBootstrapScript: |
+                        date
             name: IdeBootstrapFunction
             action: aws:runShellScript
       DocumentFormat: YAML
@@ -1063,12 +1130,12 @@ Resources:
         Fn::GetAtt:
           - VSCodeIdeIdeBootstrapFunctionADFBCE22
           - Arn
+      InstanceId:
+        Ref: VSCodeIdeIdeEC2Instance846AE373
       LogGroupName:
         Ref: VSCodeIdeIdeLogGroup364F2B78
       SsmDocument:
         Ref: VSCodeIdeIdeBootstrapDocument8DDB05AD
-      InstanceId:
-        Ref: VSCodeIdeIdeEC2Instance846AE373
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
 Outputs:

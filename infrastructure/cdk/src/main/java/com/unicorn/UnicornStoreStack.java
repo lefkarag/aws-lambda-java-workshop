@@ -22,14 +22,14 @@ public class UnicornStoreStack extends Stack {
             date
             
             echo '=== Clone Git repository ==='
-            sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/aws-lambda-java-workshop/"
-            # sudo -H -u ec2-user bash -c "cd ~/aws-lambda-java-workshop && git checkout cdk-refactoring"
+            sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/environment/aws-lambda-java-workshop/"
+            sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring"
             
             echo '=== Setup IDE ==='
-            sudo -H -i -u ec2-user bash -c "~/aws-lambda-java-workshop/infrastructure/scripts/setup/ide.sh"
+            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/setup-ide.sh"
             
             echo '=== Additional Setup ==='
-            sudo -H -i -u ec2-user bash -c "~/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
+            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
             """;
 
     private final InfrastructureCore infrastructureCore;
