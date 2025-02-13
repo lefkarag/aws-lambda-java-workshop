@@ -19,7 +19,7 @@ usermod -aG docker ec2-user
 
 # Install code-server
 codeServer=$(dnf list installed code-server | wc -l)
-if [ "\$codeServer" -eq "0" ]; then
+if [ "$codeServer" -eq "0" ]; then
   sudo -u ec2-user "codeServerVersion=${codeServerVersion}" bash -c 'curl -fsSL https://code-server.dev/install.sh | sh -s -- --version ${codeServerVersion}'
   systemctl enable --now code-server@ec2-user
 fi
