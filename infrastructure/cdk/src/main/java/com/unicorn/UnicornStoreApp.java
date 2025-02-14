@@ -25,8 +25,8 @@ public class UnicornStoreApp {
 
         var infrastructureStack = unicornStoreStack.getInfrastructureCore();
 
-//        var unicornStoreSpring = new UnicornStoreSpring(app, "UnicornStoreSpringApp", StackProps.builder()
-//                .build(), infrastructureStack);
+        var unicornStoreSpring = new UnicornStoreSpring(app, "UnicornStoreSpringApp", StackProps.builder()
+                .build(), infrastructureStack);
 
 //        var unicornStoreMicronaut = new UnicornStoreMicronaut(app, "UnicornStoreMicronautApp", StackProps.builder()
 //                .build(), infrastructureStack);
@@ -77,7 +77,7 @@ public class UnicornStoreApp {
 
         NagSuppressions.addStackSuppressions(unicornStoreStack, suppression);
         NagSuppressions.addStackSuppressions(ideStack, suppression);
-//        NagSuppressions.addStackSuppressions(unicornStoreSpring, suppression);
+        NagSuppressions.addStackSuppressions(unicornStoreSpring, suppression);
 //        NagSuppressions.addStackSuppressions(unicornStoreMicronaut, suppression);
 //        NagSuppressions.addStackSuppressions(unicornStoreSpringGraalVM, suppression);
 //        NagSuppressions.addStackSuppressions(unicornStoreQuarkus, suppression);

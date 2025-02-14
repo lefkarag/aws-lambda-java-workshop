@@ -408,7 +408,7 @@ Resources:
   UnicornStoreIdeIdeLogGroup7A5EFA50:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: unicornstore-ide-bootstrap-log-20250212-172506
+      LogGroupName: unicornstore-ide-bootstrap-log-20250214-105957
       RetentionInDays: 7
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
@@ -866,9 +866,9 @@ Resources:
         description: Bootstrap IDE
         parameters:
           BootstrapScript:
-            default: ""
-            type: String
             description: (Optional) Custom bootstrap script to run.
+            type: String
+            default: ""
         mainSteps:
           - inputs:
               runCommand:
@@ -876,11 +876,11 @@ Resources:
                     - |-
                       bash << 'HEREDOC'
                       set -e
+                      set -o xtrace
 
                       echo "Retrieving IDE password..."
 
                       PASSWORD_SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id "${passwordName}" --query 'SecretString' --output text)
-
                       export IDE_PASSWORD=$(echo "$PASSWORD_SECRET_VALUE" | jq -r '.password')
 
                       echo "Setting profile variables..."
@@ -890,52 +890,18 @@ Resources:
                       export AWS_REGION=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
                       export EC2_PRIVATE_IP=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/local-ipv4)
 
-                      tee /etc/profile.d/workshop.sh <<EOF
-                      export INSTANCE_IAM_ROLE_NAME="${instanceIamRoleName}"
-                      export INSTANCE_IAM_ROLE_ARN="${instanceIamRoleArn}"
-
-                      export AWS_REGION="$AWS_REGION"
-                      export AWS_DEFAULT_REGION="$AWS_REGION"
-                      export EC2_PRIVATE_IP="$EC2_PRIVATE_IP"
-
-                      export IDE_DOMAIN="${domain}"
-                      export IDE_URL="https://${domain}"
-                      export IDE_PASSWORD="$IDE_PASSWORD"
-
-                      alias code="code-server"
-                      EOF
-
-                      source /etc/profile.d/workshop.sh
-
-                      echo "Setting PS1..."
-
-                      # Set PS1
-                      tee /etc/profile.d/custom_prompt.sh <<EOF
-                      #!/bin/sh
-
-                      export PROMPT_COMMAND='export PS1="\u:\w:$ "'
-                      EOF
-
-                      echo "Generating SSH key..."
-
-                      # Generate an SSH key for ec2-user
-                      sudo -u ec2-user bash -c "ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa -m pem <<< y"
-
                       echo "Installing AWS CLI..."
 
                       # Install AWS CLI
-                      curl -LSsf -o /tmp/aws-cli.zip https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip
-                      unzip -q -d /tmp /tmp/aws-cli.zip
+                      curl -L -o /tmp/aws-cli.zip https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip
+                      unzip -d /tmp /tmp/aws-cli.zip
                       /tmp/aws/install --update
-                      rm -rf /tmp/aws*
-
-                      echo "export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)" | sudo tee -a /etc/profile.d/workshop.sh
-                      source /etc/profile.d/workshop.sh
+                      rm -rf /tmp/aws
 
                       echo "Installing Docker..."
 
                       # Install docker and base package
-                      dnf install -y -q docker git >/dev/null
+                      dnf install -y docker git
                       service docker start
                       usermod -aG docker ec2-user
 
@@ -957,45 +923,6 @@ Resources:
                       bind-addr: 127.0.0.1:8889
                       EOF
 
-                      # Create default directory for workspace
-                      sudo -u ec2-user bash -c 'mkdir -p ~/environment'
-
-                      ENVIRONMENT_CONTENTS_ZIP=${environmentContentsZip}
-
-                      if [ ! -z "$ENVIRONMENT_CONTENTS_ZIP" ]; then
-                        echo "Adding environments archive..."
-
-                        if [[ $ENVIRONMENT_CONTENTS_ZIP == s3:* ]]; then
-                          aws s3 cp $ENVIRONMENT_CONTENTS_ZIP /tmp/environment.zip
-                        else
-                          curl -LSsf -o /tmp/environment.zip $ENVIRONMENT_CONTENTS_ZIP
-                        fi
-
-                        sudo -u ec2-user bash -c 'unzip -q /tmp/environment.zip -d ~/environment'
-
-                        rm -rf /tmp/environment.zip
-                      fi
-
-                      STARTUP_EDITOR='none'
-
-                      TERMINAL_ON_STARTUP="${terminalOnStartup}"
-                      README_URL="${readmeUrl}"
-
-                      if [ ! -z "$README_URL" ]; then
-                        echo "Adding README..."
-                        if [[ $README_URL == s3:* ]]; then
-                          aws s3 cp $README_URL /home/ec2-user/environment/README.md
-                        else
-                          curl -LSsf -o /home/ec2-user/environment/README.md $README_URL
-                        fi
-                      fi
-
-                      if [ "$TERMINAL_ON_STARTUP" = "true" ]; then
-                        STARTUP_EDITOR='terminal'
-                      elif [ -f /home/ec2-user/environment/README.md ]; then
-                        STARTUP_EDITOR='readme'
-                      fi
-
                       echo "Configuring code-server..."
 
                       sudo -u ec2-user bash -c 'mkdir -p ~/.local/share/code-server/User'
@@ -1005,73 +932,13 @@ Resources:
                         "extensions.autoUpdate": false,
                         "extensions.autoCheckUpdates": false,
                         "security.workspace.trust.enabled": false,
-                        "workbench.startupEditor": "$STARTUP_EDITOR",
+                        "workbench.startupEditor": "terminal",
                         "task.allowAutomaticTasks": "on",
                         "telemetry.telemetryLevel": "off",
-                        "update.mode": "none"
+                        "update.mode": "none",
+                        "update.showReleaseNotes": false
                       }
                       EOF
-
-                      sudo -u ec2-user bash -c 'touch ~/.local/share/code-server/User/keybindings.json'
-                      tee /home/ec2-user/.local/share/code-server/User/keybindings.json << 'EOF'
-                      [
-                        {
-                          "key": "shift+cmd+/",
-                          "command": "remote.tunnel.forwardCommandPalette"
-                        }
-                      ]
-                      EOF
-
-                      if [ ! -z "${splashUrl}" ]; then
-                      echo "Configuring splash URL..."
-
-                      sudo -u ec2-user bash -c 'touch ~/.local/share/code-server/User/tasks.json'
-                      tee /home/ec2-user/.local/share/code-server/User/tasks.json << 'EOF'
-                      {
-                        "version": "2.0.0",
-                        "tasks": [
-                          {
-                            "label": "Open Splash",
-                            "command": "${!input:openSimpleBrowser}",
-                            "presentation": {
-                              "reveal": "always",
-                              "panel": "new"
-                            },
-                            "runOptions": {
-                              "runOn": "folderOpen"
-                            }
-                          }
-                        ],
-                        "inputs": [
-                          {
-                            "id": "openSimpleBrowser",
-                            "type": "command",
-                            "command": "simpleBrowser.show",
-                            "args": [
-                              "${splashUrl}"
-                            ]
-                          }
-                        ]
-                      }
-                      EOF
-                      fi
-
-                      echo "Installing code-server extensions..."
-
-                      EXTENSIONS="${extensions}"
-
-                      IFS=',' read -ra array <<< "$EXTENSIONS"
-
-                      # Iterate over each entry in the array
-                      for extension in "${!array[@]}"; do
-                        # Use retries as extension installation seems unreliable
-                        sudo -u ec2-user bash -c "set -e; (r=5;while ! code-server --install-extension $extension --force ; do ((--r))||exit;sleep 5;done)"
-                      done
-
-                      if [ ! -f "/home/ec2-user/.local/share/code-server/coder.json" ]; then
-                        sudo -u ec2-user bash -c 'touch ~/.local/share/code-server/coder.json'
-                        echo '{ "query": { "folder": "/home/ec2-user/environment" } }' > /home/ec2-user/.local/share/code-server/coder.json
-                      fi
 
                       echo "Restarting code-server..."
 
@@ -1080,22 +947,22 @@ Resources:
                       echo "Installing Caddy..."
 
                       # Install caddy
-                      dnf copr enable -y -q @caddy/caddy epel-9-x86_64
-                      dnf install -y -q caddy
+                      dnf copr enable -y @caddy/caddy epel-9-x86_64
+                      dnf install -y caddy
                       systemctl enable --now caddy
 
                       tee /etc/caddy/Caddyfile <<EOF
-                      :80 {
-                        handle /* {
-                          reverse_proxy 127.0.0.1:8889
-                        }
-                        #GITEA
+                      http://${domain} {
+                        reverse_proxy 127.0.0.1:8889
                       }
                       EOF
 
                       echo "Restarting caddy..."
 
                       systemctl restart caddy
+
+                      # Create default directory for workspace
+                      sudo -u ec2-user bash -c 'mkdir -p ~/environment'
 
                       if [ ! -f "/home/ec2-user/.local/share/code-server/coder.json" ]; then
                         sudo -u ec2-user bash -c 'touch ~/.local/share/code-server/coder.json'
@@ -1112,11 +979,31 @@ Resources:
                       /opt/aws/bin/cfn-signal -e $exit_code '${waitConditionHandleUrl}'
 
                       exit $exit_code
-                    - codeServerVersion: 4.96.4
-                      instanceIamRoleName:
+                    - instanceIamRoleName:
                         Ref: UnicornStoreIdeIdeRole81A2CEAA
-                      readmeUrl: ""
-                      terminalOnStartup: "true"
+                      codeServerVersion: 4.96.4
+                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
+                      environmentContentsZip: ""
+                      domain: ""
+                      customBootstrapScript: |
+                        date
+
+                        echo '=== Clone Git repository ==='
+                        sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/environment/aws-lambda-java-workshop/"
+                        sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring"
+
+                        echo '=== Setup IDE ==='
+                        sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/setup-ide.sh"
+
+                        echo '=== Additional Setup ==='
+                        sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
+                      waitConditionHandleUrl:
+                        Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
+                      splashUrl: ""
+                      instanceIamRoleArn:
+                        Fn::GetAtt:
+                          - UnicornStoreIdeIdeRole81A2CEAA
+                          - Arn
                       passwordName:
                         Fn::Join:
                           - "-"
@@ -1156,19 +1043,8 @@ Resources:
                                         - Fn::Split:
                                             - ":"
                                             - Ref: UnicornStoreIdeIdePasswordSecret514252E2
-                      instanceIamRoleArn:
-                        Fn::GetAtt:
-                          - UnicornStoreIdeIdeRole81A2CEAA
-                          - Arn
-                      splashUrl: ""
-                      waitConditionHandleUrl:
-                        Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
-                      customBootstrapScript: |
-                        date
-
-                      domain: ""
-                      environmentContentsZip: ""
-                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
+                      terminalOnStartup: "true"
+                      readmeUrl: ""
             name: IdeBootstrapFunction
             action: aws:runShellScript
       DocumentFormat: YAML
@@ -1306,12 +1182,12 @@ Resources:
         Fn::GetAtt:
           - UnicornStoreIdeIdeBootstrapFunctionF57074A6
           - Arn
-      InstanceId:
-        Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
-      SsmDocument:
-        Ref: UnicornStoreIdeIdeBootstrapDocumentE330810B
       LogGroupName:
         Ref: UnicornStoreIdeIdeLogGroup7A5EFA50
+      SsmDocument:
+        Ref: UnicornStoreIdeIdeBootstrapDocumentE330810B
+      InstanceId:
+        Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
   InfrastructureCorepostgresB0D0C6BB:
@@ -1336,8 +1212,8 @@ Resources:
       SecretId:
         Ref: InfrastructureCorepostgresB0D0C6BB
       TargetId:
-        Ref: InfrastructureCoreUnicornInstance6758A25D
-      TargetType: AWS::RDS::DBInstance
+        Ref: InfrastructureCoreUnicornStoreDatabaseF56884BA
+      TargetType: AWS::RDS::DBCluster
   InfrastructureCoreDatabaseSG7319389B:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -1357,27 +1233,25 @@ Resources:
           ToPort: 5432
       VpcId:
         Ref: UnicornStoreVpc647929A5
-  InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2:
+  InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
-      DBSubnetGroupDescription: Subnet group for UnicornInstance database
+      DBSubnetGroupDescription: Subnets for UnicornStoreDatabase database
       SubnetIds:
         - Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
         - Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
-  InfrastructureCoreUnicornInstance6758A25D:
-    Type: AWS::RDS::DBInstance
+  InfrastructureCoreUnicornStoreDatabaseF56884BA:
+    Type: AWS::RDS::DBCluster
     Properties:
-      AllocatedStorage: "100"
-      AllowMajorVersionUpgrade: true
-      BackupRetentionPeriod: 0
       CopyTagsToSnapshot: true
-      DBInstanceClass: db.t3.medium
-      DBInstanceIdentifier: unicorninstance
-      DBName: unicorns
+      DBClusterIdentifier: unicornstore-db-cluster
+      DBClusterParameterGroupName: default.aurora-postgresql16
       DBSubnetGroupName:
-        Ref: InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
-      Engine: postgres
-      EngineVersion: "16"
+        Ref: InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      DatabaseName: unicorns
+      EnableHttpEndpoint: true
+      Engine: aurora-postgresql
+      EngineVersion: "16.4"
       MasterUserPassword:
         Fn::Join:
           - ""
@@ -1390,14 +1264,34 @@ Resources:
           - - "{{resolve:secretsmanager:"
             - Ref: InfrastructureCorepostgresB0D0C6BB
             - :SecretString:username::}}
-      PubliclyAccessible: false
-      StorageType: gp2
-      VPCSecurityGroups:
+      Port: 5432
+      ServerlessV2ScalingConfiguration:
+        MaxCapacity: 4
+        MinCapacity: 0.5
+      VpcSecurityGroupIds:
         - Fn::GetAtt:
             - InfrastructureCoreDatabaseSG7319389B
             - GroupId
-    UpdateReplacePolicy: Snapshot
-    DeletionPolicy: Snapshot
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AutoMinorVersionUpgrade: true
+      DBClusterIdentifier:
+        Ref: InfrastructureCoreUnicornStoreDatabaseF56884BA
+      DBInstanceClass: db.serverless
+      DBInstanceIdentifier: unicornstore-db-writer
+      Engine: aurora-postgresql
+      PromotionTier: 0
+      PubliclyAccessible: false
+    DependsOn:
+      - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
+      - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
+      - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
+      - UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
   InfrastructureCoreUnicornEventBusBBADDC7E:
     Type: AWS::Events::EventBus
     Properties:
@@ -1426,7 +1320,7 @@ Resources:
           - ""
           - - jdbc:postgresql://
             - Fn::GetAtt:
-                - InfrastructureCoreUnicornInstance6758A25D
+                - InfrastructureCoreUnicornStoreDatabaseF56884BA
                 - Endpoint.Address
             - :5432/unicorns
   InfrastructureCoredbSecretPassword1EC1CF00:
@@ -1491,8 +1385,9 @@ Resources:
               - Ref: AWS::Partition
               - :iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
     DependsOn:
-      - InfrastructureCoreUnicornInstance6758A25D
-      - InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
+      - InfrastructureCoreUnicornStoreDatabaseF56884BA
+      - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      - InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE
       - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
       - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
       - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
@@ -1508,13 +1403,38 @@ Resources:
             Effect: Allow
             Resource:
               Ref: InfrastructureCorepostgresB0D0C6BB
+          - Action:
+              - rds-data:BatchExecuteStatement
+              - rds-data:BeginTransaction
+              - rds-data:CommitTransaction
+              - rds-data:ExecuteStatement
+              - rds-data:RollbackTransaction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":cluster:"
+                  - Ref: InfrastructureCoreUnicornStoreDatabaseF56884BA
+          - Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Effect: Allow
+            Resource:
+              Ref: InfrastructureCorepostgresAttachmentE2B30E5B
         Version: "2012-10-17"
       PolicyName: UnicornDatabaseConstructDatabaseSetupFunctionServiceRoleDefaultPolicy3FC0A7F3
       Roles:
         - Ref: UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5
     DependsOn:
-      - InfrastructureCoreUnicornInstance6758A25D
-      - InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
+      - InfrastructureCoreUnicornStoreDatabaseF56884BA
+      - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      - InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE
       - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
       - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
       - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
@@ -1626,8 +1546,9 @@ Resources:
           - Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
           - Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
     DependsOn:
-      - InfrastructureCoreUnicornInstance6758A25D
-      - InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
+      - InfrastructureCoreUnicornStoreDatabaseF56884BA
+      - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      - InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE
       - UnicornDatabaseConstructDatabaseSetupFunctionServiceRoleDefaultPolicy3FC0A7F3
       - UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5
       - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
@@ -1641,7 +1562,6 @@ Resources:
         Fn::GetAtt:
           - UnicornDatabaseConstructDatabaseSetupFunction8C55B639
           - Arn
-      SqlStatements: CREATE TABLE IF NOT EXISTS unicorns(id TEXT DEFAULT gen_random_uuid() PRIMARY KEY, name TEXT, age TEXT, size TEXT, type TEXT);
       SecretName:
         Fn::Join:
           - "-"
@@ -1672,9 +1592,11 @@ Resources:
                         - Fn::Split:
                             - ":"
                             - Ref: InfrastructureCorepostgresB0D0C6BB
+      SqlStatements: CREATE TABLE IF NOT EXISTS unicorns(id TEXT DEFAULT gen_random_uuid() PRIMARY KEY, name TEXT, age TEXT, size TEXT, type TEXT);
     DependsOn:
-      - InfrastructureCoreUnicornInstance6758A25D
-      - InfrastructureCoreUnicornInstanceSubnetGroupA5F49FB2
+      - InfrastructureCoreUnicornStoreDatabaseF56884BA
+      - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      - InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
 Outputs:
@@ -1697,6 +1619,42 @@ Outputs:
         - password
     Export:
       Name: unicornstore-ide-password
+  ExportsOutputFnGetAttInfrastructureCoreUnicornEventBusBBADDC7EArnF84A1255:
+    Value:
+      Fn::GetAtt:
+        - InfrastructureCoreUnicornEventBusBBADDC7E
+        - Arn
+    Export:
+      Name: UnicornStoreStack:ExportsOutputFnGetAttInfrastructureCoreUnicornEventBusBBADDC7EArnF84A1255
+  ExportsOutputFnGetAttInfrastructureCoreUnicornStoreDatabaseF56884BAEndpointAddress3B7F305B:
+    Value:
+      Fn::GetAtt:
+        - InfrastructureCoreUnicornStoreDatabaseF56884BA
+        - Endpoint.Address
+    Export:
+      Name: UnicornStoreStack:ExportsOutputFnGetAttInfrastructureCoreUnicornStoreDatabaseF56884BAEndpointAddress3B7F305B
+  ExportsOutputRefInfrastructureCorepostgresB0D0C6BBCF587FCF:
+    Value:
+      Ref: InfrastructureCorepostgresB0D0C6BB
+    Export:
+      Name: UnicornStoreStack:ExportsOutputRefInfrastructureCorepostgresB0D0C6BBCF587FCF
+  ExportsOutputRefUnicornStoreVpcPrivateSubnet1Subnet1D81DF6068245511:
+    Value:
+      Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
+    Export:
+      Name: UnicornStoreStack:ExportsOutputRefUnicornStoreVpcPrivateSubnet1Subnet1D81DF6068245511
+  ExportsOutputRefUnicornStoreVpcPrivateSubnet2Subnet4710EC68AA4E2B32:
+    Value:
+      Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
+    Export:
+      Name: UnicornStoreStack:ExportsOutputRefUnicornStoreVpcPrivateSubnet2Subnet4710EC68AA4E2B32
+  ExportsOutputFnGetAttInfrastructureCoreApplicationSecurityGroup914702B5GroupId330B893B:
+    Value:
+      Fn::GetAtt:
+        - InfrastructureCoreApplicationSecurityGroup914702B5
+        - GroupId
+    Export:
+      Name: UnicornStoreStack:ExportsOutputFnGetAttInfrastructureCoreApplicationSecurityGroup914702B5GroupId330B893B
 Parameters:
   SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>

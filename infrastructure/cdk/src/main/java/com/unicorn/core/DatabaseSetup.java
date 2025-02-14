@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class DatabaseSetup extends Construct {
+public class DatabaseSetup extends Construct{
 
     private CustomResource databaseSetupResource;
 
     public DatabaseSetup(final Construct scope, final String id,
-                         final InfrastructureCore infrastructureStore) {
+                         final InfrastructureCore infrastructureCore) {
         super(scope, id);
 
         if (databaseSetupResource == null) {
@@ -28,20 +28,21 @@ public class DatabaseSetup extends Construct {
                     .runtime(Runtime.PYTHON_3_13)
                     .functionName("unicornstore-db-setup-lambda")
                     .timeout(Duration.minutes(3))
-                    .vpc(infrastructureStore.getVpc())
-                    .securityGroups(List.of(infrastructureStore.getApplicationSecurityGroup()))
+                    .vpc(infrastructureCore.getVpc())
+                    .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
                     .build();
 
-            infrastructureStore.getDatabaseSecret().grantRead(databaseSetupFunction);
+            infrastructureCore.getDatabaseSecret().grantRead(databaseSetupFunction);
+            infrastructureCore.getDatabase().grantDataApiAccess(databaseSetupFunction);
 
             databaseSetupResource = CustomResource.Builder.create(this, "DatabaseSetupResource")
                     .serviceToken(databaseSetupFunction.getFunctionArn())
                     .properties(Map.of(
-                            "SecretName", infrastructureStore.getDatabaseSecret().getSecretName(),
+                            "SecretName", infrastructureCore.getDatabaseSecret().getSecretName(),
                             "SqlStatements", loadFile("/schema.sql")
                     ))
                     .build();
-            databaseSetupResource.getNode().addDependency(infrastructureStore.getDatabase());
+            databaseSetupResource.getNode().addDependency(infrastructureCore.getDatabase());
         }
     }
 

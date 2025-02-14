@@ -408,7 +408,7 @@ Resources:
   VSCodeIdeIdeLogGroup364F2B78:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: ide-bootstrap-log-20250212-110648
+      LogGroupName: ide-bootstrap-log-20250213-124225
       RetentionInDays: 7
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
@@ -857,9 +857,9 @@ Resources:
         description: Bootstrap IDE
         parameters:
           BootstrapScript:
+            type: String
             default: ""
             description: (Optional) Custom bootstrap script to run.
-            type: String
         mainSteps:
           - inputs:
               runCommand:
@@ -946,7 +946,12 @@ Resources:
                       /opt/aws/bin/cfn-signal -e $exit_code '${waitConditionHandleUrl}'
 
                       exit $exit_code
-                    - waitConditionHandleUrl:
+                    - extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
+                      environmentContentsZip: ""
+                      domain: ""
+                      customBootstrapScript: |
+                        date
+                      waitConditionHandleUrl:
                         Ref: VSCodeIdeIdeBootstrapWaitConditionHandle0A599C82
                       splashUrl: ""
                       instanceIamRoleArn:
@@ -988,11 +993,6 @@ Resources:
                       instanceIamRoleName:
                         Ref: VSCodeIdeIdeRole21951A1F
                       codeServerVersion: 4.96.4
-                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
-                      environmentContentsZip: ""
-                      domain: ""
-                      customBootstrapScript: |
-                        date
             name: IdeBootstrapFunction
             action: aws:runShellScript
       DocumentFormat: YAML
@@ -1130,12 +1130,12 @@ Resources:
         Fn::GetAtt:
           - VSCodeIdeIdeBootstrapFunctionADFBCE22
           - Arn
-      InstanceId:
-        Ref: VSCodeIdeIdeEC2Instance846AE373
       LogGroupName:
         Ref: VSCodeIdeIdeLogGroup364F2B78
       SsmDocument:
         Ref: VSCodeIdeIdeBootstrapDocument8DDB05AD
+      InstanceId:
+        Ref: VSCodeIdeIdeEC2Instance846AE373
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
 Outputs:
