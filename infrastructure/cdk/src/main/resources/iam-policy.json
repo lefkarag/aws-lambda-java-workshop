@@ -93,6 +93,16 @@
 				"dynamodb:PurchaseReservedCapacityOfferings"
 			],
 			"Resource": "*"
+		},
+		{
+			"Sid": "IamLimitedAccessForWorkshopUser",
+			"Effect": "Allow",
+			"Action": [
+				"iam:PassRole"
+			],
+			"Resource": [
+				"arn:aws:iam::{{.AccountId}}:role/unicornstore-ide-user"
+			]
 		}
 	]
   }

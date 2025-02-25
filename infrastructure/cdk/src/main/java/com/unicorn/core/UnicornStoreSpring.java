@@ -1,8 +1,15 @@
 package com.unicorn.core;
 
-import software.amazon.awscdk.*;
+import software.amazon.awscdk.CfnOutput;
+import software.amazon.awscdk.CfnOutputProps;
+import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.RestApi;
+import software.amazon.awscdk.services.ec2.ISecurityGroup;
+import software.amazon.awscdk.services.ec2.IVpc;
+import software.amazon.awscdk.services.ec2.Vpc;
+import software.amazon.awscdk.services.ec2.VpcLookupOptions;
+import software.amazon.awscdk.services.events.IEventBus;
 import software.amazon.awscdk.services.lambda.Alias;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
@@ -12,20 +19,15 @@ import software.constructs.Construct;
 import java.util.List;
 import java.util.Map;
 
-public class UnicornStoreSpring extends Stack {
+public class UnicornStoreSpring extends Construct {
 
-    private final InfrastructureCore infrastructureCore;
-
-    public UnicornStoreSpring(final Construct scope, final String id, final StackProps props,
-                              final InfrastructureCore infrastructureCore) {
-        super(scope, id, props);
-
-        //Get previously created infrastructure stack
-        this.infrastructureCore = infrastructureCore;
-        var eventBridge = infrastructureCore.getEventBridge();
+    public UnicornStoreSpring(final Construct scope, final String id,
+                              IEventBus eventBridge, IVpc vpc, ISecurityGroup securityGroup,
+                              String dbSecretString, String dbConnectionString) {
+        super(scope, id);
 
         //Create Spring Lambda function
-        var unicornStoreSpringLambda = createUnicornLambdaFunction();
+        var unicornStoreSpringLambda = createUnicornLambdaFunction(vpc, securityGroup, dbSecretString, dbConnectionString);
 
         //Permission for Spring Boot Lambda Function
         eventBridge.grantPutEventsTo(unicornStoreSpringLambda);
@@ -50,7 +52,8 @@ public class UnicornStoreSpring extends Stack {
                 .build();
     }
 
-    private Alias createUnicornLambdaFunction() {
+    private Alias createUnicornLambdaFunction(IVpc vpc, ISecurityGroup securityGroup,
+                                              String dbSecretString, String dbConnectionString) {
         var lambda = Function.Builder.create(this, "UnicornStoreSpringFunction")
                 .runtime(Runtime.JAVA_21)
                 .functionName("unicorn-store-spring")
@@ -58,12 +61,12 @@ public class UnicornStoreSpring extends Stack {
                 .timeout(Duration.seconds(29))
                 .code(Code.fromAsset("../../labs/unicorn-store/software/unicorn-store-spring/target/store-spring-1.0.0.jar"))
                 .handler("com.amazonaws.serverless.proxy.spring.SpringDelegatingLambdaContainerHandler")
-                .vpc(infrastructureCore.getVpc())
-                .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
+                .vpc(vpc)
+                .securityGroups(List.of(securityGroup))
                 .environment(Map.of(
                         "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                        "SPRING_DATASOURCE_PASSWORD", infrastructureCore.getDatabaseSecretString(),
-                        "SPRING_DATASOURCE_URL", infrastructureCore.getDatabaseConnectionString(),
+                        "SPRING_DATASOURCE_PASSWORD", dbSecretString,
+                        "SPRING_DATASOURCE_URL", dbConnectionString,
                         "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1",
                         "AWS_SERVERLESS_JAVA_CONTAINER_INIT_GRACE_TIME", "500"
                 ))

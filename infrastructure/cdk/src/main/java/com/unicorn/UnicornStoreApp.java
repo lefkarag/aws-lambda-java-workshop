@@ -2,10 +2,6 @@ package com.unicorn;
 
 import java.util.List;
 
-import com.unicorn.alternatives.UnicornAuditService;
-import com.unicorn.alternatives.UnicornStoreMicronaut;
-import com.unicorn.alternatives.UnicornStoreQuarkus;
-import com.unicorn.alternatives.UnicornStoreSpringGraalVM;
 import com.unicorn.core.UnicornStoreSpring;
 import io.github.cdklabs.cdknag.AwsSolutionsChecks;
 import io.github.cdklabs.cdknag.NagPackSuppression;
@@ -19,26 +15,11 @@ public class UnicornStoreApp {
     public static void main(final String[] args) {
         App app = new App();
 
-        var unicornStoreStack = new UnicornStoreStack(app, "UnicornStoreStack", StackProps.builder().build());
+        var unicornStoreInfraStack = new UnicornStoreInfraStack(app, "UnicornStoreInfraStack", StackProps.builder().build());
 
         var ideStack = new IdeStack(app, "ide-stack");
 
-        var infrastructureStack = unicornStoreStack.getInfrastructureCore();
-
-        var unicornStoreSpring = new UnicornStoreSpring(app, "UnicornStoreSpringApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-//        var unicornStoreMicronaut = new UnicornStoreMicronaut(app, "UnicornStoreMicronautApp", StackProps.builder()
-//                .build(), infrastructureStack);
-//
-//        var unicornStoreSpringGraalVM = new UnicornStoreSpringGraalVM(app, "UnicornStoreSpringGraalVMApp", StackProps.builder()
-//                .build(), infrastructureStack);
-//
-//        var unicornStoreQuarkus = new UnicornStoreQuarkus(app, "UnicornStoreQuarkusApp", StackProps.builder()
-//                .build(), infrastructureStack);
-//
-//        var unicornAuditService = new UnicornAuditService(app, "UnicornAuditServiceApp", StackProps.builder()
-//                .build(), infrastructureStack);
+//        var unicornStoreAppStack = new UnicornStoreAppStack(app, "UnicornStoreAppStack", StackProps.builder().build());
 
         //Add CDK-NAG checks: https://github.com/cdklabs/cdk-nag
         //Add suppression to exclude certain findings that are not needed for Workshop environment
@@ -75,13 +56,9 @@ public class UnicornStoreApp {
                 new NagPackSuppression.Builder().id("CdkNagValidationFailure").reason("Suppress warnings see: https://github.com/cdklabs/cdk-nag/issues/817").build()
         );
 
-        NagSuppressions.addStackSuppressions(unicornStoreStack, suppression);
+        NagSuppressions.addStackSuppressions(unicornStoreInfraStack, suppression);
         NagSuppressions.addStackSuppressions(ideStack, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreSpring, suppression);
-//        NagSuppressions.addStackSuppressions(unicornStoreMicronaut, suppression);
-//        NagSuppressions.addStackSuppressions(unicornStoreSpringGraalVM, suppression);
-//        NagSuppressions.addStackSuppressions(unicornStoreQuarkus, suppression);
-//        NagSuppressions.addStackSuppressions(unicornAuditService, suppression);
+        NagSuppressions.addStackSuppressions(unicornStoreAppStack, suppression);
 
         app.synth();
     }

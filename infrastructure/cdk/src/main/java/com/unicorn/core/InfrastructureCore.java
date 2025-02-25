@@ -1,5 +1,7 @@
 package com.unicorn.core;
 
+import com.unicorn.common.CfnExports;
+import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.ec2.IVpc;
 import software.amazon.awscdk.services.ec2.Port;
 import software.amazon.awscdk.services.ec2.Peer;
@@ -20,9 +22,6 @@ import software.amazon.awscdk.services.rds.DatabaseSecret;
 import software.amazon.awscdk.services.ssm.ParameterTier;
 import software.amazon.awscdk.services.ssm.StringParameter;
 import software.amazon.awscdk.services.secretsmanager.Secret;
-import software.amazon.awscdk.RemovalPolicy;
-import software.amazon.awscdk.SecretValue;
-import software.amazon.awscdk.SecretsManagerSecretOptions;
 import software.constructs.Construct;
 
 import java.util.List;
@@ -54,6 +53,22 @@ public class InfrastructureCore extends Construct {
 
         paramDBConnectionString = createParamDBConnectionString();
         secretPassword = createSecretPassword();
+
+        new CfnOutput(this, CfnExports.UNICORN_STORE_VPC_ID, CfnOutputProps.builder()
+                .value(vpc.getVpcId())
+                .build());
+
+        new CfnOutput(this, CfnExports.UNICORN_STORE_EVENT_BRIDGE_ARN, CfnOutputProps.builder()
+                .value(eventBridge.getEventBusArn())
+                .build());
+
+        new CfnOutput(this, CfnExports.UNICORN_STORE_SECURITY_GROUP_ID, CfnOutputProps.builder()
+                .value(applicationSecurityGroup.getSecurityGroupId())
+                .build());
+
+        new CfnOutput(this, CfnExports.UNICORN_STORE_DATABASE_CONNECTION, CfnOutputProps.builder()
+                .value(paramDBConnectionString.getStringValue())
+                .build());
     }
 
     private EventBus createEventBus() {
@@ -78,7 +93,6 @@ public class InfrastructureCore extends Construct {
     }
 
     private DatabaseCluster createDatabase(IVpc vpc, DatabaseSecret databaseSecret) {
-
         var databaseSecurityGroup = createDatabaseSecurityGroup(vpc);
 
         var dbCluster = DatabaseCluster.Builder.create(this, "UnicornStoreDatabase")

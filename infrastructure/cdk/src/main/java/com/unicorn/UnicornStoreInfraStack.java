@@ -1,14 +1,9 @@
 package com.unicorn;
 
-import com.unicorn.alternatives.UnicornAuditService;
-import com.unicorn.alternatives.UnicornStoreMicronaut;
-import com.unicorn.alternatives.UnicornStoreQuarkus;
-import com.unicorn.alternatives.UnicornStoreSpringGraalVM;
 import com.unicorn.constructs.VSCodeIde;
 import com.unicorn.constructs.WorkshopVpc;
 import com.unicorn.core.DatabaseSetup;
 import com.unicorn.core.InfrastructureCore;
-import com.unicorn.core.UnicornStoreSpring;
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.ec2.InstanceType;
@@ -16,7 +11,7 @@ import software.constructs.Construct;
 
 import java.util.Arrays;
 
-public class UnicornStoreStack extends Stack {
+public class UnicornStoreInfraStack extends Stack {
 
     private final static String BOOTSTRAP_SCRIPT = """
             date
@@ -32,9 +27,7 @@ public class UnicornStoreStack extends Stack {
             sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
             """;
 
-    private final InfrastructureCore infrastructureCore;
-
-    public UnicornStoreStack(final Construct scope, final String id, final StackProps props) {
+    public UnicornStoreInfraStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, StackProps.builder()
                 .synthesizer(new DefaultStackSynthesizer(DefaultStackSynthesizerProps.builder()
                         .generateBootstrapVersionRule(false)  // This disables the bootstrap version parameter
@@ -59,12 +52,11 @@ public class UnicornStoreStack extends Stack {
         new VSCodeIde(this, "UnicornStoreIde", ideProps);
 
         // Create Core infrastructure
-        infrastructureCore = new InfrastructureCore(this, "InfrastructureCore", vpc);
+        var infrastructureCore = new InfrastructureCore(this, "InfrastructureCore", vpc);
 
         // Execute Database setup
         var databaseSetup = new DatabaseSetup(this, "UnicornDatabaseConstruct", infrastructureCore);
         databaseSetup.getNode().addDependency(infrastructureCore.getDatabase());
     }
 
-    public InfrastructureCore getInfrastructureCore() { return infrastructureCore; }
 }
