@@ -2,8 +2,6 @@ package com.unicorn.common;
 
 public interface CfnExports {
 
-    String UNICORN_STORE_VPC_ID = "UnicornStoreVpcId";
-
     String UNICORN_STORE_EVENT_BRIDGE_ARN = "UnicornStoreEventBridgeArn";
 
     String UNICORN_STORE_SECURITY_GROUP_ID = "UnicornStoreSecurityGroupId";

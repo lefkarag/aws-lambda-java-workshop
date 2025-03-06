@@ -58,7 +58,7 @@ public class UnicornStoreApp {
 
         NagSuppressions.addStackSuppressions(unicornStoreInfraStack, suppression);
         NagSuppressions.addStackSuppressions(ideStack, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreAppStack, suppression);
+//        NagSuppressions.addStackSuppressions(unicornStoreAppStack, suppression);
 
         app.synth();
     }

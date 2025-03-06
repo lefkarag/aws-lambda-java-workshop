@@ -21,10 +21,14 @@ import java.util.Map;
 
 public class UnicornStoreSpring extends Construct {
 
+    private Construct scope;
+
     public UnicornStoreSpring(final Construct scope, final String id,
                               IEventBus eventBridge, IVpc vpc, ISecurityGroup securityGroup,
                               String dbSecretString, String dbConnectionString) {
         super(scope, id);
+
+        this.scope = scope;
 
         //Create Spring Lambda function
         var unicornStoreSpringLambda = createUnicornLambdaFunction(vpc, securityGroup, dbSecretString, dbConnectionString);
@@ -36,17 +40,17 @@ public class UnicornStoreSpring extends Construct {
         var restApi = setupRestApi(unicornStoreSpringLambda);
 
         //Create output values for later reference
-        new CfnOutput(this, "unicorn-store-spring-function-arn", CfnOutputProps.builder()
+        new CfnOutput(scope, "unicorn-store-spring-function-arn", CfnOutputProps.builder()
                 .value(unicornStoreSpringLambda.getFunctionArn())
                 .build());
 
-        new CfnOutput(this, "ApiEndpointSpring", CfnOutputProps.builder()
+        new CfnOutput(scope, "ApiEndpointSpring", CfnOutputProps.builder()
                 .value(restApi.getUrl())
                 .build());
     }
 
     private RestApi setupRestApi(Alias unicornStoreSpringLambdaAlias) {
-        return LambdaRestApi.Builder.create(this, "UnicornStoreSpringApi")
+        return LambdaRestApi.Builder.create(scope, "UnicornStoreSpringApi")
                 .restApiName("UnicornStoreSpringApi")
                 .handler(unicornStoreSpringLambdaAlias)
                 .build();
@@ -54,7 +58,7 @@ public class UnicornStoreSpring extends Construct {
 
     private Alias createUnicornLambdaFunction(IVpc vpc, ISecurityGroup securityGroup,
                                               String dbSecretString, String dbConnectionString) {
-        var lambda = Function.Builder.create(this, "UnicornStoreSpringFunction")
+        var lambda = Function.Builder.create(scope, "UnicornStoreSpringFunction")
                 .runtime(Runtime.JAVA_21)
                 .functionName("unicorn-store-spring")
                 .memorySize(512)
@@ -73,7 +77,7 @@ public class UnicornStoreSpring extends Construct {
                 .build();
 
         // Create an alias for the latest version
-        var alias = Alias.Builder.create(this, "UnicornStoreSpringFunctionAlias")
+        var alias = Alias.Builder.create(scope, "UnicornStoreSpringFunctionAlias")
                 .aliasName("live")
                 .version(lambda.getLatestVersion())
                 .build();

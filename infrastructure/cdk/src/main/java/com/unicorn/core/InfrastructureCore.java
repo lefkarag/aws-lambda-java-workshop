@@ -54,20 +54,24 @@ public class InfrastructureCore extends Construct {
         paramDBConnectionString = createParamDBConnectionString();
         secretPassword = createSecretPassword();
 
-        new CfnOutput(this, CfnExports.UNICORN_STORE_VPC_ID, CfnOutputProps.builder()
-                .value(vpc.getVpcId())
-                .build());
+//        new CfnOutput(this, CfnExports.UNICORN_STORE_VPC_ID, CfnOutputProps.builder()
+//                .value(vpc.getVpcId())
+//                .exportName(CfnExports.UNICORN_STORE_VPC_ID)
+//                .build());
 
-        new CfnOutput(this, CfnExports.UNICORN_STORE_EVENT_BRIDGE_ARN, CfnOutputProps.builder()
+        new CfnOutput(this, "ExportedEventBridgeArn", CfnOutputProps.builder()
                 .value(eventBridge.getEventBusArn())
+                .exportName(CfnExports.UNICORN_STORE_EVENT_BRIDGE_ARN)
                 .build());
 
-        new CfnOutput(this, CfnExports.UNICORN_STORE_SECURITY_GROUP_ID, CfnOutputProps.builder()
+        new CfnOutput(this, "ExportedSecurityGroupId", CfnOutputProps.builder()
                 .value(applicationSecurityGroup.getSecurityGroupId())
+                .exportName(CfnExports.UNICORN_STORE_SECURITY_GROUP_ID)
                 .build());
 
-        new CfnOutput(this, CfnExports.UNICORN_STORE_DATABASE_CONNECTION, CfnOutputProps.builder()
+        new CfnOutput(this, "ExportedDatabaseConnection", CfnOutputProps.builder()
                 .value(paramDBConnectionString.getStringValue())
+                .exportName(CfnExports.UNICORN_STORE_DATABASE_CONNECTION)
                 .build());
     }
 
