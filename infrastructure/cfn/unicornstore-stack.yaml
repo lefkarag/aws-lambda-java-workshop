@@ -1,106 +1,1651 @@
-[ERROR] Failed to execute goal org.codehaus.mojo:exec-maven-plugin:3.5.0:java (default-cli) on project cdk: An exception occurred while executing the Java class. Error: Validation failed with the following errors:
-[ERROR]   [UnicornStoreInfraStack/InfrastructureCore/ExportedDatabaseConnection] Export name must only include alphanumeric characters, colons, or hyphens (got 'UNICORN_STORE_DATABASE_CONNECTION')
-[ERROR] @jsii/kernel.RuntimeError: Error: Validation failed with the following errors:
-[ERROR]   [UnicornStoreInfraStack/InfrastructureCore/ExportedDatabaseConnection] Export name must only include alphanumeric characters, colons, or hyphens (got 'UNICORN_STORE_DATABASE_CONNECTION')
-[ERROR]     at Kernel._Kernel_ensureSync (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:15171:23)
-[ERROR]     at Kernel.invoke (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:14534:102)
-[ERROR]     at KernelHost.processRequest (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16378:36)
-[ERROR]     at KernelHost.run (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16338:22)
-[ERROR]     at Immediate._onImmediate (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16339:46)
-[ERROR]     at process.processImmediate (node:internal/timers:478:21)
-[ERROR] -> [Help 1]
-org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.codehaus.mojo:exec-maven-plugin:3.5.0:java (default-cli) on project cdk: An exception occurred while executing the Java class. Error: Validation failed with the following errors:
-  [UnicornStoreInfraStack/InfrastructureCore/ExportedDatabaseConnection] Export name must only include alphanumeric characters, colons, or hyphens (got 'UNICORN_STORE_DATABASE_CONNECTION')
-@jsii/kernel.RuntimeError: Error: Validation failed with the following errors:
-  [UnicornStoreInfraStack/InfrastructureCore/ExportedDatabaseConnection] Export name must only include alphanumeric characters, colons, or hyphens (got 'UNICORN_STORE_DATABASE_CONNECTION')
-    at Kernel._Kernel_ensureSync (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:15171:23)
-    at Kernel.invoke (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:14534:102)
-    at KernelHost.processRequest (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16378:36)
-    at KernelHost.run (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16338:22)
-    at Immediate._onImmediate (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16339:46)
-    at process.processImmediate (node:internal/timers:478:21)
-    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:215)
-    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:156)
-    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:148)
-    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:117)
-    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:81)
-    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:56)
-    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:128)
-    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:305)
-    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:192)
-    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:105)
-    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:972)
-    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:293)
-    at org.apache.maven.cli.MavenCli.main (MavenCli.java:196)
-    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
-    at java.lang.reflect.Method.invoke (Method.java:580)
-    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:282)
-    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:225)
-    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:406)
-    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:347)
-    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
-    at java.lang.reflect.Method.invoke (Method.java:580)
-    at org.apache.maven.wrapper.BootstrapMainStarter.start (BootstrapMainStarter.java:47)
-    at org.apache.maven.wrapper.WrapperExecutor.execute (WrapperExecutor.java:156)
-    at org.apache.maven.wrapper.MavenWrapperMain.main (MavenWrapperMain.java:72)
-Caused by: org.apache.maven.plugin.MojoExecutionException: An exception occurred while executing the Java class. Error: Validation failed with the following errors:
-  [UnicornStoreInfraStack/InfrastructureCore/ExportedDatabaseConnection] Export name must only include alphanumeric characters, colons, or hyphens (got 'UNICORN_STORE_DATABASE_CONNECTION')
-@jsii/kernel.RuntimeError: Error: Validation failed with the following errors:
-  [UnicornStoreInfraStack/InfrastructureCore/ExportedDatabaseConnection] Export name must only include alphanumeric characters, colons, or hyphens (got 'UNICORN_STORE_DATABASE_CONNECTION')
-    at Kernel._Kernel_ensureSync (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:15171:23)
-    at Kernel.invoke (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:14534:102)
-    at KernelHost.processRequest (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16378:36)
-    at KernelHost.run (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16338:22)
-    at Immediate._onImmediate (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16339:46)
-    at process.processImmediate (node:internal/timers:478:21)
-    at org.codehaus.mojo.exec.ExecJavaMojo.execute (ExecJavaMojo.java:353)
-    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:137)
-    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:210)
-    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:156)
-    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:148)
-    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:117)
-    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:81)
-    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:56)
-    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:128)
-    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:305)
-    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:192)
-    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:105)
-    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:972)
-    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:293)
-    at org.apache.maven.cli.MavenCli.main (MavenCli.java:196)
-    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
-    at java.lang.reflect.Method.invoke (Method.java:580)
-    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:282)
-    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:225)
-    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:406)
-    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:347)
-    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
-    at java.lang.reflect.Method.invoke (Method.java:580)
-    at org.apache.maven.wrapper.BootstrapMainStarter.start (BootstrapMainStarter.java:47)
-    at org.apache.maven.wrapper.WrapperExecutor.execute (WrapperExecutor.java:156)
-    at org.apache.maven.wrapper.MavenWrapperMain.main (MavenWrapperMain.java:72)
-Caused by: java.lang.RuntimeException: Error: Validation failed with the following errors:
-  [UnicornStoreInfraStack/InfrastructureCore/ExportedDatabaseConnection] Export name must only include alphanumeric characters, colons, or hyphens (got 'UNICORN_STORE_DATABASE_CONNECTION')
-@jsii/kernel.RuntimeError: Error: Validation failed with the following errors:
-  [UnicornStoreInfraStack/InfrastructureCore/ExportedDatabaseConnection] Export name must only include alphanumeric characters, colons, or hyphens (got 'UNICORN_STORE_DATABASE_CONNECTION')
-    at Kernel._Kernel_ensureSync (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:15171:23)
-    at Kernel.invoke (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:14534:102)
-    at KernelHost.processRequest (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16378:36)
-    at KernelHost.run (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16338:22)
-    at Immediate._onImmediate (/private/var/folders/mf/v64bm9gj3jx50qtbvdz02m5r0000gr/T/jsii-java-runtime8154780254410130146/lib/program.js:16339:46)
-    at process.processImmediate (node:internal/timers:478:21)
-    at software.amazon.jsii.JsiiRuntime.processErrorResponse (JsiiRuntime.java:147)
-    at software.amazon.jsii.JsiiRuntime.requestResponse (JsiiRuntime.java:116)
-    at software.amazon.jsii.JsiiClient.callMethod (JsiiClient.java:184)
-    at software.amazon.jsii.Kernel.call (Kernel.java:52)
-    at software.amazon.awscdk.Stage.synth (Stage.java:108)
-    at com.unicorn.UnicornStoreApp.main (UnicornStoreApp.java:63)
-    at org.codehaus.mojo.exec.ExecJavaMojo.doMain (ExecJavaMojo.java:375)
-    at org.codehaus.mojo.exec.ExecJavaMojo.doExec (ExecJavaMojo.java:364)
-    at org.codehaus.mojo.exec.ExecJavaMojo.lambda$execute$0 (ExecJavaMojo.java:286)
-    at java.lang.Thread.run (Thread.java:1583)
-[ERROR] 
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+Metadata:
+  cdk_nag:
+    rules_to_suppress:
+      - reason: The workshop environment does not require API-Gateway authorization
+        id: AwsSolutions-APIG4
+      - reason: The workshop environment does not require Cognito User Pool authorization
+        id: AwsSolutions-COG4
+      - reason: Workshop environment does not need a Multi-AZ setup to reduce cost
+        id: AwsSolutions-RDS3
+      - reason: AWS Managed policies are acceptable for the workshop
+        id: AwsSolutions-IAM4
+      - reason: A wildcard is acceptable for this workshop to allow parallel creation of resources
+        id: AwsSolutions-IAM5
+      - reason: Workshop environment is ephemeral and the database should be deleted by the end of the workshop
+        id: AwsSolutions-RDS10
+      - reason: Database is in a private subnet and can use the default port
+        id: AwsSolutions-RDS11
+      - reason: API Gateway request validation is not needed for workshop
+        id: AwsSolutions-APIG2
+      - reason: API Gateway access logging not needed for workshop setup
+        id: AwsSolutions-APIG1
+      - reason: API Gateway access logging not needed for workshop setup
+        id: AwsSolutions-APIG6
+      - reason: Workshop environment does not need VPC flow logs
+        id: AwsSolutions-VPC7
+      - reason: Ephemeral workshop environment does not need to rotate secrets
+        id: AwsSolutions-SMG4
+      - reason: Workshop non-sensitive test database does not need encryption at rest
+        id: AwsSolutions-RDS2
+      - reason: Workshop API Gateways do not need AWS WAF assigned
+        id: AwsSolutions-APIG3
+      - reason: Not needed
+        id: AwsSolutions-EC23
+      - reason: Workshop Database does not need backups
+        id: AwsSolutions-RDS13
+      - reason: Workshop S3 bucket does not need Access Logs
+        id: AwsSolutions-S1
+      - reason: Workshop environment use CDK default Lambdas
+        id: AwsSolutions-L1
+      - reason: Workshop environment uses user/password authentication
+        id: AwsSolutions-RDS6
+      - reason: Workshop instance doesn't need autoscaling
+        id: AwsSolutions-EC28
+      - reason: Workshop instance doesn't need autoscaling
+        id: AwsSolutions-EC29
+      - reason: Workshop environment should be accessible from any Geo
+        id: AwsSolutions-CFR1
+      - reason: Ephemeral workshop environment does not need WAF
+        id: AwsSolutions-CFR2
+      - reason: Ephemeral workshop environment does not need logging
+        id: AwsSolutions-CFR3
+      - reason: Workshop instance uses http
+        id: AwsSolutions-CFR4
+      - reason: Workshop instance uses http
+        id: AwsSolutions-CFR5
+      - reason: Workshop non-sensitive EKS cluster uses public access
+        id: AwsSolutions-EKS1
+      - reason: CodeBuild uses default AWS-managed CMK for S3
+        id: AwsSolutions-CB4
+      - reason: "Suppress warnings see: https://github.com/cdklabs/cdk-nag/issues/817"
+        id: CdkNagValidationFailure
+Resources:
+  UnicornStoreVpc647929A5:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: unicornstore-vpc
+  UnicornStoreVpcPublicSubnet1Subnet5A587A94:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PublicSubnet1
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreVpcPublicSubnet1RouteTableA6A1DD76:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PublicSubnet1
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreVpcPublicSubnet1RouteTableAssociation3D94AF82:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: UnicornStoreVpcPublicSubnet1RouteTableA6A1DD76
+      SubnetId:
+        Ref: UnicornStoreVpcPublicSubnet1Subnet5A587A94
+  UnicornStoreVpcPublicSubnet1DefaultRoute72D8F029:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: UnicornStoreVpcIGW37028CE1
+      RouteTableId:
+        Ref: UnicornStoreVpcPublicSubnet1RouteTableA6A1DD76
+    DependsOn:
+      - UnicornStoreVpcVPCGW825EF84F
+  UnicornStoreVpcPublicSubnet1EIP9D77368A:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PublicSubnet1
+  UnicornStoreVpcPublicSubnet1NATGateway1B70C1D9:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - UnicornStoreVpcPublicSubnet1EIP9D77368A
+          - AllocationId
+      SubnetId:
+        Ref: UnicornStoreVpcPublicSubnet1Subnet5A587A94
+      Tags:
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PublicSubnet1
+    DependsOn:
+      - UnicornStoreVpcPublicSubnet1DefaultRoute72D8F029
+      - UnicornStoreVpcPublicSubnet1RouteTableAssociation3D94AF82
+  UnicornStoreVpcPublicSubnet2Subnet6C10127F:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PublicSubnet2
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreVpcPublicSubnet2RouteTable9C89D84E:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PublicSubnet2
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreVpcPublicSubnet2RouteTableAssociationEF6ADCD0:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: UnicornStoreVpcPublicSubnet2RouteTable9C89D84E
+      SubnetId:
+        Ref: UnicornStoreVpcPublicSubnet2Subnet6C10127F
+  UnicornStoreVpcPublicSubnet2DefaultRoute6F034F39:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: UnicornStoreVpcIGW37028CE1
+      RouteTableId:
+        Ref: UnicornStoreVpcPublicSubnet2RouteTable9C89D84E
+    DependsOn:
+      - UnicornStoreVpcVPCGW825EF84F
+  UnicornStoreVpcPrivateSubnet1Subnet1D81DF60:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.2.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PrivateSubnet1
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreVpcPrivateSubnet1RouteTable3F4F42C3:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PrivateSubnet1
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: UnicornStoreVpcPrivateSubnet1RouteTable3F4F42C3
+      SubnetId:
+        Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
+  UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: UnicornStoreVpcPublicSubnet1NATGateway1B70C1D9
+      RouteTableId:
+        Ref: UnicornStoreVpcPrivateSubnet1RouteTable3F4F42C3
+  UnicornStoreVpcPrivateSubnet2Subnet4710EC68:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.3.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PrivateSubnet2
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreVpcPrivateSubnet2RouteTableC066B309:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: UnicornStoreInfraStack/UnicornStoreVpc/Vpc/PrivateSubnet2
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: UnicornStoreVpcPrivateSubnet2RouteTableC066B309
+      SubnetId:
+        Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
+  UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: UnicornStoreVpcPublicSubnet1NATGateway1B70C1D9
+      RouteTableId:
+        Ref: UnicornStoreVpcPrivateSubnet2RouteTableC066B309
+  UnicornStoreVpcIGW37028CE1:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: unicornstore-vpc
+  UnicornStoreVpcVPCGW825EF84F:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId:
+        Ref: UnicornStoreVpcIGW37028CE1
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreIdeIdeRole81A2CEAA:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/ReadOnlyAccess
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/AmazonSSMManagedInstanceCore
+        - Ref: UnicornStoreIdeWorkshopIdeUserPolicy4FE3EC67
+      RoleName: unicornstore-ide-user
+  UnicornStoreIdeIdeRoleDefaultPolicy7083F507:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - UnicornStoreIdeIdeLogGroup7A5EFA50
+                - Arn
+          - Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Effect: Allow
+            Resource:
+              Ref: UnicornStoreIdeIdePasswordSecret514252E2
+        Version: "2012-10-17"
+      PolicyName: UnicornStoreIdeIdeRoleDefaultPolicy7083F507
+      Roles:
+        - Ref: UnicornStoreIdeIdeRole81A2CEAA
+  UnicornStoreIdeWorkshopIdeUserPolicy4FE3EC67:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: ""
+      Path: /
+      PolicyDocument:
+        Statement:
+          - Action:
+              - iam:CreateRole
+              - iam:TagRole
+              - iam:DeleteRole
+              - iam:CreatePolicy
+              - iam:CreatePolicyVersion
+              - iam:DeletePolicy
+              - iam:DeletePolicyVersion
+              - iam:AttachRolePolicy
+              - iam:DetachRolePolicy
+              - iam:PutRolePolicy
+              - iam:DeleteRolePolicy
+              - iam:PassRole
+            Effect: Allow
+            Resource:
+              - !Sub arn:aws:iam::${AWS::AccountId}:role/*unicorn*
+              - !Sub arn:aws:iam::${AWS::AccountId}:policy/*unicorn*
+              - !Sub arn:aws:iam::${AWS::AccountId}:role/*Unicorn*
+              - !Sub arn:aws:iam::${AWS::AccountId}:policy/*Unicorn*
+              - !Sub arn:aws:iam::${AWS::AccountId}:policy/*AWSLambdaTracerAccessExecutionRole*
+            Sid: IamLimitedAccessForUnicorns
+          - Action:
+              - cloudformation:*
+              - codecommit:*
+              - codebuild:*
+              - codedeploy:*
+              - codepipeline:*
+              - codewhisperer:*
+              - codeartifact:*
+              - codedeploy-commands-secure:*
+              - ec2:*
+              - rds:*
+              - ssm:*
+              - secretsmanager:*
+              - kms:*
+              - cloudtrail:*
+              - events:*
+              - cloudwatch:*
+              - xray:*
+              - logs:*
+              - lambda:*
+              - dynamodb:*
+              - s3:*
+              - tag:*
+              - sts:*
+            Effect: Allow
+            Resource: "*"
+            Sid: AllowedServicesOthers
+          - Action: ec2:RunInstances
+            Condition:
+              StringLike:
+                ec2:InstanceType:
+                  - "*4xlarge"
+                  - "*6xlarge"
+                  - "*8xlarge"
+                  - "*9xlarge"
+                  - "*10xlarge"
+                  - "*12xlarge"
+                  - "*16xlarge"
+                  - "*18xlarge"
+                  - "*24xlarge"
+                  - f1*
+                  - x1*
+                  - z1*
+                  - "*metal"
+            Effect: Deny
+            Resource: arn:aws:ec2:*:*:instance/*
+            Sid: DenyXXLInstances
+          - Action:
+              - ec2:ModifyReservedInstances
+              - ec2:PurchaseHostReservation
+              - ec2:PurchaseReservedInstancesOffering
+              - ec2:PurchaseScheduledInstances
+              - rds:PurchaseReservedDBInstancesOffering
+              - dynamodb:PurchaseReservedCapacityOfferings
+            Effect: Deny
+            Resource: "*"
+            Sid: DenyReservations
+          - Action: iam:PassRole
+            Effect: Allow
+            Resource: !Sub arn:aws:iam::${AWS::AccountId}:role/unicornstore-ide-user
+            Sid: IamLimitedAccessForWorkshopUser
+        Version: "2012-10-17"
+  UnicornStoreIdeIdeLogGroup7A5EFA50:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: unicornstore-ide-bootstrap-log-20250306-145353
+      RetentionInDays: 7
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+  UnicornStoreIdeIdePrefixListFunctionServiceRole32E30C10:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  UnicornStoreIdeIdePrefixListFunctionServiceRoleDefaultPolicy33F10FE5:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: ec2:DescribeManagedPrefixLists
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: UnicornStoreIdeIdePrefixListFunctionServiceRoleDefaultPolicy33F10FE5
+      Roles:
+        - Ref: UnicornStoreIdeIdePrefixListFunctionServiceRole32E30C10
+  UnicornStoreIdeIdePrefixListFunctionA6A4129C:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |-
+          from __future__ import print_function
+          import boto3
+          import traceback
+          import cfnresponse
+
+          def lambda_handler(event, context):
+              print('Event: {}'.format(event))
+              print('context: {}'.format(context))
+              responseData = {}
+
+              status = cfnresponse.SUCCESS
+
+              if event['RequestType'] == 'Delete':
+                  responseData = {'Success': 'Custom Resource removed'}
+                  cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
+              else:
+                  try:
+                      # Open AWS clients
+                      ec2 = boto3.client('ec2')
+
+                      res = ec2.describe_managed_prefix_lists(
+                         Filters=[{
+                            'Name': 'prefix-list-name',
+                            'Values': ['com.amazonaws.global.cloudfront.origin-facing']
+                         }]
+                      )
+
+                      responseData = {'PrefixListId': str(res['PrefixLists'][0]['PrefixListId'])}
+                  except Exception as e:
+                      status = cfnresponse.FAILED
+                      tb_err = traceback.format_exc()
+                      print(tb_err)
+                      responseData = {'Error': tb_err}
+                  finally:
+                      cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
+      FunctionName: unicornstore-ide-prefix-list-lambda
+      Handler: index.lambda_handler
+      Role:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdePrefixListFunctionServiceRole32E30C10
+          - Arn
+      Runtime: python3.13
+      Timeout: 180
+    DependsOn:
+      - UnicornStoreIdeIdePrefixListFunctionServiceRoleDefaultPolicy33F10FE5
+      - UnicornStoreIdeIdePrefixListFunctionServiceRole32E30C10
+  UnicornStoreIdeIdePrefixListResource228B9344:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdePrefixListFunctionA6A4129C
+          - Arn
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  UnicornStoreIdeIdeSecurityGroupD6434416:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: IDE security group
+      GroupName: unicornstore-ide-cloudfront-ide-sg
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreIdeIdeSecurityGroupfromIndirectPeer80C455E18A:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: HTTP from CloudFront only
+      FromPort: 80
+      GroupId:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdeSecurityGroupD6434416
+          - GroupId
+      IpProtocol: tcp
+      SourcePrefixListId:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdePrefixListResource228B9344
+          - PrefixListId
+      ToPort: 80
+  UnicornStoreIdeIdeInstanceProfileCEFB2BB2:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName:
+        Ref: UnicornStoreIdeIdeRole81A2CEAA
+      Roles:
+        - Ref: UnicornStoreIdeIdeRole81A2CEAA
+  UnicornStoreIdeIdeElasticIP832AF6A3:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  UnicornStoreIdeIdeEC2Instance5F393FC5:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            DeleteOnTermination: true
+            Encrypted: true
+            VolumeSize: 50
+            VolumeType: gp3
+      IamInstanceProfile:
+        Ref: UnicornStoreIdeIdeInstanceProfileCEFB2BB2
+      ImageId:
+        Ref: SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter
+      InstanceType: t3.medium
+      SecurityGroupIds:
+        - Fn::GetAtt:
+            - UnicornStoreIdeIdeSecurityGroupD6434416
+            - GroupId
+        - Fn::GetAtt:
+            - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+            - GroupId
+        - Fn::GetAtt:
+            - UnicornStoreIdeAppSecurityGroupA4858227
+            - GroupId
+      SubnetId:
+        Ref: UnicornStoreVpcPublicSubnet1Subnet5A587A94
+      Tags:
+        - Key: Name
+          Value: unicornstore-ide
+      UserData:
+        Fn::Base64: "#!/bin/bash"
+    DependsOn:
+      - UnicornStoreIdeIdePasswordSecret514252E2
+      - UnicornStoreIdeIdeRoleDefaultPolicy7083F507
+      - UnicornStoreIdeIdeRole81A2CEAA
+  UnicornStoreIdeIdeEipAssociation14729AD1:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdeElasticIP832AF6A3
+          - AllocationId
+      InstanceId:
+        Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
+  UnicornStoreIdeIdeInternalSecurityGroup29539F21:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: IDE internal security group
+      GroupName: unicornstore-ide-internal-sg
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreIdeIdeInternalSecurityGroupfromUnicornStoreInfraStackUnicornStoreIdeIdeInternalSecurityGroupC8A6C50EALLTRAFFIC79BDA194:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Allow all internal traffic
+      GroupId:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+          - GroupId
+      IpProtocol: "-1"
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+          - GroupId
+  UnicornStoreIdeIdeInternalSecurityGrouptoUnicornStoreInfraStackUnicornStoreIdeIdeInternalSecurityGroupC8A6C50EALLTRAFFICD1135EA4:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      Description: Allow all internal traffic
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+          - GroupId
+      GroupId:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdeInternalSecurityGroup29539F21
+          - GroupId
+      IpProtocol: "-1"
+  UnicornStoreIdeAppSecurityGroupA4858227:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: App security group
+      GroupName: unicornstore-ide-cloudfront-app-sg
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  UnicornStoreIdeAppSecurityGroupfromIndirectPeer808018449A72:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Port 8080 to App from CloudFront only
+      FromPort: 8080
+      GroupId:
+        Fn::GetAtt:
+          - UnicornStoreIdeAppSecurityGroupA4858227
+          - GroupId
+      IpProtocol: tcp
+      SourcePrefixListId:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdePrefixListResource228B9344
+          - PrefixListId
+      ToPort: 8080
+  UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1:
+    Type: AWS::CloudFormation::WaitConditionHandle
+  UnicornStoreIdeIdeBootstrapWaitConditionE9768A2E:
+    Type: AWS::CloudFormation::WaitCondition
+    Properties:
+      Count: 1
+      Handle:
+        Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
+      Timeout: "1800"
+    DependsOn:
+      - UnicornStoreIdeIdeBootstrapDocumentE330810B
+      - UnicornStoreIdeIdeEC2Instance5F393FC5
+  UnicornStoreIdeIdeDistribution9A9F0B03:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        CacheBehaviors:
+          - AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - PATCH
+              - POST
+              - DELETE
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+            Compress: true
+            OriginRequestPolicyId: 216adef6-5c7f-47e4-b989-5492eafa07d3
+            PathPattern: /app/*
+            TargetOriginId: UnicornStoreInfraStackUnicornStoreIdeIdeDistributionOrigin245E4EAF3
+            ViewerProtocolPolicy: allow-all
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+            - PUT
+            - PATCH
+            - POST
+            - DELETE
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+          Compress: true
+          OriginRequestPolicyId: 216adef6-5c7f-47e4-b989-5492eafa07d3
+          TargetOriginId: UnicornStoreInfraStackUnicornStoreIdeIdeDistributionOrigin1864857C9
+          ViewerProtocolPolicy: allow-all
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        Origins:
+          - CustomOriginConfig:
+              HTTPPort: 80
+              OriginProtocolPolicy: http-only
+              OriginSSLProtocols:
+                - TLSv1.2
+            DomainName:
+              Fn::GetAtt:
+                - UnicornStoreIdeIdeEC2Instance5F393FC5
+                - PublicDnsName
+            Id: UnicornStoreInfraStackUnicornStoreIdeIdeDistributionOrigin1864857C9
+          - CustomOriginConfig:
+              HTTPPort: 8080
+              OriginProtocolPolicy: http-only
+              OriginSSLProtocols:
+                - TLSv1.2
+            DomainName:
+              Fn::GetAtt:
+                - UnicornStoreIdeIdeEC2Instance5F393FC5
+                - PublicDnsName
+            Id: UnicornStoreInfraStackUnicornStoreIdeIdeDistributionOrigin245E4EAF3
+    DependsOn:
+      - UnicornStoreIdeIdeEipAssociation14729AD1
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  UnicornStoreIdeIdePasswordSecret514252E2:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        ExcludeCharacters: '"@/\\'
+        ExcludePunctuation: true
+        GenerateStringKey: password
+        IncludeSpace: false
+        PasswordLength: 32
+        SecretStringTemplate: '{"password":""}'
+      Name: unicornstore-ide-password-lambda
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  UnicornStoreIdeIdePasswordExporterFunctionServiceRoleE9BF6179:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  UnicornStoreIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0EF930BA:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Effect: Allow
+            Resource:
+              Ref: UnicornStoreIdeIdePasswordSecret514252E2
+        Version: "2012-10-17"
+      PolicyName: UnicornStoreIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0EF930BA
+      Roles:
+        - Ref: UnicornStoreIdeIdePasswordExporterFunctionServiceRoleE9BF6179
+  UnicornStoreIdeIdePasswordExporterFunction456E6CFA:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |-
+          import traceback
+          import cfnresponse
+          import boto3
+          import json
+
+          def lambda_handler(event, context):
+              print('Event: {}'.format(event))
+              print('context: {}'.format(context))
+              responseData = {}
+
+              status = cfnresponse.SUCCESS
+
+              if event['RequestType'] == 'Delete':
+                  cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
+              else:
+                  try:
+                      passwordName = event['ResourceProperties']['PasswordName']
+
+                      secretsmanager = boto3.client('secretsmanager')
+
+                      response = secretsmanager.get_secret_value(
+                          SecretId=passwordName,
+                      )
+
+                      responseData = json.loads(response['SecretString'])
+                  except Exception as e:
+                      status = cfnresponse.FAILED
+                      tb_err = traceback.format_exc()
+                      print(tb_err)
+                      responseData = {'Error': tb_err}
+                  finally:
+                      cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
+      FunctionName: unicornstore-ide-password-lambda
+      Handler: index.lambda_handler
+      Role:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdePasswordExporterFunctionServiceRoleE9BF6179
+          - Arn
+      Runtime: python3.13
+      Timeout: 180
+    DependsOn:
+      - UnicornStoreIdeIdePasswordExporterFunctionServiceRoleDefaultPolicy0EF930BA
+      - UnicornStoreIdeIdePasswordExporterFunctionServiceRoleE9BF6179
+  UnicornStoreIdeIdePasswordExporter0662A4D7:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdePasswordExporterFunction456E6CFA
+          - Arn
+      PasswordName:
+        Fn::Join:
+          - "-"
+          - - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "-"
+                    - Fn::Select:
+                        - 6
+                        - Fn::Split:
+                            - ":"
+                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "-"
+                    - Fn::Select:
+                        - 6
+                        - Fn::Split:
+                            - ":"
+                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+            - Fn::Select:
+                - 2
+                - Fn::Split:
+                    - "-"
+                    - Fn::Select:
+                        - 6
+                        - Fn::Split:
+                            - ":"
+                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+            - Fn::Select:
+                - 3
+                - Fn::Split:
+                    - "-"
+                    - Fn::Select:
+                        - 6
+                        - Fn::Split:
+                            - ":"
+                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  UnicornStoreIdeIdeBootstrapDocumentE330810B:
+    Type: AWS::SSM::Document
+    Properties:
+      Content:
+        schemaVersion: "2.2"
+        description: Bootstrap IDE
+        parameters:
+          BootstrapScript:
+            type: String
+            description: (Optional) Custom bootstrap script to run.
+            default: ""
+        mainSteps:
+          - inputs:
+              runCommand:
+                - Fn::Sub:
+                    - |-
+                      bash << 'HEREDOC'
+                      set -e
+                      set -o xtrace
+
+                      echo "Retrieving IDE password..."
+
+                      PASSWORD_SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id "${passwordName}" --query 'SecretString' --output text)
+                      export IDE_PASSWORD=$(echo "$PASSWORD_SECRET_VALUE" | jq -r '.password')
+
+                      echo "Setting profile variables..."
+
+                      # Set some useful variables
+                      export TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+                      export AWS_REGION=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
+                      export EC2_PRIVATE_IP=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/local-ipv4)
+
+                      echo "Installing AWS CLI..."
+
+                      # Install AWS CLI
+                      curl -L -o /tmp/aws-cli.zip https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip
+                      unzip -d /tmp /tmp/aws-cli.zip
+                      /tmp/aws/install --update
+                      rm -rf /tmp/aws
+
+                      echo "Installing Docker..."
+
+                      # Install docker and base package
+                      dnf install -y docker git
+                      service docker start
+                      usermod -aG docker ec2-user
+
+                      echo "Installing code-server..."
+
+                      # Install code-server
+                      codeServer=$(dnf list installed code-server | wc -l)
+                      if [ "$codeServer" -eq "0" ]; then
+                        sudo -u ec2-user "codeServerVersion=${codeServerVersion}" bash -c 'curl -fsSL https://code-server.dev/install.sh | sh -s -- --version ${codeServerVersion}'
+                        systemctl enable --now code-server@ec2-user
+                      fi
+
+                      sudo -u ec2-user bash -c 'mkdir -p ~/.config/code-server'
+                      sudo -u ec2-user bash -c 'touch ~/.config/code-server/config.yaml'
+                      tee /home/ec2-user/.config/code-server/config.yaml <<EOF
+                      cert: false
+                      auth: password
+                      password: "$IDE_PASSWORD"
+                      bind-addr: 127.0.0.1:8889
+                      EOF
+
+                      echo "Configuring code-server..."
+
+                      sudo -u ec2-user bash -c 'mkdir -p ~/.local/share/code-server/User'
+                      sudo -u ec2-user bash -c 'touch ~/.local/share/code-server/User/settings.json'
+                      tee /home/ec2-user/.local/share/code-server/User/settings.json <<EOF
+                      {
+                        "extensions.autoUpdate": false,
+                        "extensions.autoCheckUpdates": false,
+                        "security.workspace.trust.enabled": false,
+                        "workbench.startupEditor": "terminal",
+                        "task.allowAutomaticTasks": "on",
+                        "telemetry.telemetryLevel": "off",
+                        "update.mode": "none",
+                        "update.showReleaseNotes": false
+                      }
+                      EOF
+
+                      echo "Restarting code-server..."
+
+                      systemctl restart code-server@ec2-user
+
+                      echo "Installing Caddy..."
+
+                      # Install caddy
+                      dnf copr enable -y @caddy/caddy epel-9-x86_64
+                      dnf install -y caddy
+                      systemctl enable --now caddy
+
+                      tee /etc/caddy/Caddyfile <<EOF
+                      http://${domain} {
+                        reverse_proxy 127.0.0.1:8889
+                      }
+                      EOF
+
+                      echo "Restarting caddy..."
+
+                      systemctl restart caddy
+
+                      # Create default directory for workspace
+                      sudo -u ec2-user bash -c 'mkdir -p ~/environment'
+
+                      if [ ! -f "/home/ec2-user/.local/share/code-server/coder.json" ]; then
+                        sudo -u ec2-user bash -c 'touch ~/.local/share/code-server/coder.json'
+                        echo '{ "query": { "folder": "/home/ec2-user/environment" } }' > /home/ec2-user/.local/share/code-server/coder.json
+                      fi
+
+                      echo "Running custom bootstrap script..."
+
+                      ${customBootstrapScript}
+                      HEREDOC
+
+                      exit_code=$?
+
+                      /opt/aws/bin/cfn-signal -e $exit_code '${waitConditionHandleUrl}'
+
+                      exit $exit_code
+                    - customBootstrapScript: |
+                        date
+
+                        echo '=== Clone Git repository ==='
+                        sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/environment/aws-lambda-java-workshop/"
+                        sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring"
+
+                        echo '=== Setup IDE ==='
+                        sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/setup-ide.sh"
+
+                        echo '=== Additional Setup ==='
+                        sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
+                      domain: ""
+                      environmentContentsZip: ""
+                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
+                      codeServerVersion: 4.96.4
+                      instanceIamRoleName:
+                        Ref: UnicornStoreIdeIdeRole81A2CEAA
+                      readmeUrl: ""
+                      terminalOnStartup: "true"
+                      passwordName:
+                        Fn::Join:
+                          - "-"
+                          - - Fn::Select:
+                                - 0
+                                - Fn::Split:
+                                    - "-"
+                                    - Fn::Select:
+                                        - 6
+                                        - Fn::Split:
+                                            - ":"
+                                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                            - Fn::Select:
+                                - 1
+                                - Fn::Split:
+                                    - "-"
+                                    - Fn::Select:
+                                        - 6
+                                        - Fn::Split:
+                                            - ":"
+                                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                            - Fn::Select:
+                                - 2
+                                - Fn::Split:
+                                    - "-"
+                                    - Fn::Select:
+                                        - 6
+                                        - Fn::Split:
+                                            - ":"
+                                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                            - Fn::Select:
+                                - 3
+                                - Fn::Split:
+                                    - "-"
+                                    - Fn::Select:
+                                        - 6
+                                        - Fn::Split:
+                                            - ":"
+                                            - Ref: UnicornStoreIdeIdePasswordSecret514252E2
+                      instanceIamRoleArn:
+                        Fn::GetAtt:
+                          - UnicornStoreIdeIdeRole81A2CEAA
+                          - Arn
+                      splashUrl: ""
+                      waitConditionHandleUrl:
+                        Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
+            name: IdeBootstrapFunction
+            action: aws:runShellScript
+      DocumentFormat: YAML
+      DocumentType: Command
+      Name: unicornstore-ide-bootstrap-document
+      UpdateMethod: NewVersion
+  UnicornStoreIdeIdeBootstrapFunctionServiceRole3CD8C4AA:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  UnicornStoreIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA8D6D12D:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: iam:PassRole
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - UnicornStoreIdeIdeRole81A2CEAA
+                - Arn
+          - Action:
+              - ec2:DescribeInstances
+              - iam:ListInstanceProfiles
+              - ssm:DescribeInstanceInformation
+              - ssm:SendCommand
+              - ssm:GetCommandInvocation
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: UnicornStoreIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA8D6D12D
+      Roles:
+        - Ref: UnicornStoreIdeIdeBootstrapFunctionServiceRole3CD8C4AA
+  UnicornStoreIdeIdeBootstrapFunctionF57074A6:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |-
+          from __future__ import print_function
+          import boto3
+          import json
+          import os
+          import time
+          import traceback
+          import cfnresponse
+          from botocore.exceptions import WaiterError
+
+          def lambda_handler(event, context):
+              print('Event: {}'.format(event))
+              print('context: {}'.format(context))
+              responseData = {}
+
+              status = cfnresponse.SUCCESS
+
+              if event['RequestType'] == 'Delete':
+                  responseData = {'Success': 'Custom Resource removed'}
+                  cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
+              else:
+                  try:
+                      # Open AWS clients
+                      ec2 = boto3.client('ec2')
+                      ssm = boto3.client('ssm')
+
+                      instance_id = event['ResourceProperties']['InstanceId']
+
+                      print('Waiting for the instance to be ready...')
+                      # Wait for Instance to become ready
+                      instance_state = 'unknown'
+                      print('Instance is currently in state'.format(instance_state))
+                      while instance_state != 'running':
+                          time.sleep(5)
+                          di = ec2.describe_instances(InstanceIds=[instance_id])
+                          instance_state = di['Reservations'][0]['Instances'][0]['State']['Name']
+                          print('Waiting for instance in state: {}'.format(instance_state))
+
+                      print('Instance is ready')
+
+                      print('Waiting for instance to come online in SSM...')
+                      for i in range(1, 60):
+                        response = ssm.describe_instance_information(Filters=[{'Key': 'InstanceIds', 'Values': [instance_id]}])
+                        if len(response["InstanceInformationList"]) == 0:
+                          print('No instances in SSM')
+                        elif len(response["InstanceInformationList"]) > 0 and \
+                              response["InstanceInformationList"][0]["PingStatus"] == "Online" and \
+                              response["InstanceInformationList"][0]["InstanceId"] == instance_id:
+                          print('Instance is online in SSM')
+                          break
+                        time.sleep(10)
+
+                      ssm_document = event['ResourceProperties']['SsmDocument']
+
+                      ssm.send_command(
+                          InstanceIds=[instance_id],
+                          DocumentName=ssm_document,
+                          CloudWatchOutputConfig={
+                              'CloudWatchLogGroupName': event['ResourceProperties']['LogGroupName'],
+                              'CloudWatchOutputEnabled': True
+                          })
+
+                      responseData = {'Success': 'Started bootstrapping for instance: '+instance_id}
+                  except Exception as e:
+                      status = cfnresponse.FAILED
+                      tb_err = traceback.format_exc()
+                      print(tb_err)
+                      responseData = {'Error': tb_err}
+                  finally:
+                      cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
+      FunctionName: unicornstore-ide-bootstrap-lambda
+      Handler: index.lambda_handler
+      Role:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdeBootstrapFunctionServiceRole3CD8C4AA
+          - Arn
+      Runtime: python3.13
+      Timeout: 900
+    DependsOn:
+      - UnicornStoreIdeIdeBootstrapFunctionServiceRoleDefaultPolicyA8D6D12D
+      - UnicornStoreIdeIdeBootstrapFunctionServiceRole3CD8C4AA
+  UnicornStoreIdeIdeBootstrapResourceB07B1E57:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - UnicornStoreIdeIdeBootstrapFunctionF57074A6
+          - Arn
+      LogGroupName:
+        Ref: UnicornStoreIdeIdeLogGroup7A5EFA50
+      InstanceId:
+        Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
+      SsmDocument:
+        Ref: UnicornStoreIdeIdeBootstrapDocumentE330810B
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  InfrastructureCorepostgresB0D0C6BB:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description:
+        Fn::Join:
+          - ""
+          - - "Generated by the CDK for stack: "
+            - Ref: AWS::StackName
+      GenerateSecretString:
+        ExcludeCharacters: " %+~`#$&*()|[]{}:;<>?!'/@\"\\"
+        GenerateStringKey: password
+        PasswordLength: 30
+        SecretStringTemplate: '{"username":"postgres"}'
+      Name: unicornstore-db-secret
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  InfrastructureCorepostgresAttachmentE2B30E5B:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId:
+        Ref: InfrastructureCorepostgresB0D0C6BB
+      TargetId:
+        Ref: InfrastructureCoreUnicornStoreDatabaseF56884BA
+      TargetType: AWS::RDS::DBCluster
+  InfrastructureCoreDatabaseSG7319389B:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: UnicornStoreInfraStack/InfrastructureCore/DatabaseSG
+      GroupName: unicornstore-db-sg
+      SecurityGroupEgress:
+        - CidrIp: 255.255.255.255/32
+          Description: Disallow all traffic
+          FromPort: 252
+          IpProtocol: icmp
+          ToPort: 86
+      SecurityGroupIngress:
+        - CidrIp: 10.0.0.0/16
+          Description: Allow Database Traffic from local network
+          FromPort: 5432
+          IpProtocol: tcp
+          ToPort: 5432
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnets for UnicornStoreDatabase database
+      SubnetIds:
+        - Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
+        - Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
+  InfrastructureCoreUnicornStoreDatabaseF56884BA:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      CopyTagsToSnapshot: true
+      DBClusterIdentifier: unicornstore-db-cluster
+      DBClusterParameterGroupName: default.aurora-postgresql16
+      DBSubnetGroupName:
+        Ref: InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      DatabaseName: unicorns
+      EnableHttpEndpoint: true
+      Engine: aurora-postgresql
+      EngineVersion: "16.4"
+      MasterUserPassword:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: InfrastructureCorepostgresB0D0C6BB
+            - :SecretString:password::}}
+      MasterUsername:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: InfrastructureCorepostgresB0D0C6BB
+            - :SecretString:username::}}
+      Port: 5432
+      ServerlessV2ScalingConfiguration:
+        MaxCapacity: 4
+        MinCapacity: 0.5
+      VpcSecurityGroupIds:
+        - Fn::GetAtt:
+            - InfrastructureCoreDatabaseSG7319389B
+            - GroupId
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AutoMinorVersionUpgrade: true
+      DBClusterIdentifier:
+        Ref: InfrastructureCoreUnicornStoreDatabaseF56884BA
+      DBInstanceClass: db.serverless
+      DBInstanceIdentifier: unicornstore-db-writer
+      Engine: aurora-postgresql
+      PromotionTier: 0
+      PubliclyAccessible: false
+    DependsOn:
+      - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
+      - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
+      - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
+      - UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  InfrastructureCoreUnicornEventBusBBADDC7E:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: unicorns
+  InfrastructureCoreApplicationSecurityGroup914702B5:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: UnicornStoreInfraStack/InfrastructureCore/ApplicationSecurityGroup
+      GroupName: unicornstore-application-sg
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      VpcId:
+        Ref: UnicornStoreVpc647929A5
+  InfrastructureCoreSsmParameterDBConnectionString2EE427D4:
+    Type: AWS::SSM::Parameter
+    Properties:
+      AllowedPattern: .*
+      Description: Database Connection String
+      Name: unicornstore-db-connection-string
+      Tier: Standard
+      Type: String
+      Value:
+        Fn::Join:
+          - ""
+          - - jdbc:postgresql://
+            - Fn::GetAtt:
+                - InfrastructureCoreUnicornStoreDatabaseF56884BA
+                - Endpoint.Address
+            - :5432/unicorns
+  InfrastructureCoredbSecretPassword1EC1CF00:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: unicornstore-db-password-secret
+      SecretString:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Fn::Join:
+                - "-"
+                - - Fn::Select:
+                      - 0
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: InfrastructureCorepostgresB0D0C6BB
+                  - Fn::Select:
+                      - 1
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: InfrastructureCorepostgresB0D0C6BB
+                  - Fn::Select:
+                      - 2
+                      - Fn::Split:
+                          - "-"
+                          - Fn::Select:
+                              - 6
+                              - Fn::Split:
+                                  - ":"
+                                  - Ref: InfrastructureCorepostgresB0D0C6BB
+            - :SecretString:password::}}
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+  UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+    DependsOn:
+      - InfrastructureCoreUnicornStoreDatabaseF56884BA
+      - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      - InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE
+      - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
+      - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
+      - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
+      - UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6
+  UnicornDatabaseConstructDatabaseSetupFunctionServiceRoleDefaultPolicy3FC0A7F3:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Effect: Allow
+            Resource:
+              Ref: InfrastructureCorepostgresB0D0C6BB
+          - Action:
+              - rds-data:BatchExecuteStatement
+              - rds-data:BeginTransaction
+              - rds-data:CommitTransaction
+              - rds-data:ExecuteStatement
+              - rds-data:RollbackTransaction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":rds:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":cluster:"
+                  - Ref: InfrastructureCoreUnicornStoreDatabaseF56884BA
+          - Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
+            Effect: Allow
+            Resource:
+              Ref: InfrastructureCorepostgresAttachmentE2B30E5B
+        Version: "2012-10-17"
+      PolicyName: UnicornDatabaseConstructDatabaseSetupFunctionServiceRoleDefaultPolicy3FC0A7F3
+      Roles:
+        - Ref: UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5
+    DependsOn:
+      - InfrastructureCoreUnicornStoreDatabaseF56884BA
+      - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      - InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE
+      - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
+      - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
+      - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
+      - UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6
+  UnicornDatabaseConstructDatabaseSetupFunction8C55B639:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          import traceback
+          import cfnresponse
+          import boto3
+          import json
+
+          def get_cluster_arn(cluster_id, region, account_id):
+              return f"arn:aws:rds:{region}:{account_id}:cluster:{cluster_id}"
+
+          def lambda_handler(event, context):
+              print('Event: {}'.format(event))
+              print('context: {}'.format(context))
+              responseData = {}
+              status = cfnresponse.SUCCESS
+
+              if event['RequestType'] == 'Delete':
+                  cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
+              else:
+                  try:
+                      # Get secret name and SQL from resource properties
+                      secret_name = event['ResourceProperties']['SecretName']
+                      sql_statements = event['ResourceProperties']['SqlStatements']
+
+                      # Get AWS account ID and region
+                      sts = boto3.client('sts')
+                      caller_identity = sts.get_caller_identity()
+                      account_id = caller_identity['Account']
+                      region = boto3.session.Session().region_name
+                      caller_arn = caller_identity['Arn']
+                      print(f"Account ID: {account_id}, Region: {region}")
+                      print(f"Caller ARN: {caller_arn}")
+
+                      # Get the secret
+                      secretsmanager = boto3.client('secretsmanager')
+                      secret_details = secretsmanager.describe_secret(
+                          SecretId=secret_name
+                      )
+                      secret_arn = secret_details['ARN']
+                      print(f"Secret ARN: {secret_arn}")
+
+                      secret_response = secretsmanager.get_secret_value(
+                          SecretId=secret_name
+                      )
+
+                      # Parse the secret JSON
+                      secret = json.loads(secret_response['SecretString'])
+                      # print(f"Secret: {secret}")
+
+                      # Construct cluster ARN
+                      cluster_arn = get_cluster_arn(
+                          secret['dbClusterIdentifier'],
+                          region,
+                          account_id
+                      )
+                      print(f"Cluster ARN: {cluster_arn}")
+
+                      # Initialize RDS Data API client
+                      rds_data = boto3.client('rds-data')
+
+                      # Execute each SQL statement
+                      for sql in sql_statements.split(';'):
+                          sql = sql.strip()
+                          if sql:  # Skip empty statements
+                              try:
+                                  response = rds_data.execute_statement(
+                                      resourceArn=cluster_arn,
+                                      secretArn=secret_arn,
+                                      database=secret['dbname'],
+                                      sql=sql
+                                  )
+                                  print(f"Executed SQL: {sql}")
+                                  print(f"Response: {response}")
+                              except Exception as sql_error:
+                                  print(f"Error executing SQL: {sql}")
+                                  print(f"Error: {str(sql_error)}")
+                                  raise sql_error
+
+                      responseData = {'Success': 'Finished database setup.'}
+
+                  except Exception as e:
+                      status = cfnresponse.FAILED
+                      tb_err = traceback.format_exc()
+                      print(tb_err)
+                      responseData = {'Error': tb_err}
+                  finally:
+                      cfnresponse.send(event, context, status, responseData, 'CustomResourcePhysicalID')
+      FunctionName: unicornstore-db-setup-lambda
+      Handler: index.lambda_handler
+      Role:
+        Fn::GetAtt:
+          - UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5
+          - Arn
+      Runtime: python3.13
+      Timeout: 180
+      VpcConfig:
+        SecurityGroupIds:
+          - Fn::GetAtt:
+              - InfrastructureCoreApplicationSecurityGroup914702B5
+              - GroupId
+        SubnetIds:
+          - Ref: UnicornStoreVpcPrivateSubnet1Subnet1D81DF60
+          - Ref: UnicornStoreVpcPrivateSubnet2Subnet4710EC68
+    DependsOn:
+      - InfrastructureCoreUnicornStoreDatabaseF56884BA
+      - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      - InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE
+      - UnicornDatabaseConstructDatabaseSetupFunctionServiceRoleDefaultPolicy3FC0A7F3
+      - UnicornDatabaseConstructDatabaseSetupFunctionServiceRole106B62D5
+      - UnicornStoreVpcPrivateSubnet1DefaultRoute18CAE313
+      - UnicornStoreVpcPrivateSubnet1RouteTableAssociationE6E7A751
+      - UnicornStoreVpcPrivateSubnet2DefaultRouteDA0F8992
+      - UnicornStoreVpcPrivateSubnet2RouteTableAssociation0C455BE6
+  UnicornDatabaseConstructDatabaseSetupResourceE1449E29:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - UnicornDatabaseConstructDatabaseSetupFunction8C55B639
+          - Arn
+      SqlStatements: CREATE TABLE IF NOT EXISTS unicorns(id TEXT DEFAULT gen_random_uuid() PRIMARY KEY, name TEXT, age TEXT, size TEXT, type TEXT);
+      SecretName:
+        Fn::Join:
+          - "-"
+          - - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "-"
+                    - Fn::Select:
+                        - 6
+                        - Fn::Split:
+                            - ":"
+                            - Ref: InfrastructureCorepostgresB0D0C6BB
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "-"
+                    - Fn::Select:
+                        - 6
+                        - Fn::Split:
+                            - ":"
+                            - Ref: InfrastructureCorepostgresB0D0C6BB
+            - Fn::Select:
+                - 2
+                - Fn::Split:
+                    - "-"
+                    - Fn::Select:
+                        - 6
+                        - Fn::Split:
+                            - ":"
+                            - Ref: InfrastructureCorepostgresB0D0C6BB
+    DependsOn:
+      - InfrastructureCoreUnicornStoreDatabaseF56884BA
+      - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
+      - InfrastructureCoreUnicornStoreDatabaseUnicornStoreDatabaseWriter1E7762FE
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+Outputs:
+  IdeUrl:
+    Description: Workshop IDE Url
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Fn::GetAtt:
+              - UnicornStoreIdeIdeDistribution9A9F0B03
+              - DomainName
+    Export:
+      Name: unicornstore-ide-url
+  IdePassword:
+    Description: Workshop IDE Password
+    Value:
+      Fn::GetAtt:
+        - UnicornStoreIdeIdePasswordExporter0662A4D7
+        - password
+    Export:
+      Name: unicornstore-ide-password
+  InfrastructureCoreExportedEventBridgeArnEB3310D9:
+    Value:
+      Fn::GetAtt:
+        - InfrastructureCoreUnicornEventBusBBADDC7E
+        - Arn
+    Export:
+      Name: UnicornStoreEventBridgeArn
+  InfrastructureCoreExportedSecurityGroupId13068424:
+    Value:
+      Fn::GetAtt:
+        - InfrastructureCoreApplicationSecurityGroup914702B5
+        - GroupId
+    Export:
+      Name: UnicornStoreSecurityGroupId
+  InfrastructureCoreExportedDatabaseConnectionD10DA171:
+    Value:
+      Fn::GetAtt:
+        - InfrastructureCoreSsmParameterDBConnectionString2EE427D4
+        - Value
+    Export:
+      Name: UnicornStoreDatabaseConnection
+Parameters:
+  SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64
+

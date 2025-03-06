@@ -6,6 +6,6 @@ public interface CfnExports {
 
     String UNICORN_STORE_SECURITY_GROUP_ID = "UnicornStoreSecurityGroupId";
 
-    String UNICORN_STORE_DATABASE_CONNECTION = "UNICORN_STORE_DATABASE_CONNECTION";
+    String UNICORN_STORE_DATABASE_CONNECTION = "UnicornStoreDatabaseConnection";
 
 }
