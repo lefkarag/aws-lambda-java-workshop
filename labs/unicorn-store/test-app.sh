@@ -4,7 +4,7 @@ app=$1
 
 if [ $app == "spring" ]
 then
-  curl --location --request POST $(cat infrastructure/cdk/target/output.json | jq -r '.UnicornStoreSpringApp.ApiEndpointSpring')'/unicorns' \
+  curl --location --request POST $(aws cloudformation list-exports --query "Exports[?Name=='UnicornStoreApiEndpointSpring'].Value" --output text)'/unicorns' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "name": "Something",

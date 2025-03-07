@@ -8,4 +8,6 @@ public interface CfnExports {
 
     String UNICORN_STORE_DATABASE_CONNECTION = "UnicornStoreDatabaseConnection";
 
+    String UNICORN_STORE_API_ENDPOINT_SPRING = "UnicornStoreApiEndpointSpring";
+
 }

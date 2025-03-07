@@ -69,11 +69,7 @@ public class UnicornStoreAppStack extends Stack {
     }
 
     private String getDatabaseSecret() {
-        SecretValue secretValue = SecretValue.secretsManager("unicornstore-db-password-secret",
-                SecretsManagerSecretOptions.builder()
-                        .jsonField("password")
-                        .build());
-
+        var secretValue = SecretValue.secretsManager("unicornstore-db-password-secret");
         return secretValue.toString();
     }
 

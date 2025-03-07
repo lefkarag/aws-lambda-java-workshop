@@ -4,7 +4,7 @@ TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-m
 AWS_REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')
 ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account --region $AWS_REGION)
 MAC_ADDRESS=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/network/interfaces/macs)
-VPC_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/network/interfaces/macs/$MAC_ADDRESS/vpc-id)
+export VPC_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/network/interfaces/macs/$MAC_ADDRESS/vpc-id)
 
 # Build the unicorn application
 cd ~/environment/aws-lambda-java-workshop/labs/unicorn-store
@@ -12,6 +12,6 @@ cd ~/environment/aws-lambda-java-workshop/labs/unicorn-store
 ./mvnw clean package -f software/alternatives/unicorn-store-micronaut/pom.xml
 ./mvnw clean package -f software/alternatives/unicorn-store-quarkus/pom.xml
 
-cd ~/environment/aws-lambda-java-workshop/infrastructure
+cd ~/environment/aws-lambda-java-workshop/infrastructure/cdk
 cdk bootstrap
 cdk deploy UnicornStoreAppStack --require-approval never --outputs-file target/output.json

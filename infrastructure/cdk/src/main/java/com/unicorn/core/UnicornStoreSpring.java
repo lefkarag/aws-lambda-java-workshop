@@ -1,5 +1,6 @@
 package com.unicorn.core;
 
+import com.unicorn.common.CfnExports;
 import software.amazon.awscdk.CfnOutput;
 import software.amazon.awscdk.CfnOutputProps;
 import software.amazon.awscdk.Duration;
@@ -46,6 +47,7 @@ public class UnicornStoreSpring extends Construct {
 
         new CfnOutput(scope, "ApiEndpointSpring", CfnOutputProps.builder()
                 .value(restApi.getUrl())
+                .exportName(CfnExports.UNICORN_STORE_API_ENDPOINT_SPRING)
                 .build());
     }
 
