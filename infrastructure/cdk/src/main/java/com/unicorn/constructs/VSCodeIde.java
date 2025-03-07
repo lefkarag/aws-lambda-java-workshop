@@ -180,8 +180,8 @@ public class VSCodeIde extends Construct {
                     .build());
         }
 
-        // props.getRole().addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess"));
-        props.getRole().addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("ReadOnlyAccess"));
+        // Admin access is removed at the end of the deployment
+        props.getRole().addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("AdministratorAccess"));
         props.getRole().addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"));
 
         var filePath = props.getAdditionalIamPolicyPath();
