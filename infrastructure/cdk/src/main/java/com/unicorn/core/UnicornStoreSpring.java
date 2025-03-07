@@ -39,16 +39,6 @@ public class UnicornStoreSpring extends Construct {
 
         //Setup a Proxy-Rest API to access the Spring Lambda function
         var restApi = setupRestApi(unicornStoreSpringLambda);
-
-        //Create output values for later reference
-        new CfnOutput(scope, "unicorn-store-spring-function-arn", CfnOutputProps.builder()
-                .value(unicornStoreSpringLambda.getFunctionArn())
-                .build());
-
-        new CfnOutput(scope, "ApiEndpointSpring", CfnOutputProps.builder()
-                .value(restApi.getUrl())
-                .exportName(CfnExports.UNICORN_STORE_API_ENDPOINT_SPRING)
-                .build());
     }
 
     private RestApi setupRestApi(Alias unicornStoreSpringLambdaAlias) {

@@ -14,8 +14,8 @@ public class UnicornStoreAppStack extends Stack {
     public UnicornStoreAppStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, StackProps.builder()
                 .env(Environment.builder()
-                        .account(System.getenv("ACCOUNT_ID"))
-                        .region(System.getenv("AWS_REGION"))
+                        .account(System.getenv("ACCOUNT_ID") != null ? System.getenv("ACCOUNT_ID") : "1234") // dummy value just to pass the cdk validation
+                        .region(System.getenv("AWS_REGION") != null ? System.getenv("AWS_REGION") : "us-east-1")
                         .build())
                 .build());
 
@@ -35,7 +35,7 @@ public class UnicornStoreAppStack extends Stack {
 //        var unicornStoreSpringGraalVM = new UnicornStoreSpringGraalVM(scope, "UnicornStoreSpringGraalVMApp", StackProps.builder()
 //                .build());
 //
-//        var unicornStoreQux``arkus = new UnicornStoreQuarkus(scope, "UnicornStoreQuarkusApp", StackProps.builder().build());
+//        var unicornStoreQuarkus = new UnicornStoreQuarkus(scope, "UnicornStoreQuarkusApp", StackProps.builder().build());
 
 //        var unicornAuditService = new UnicornAuditService(scope, "UnicornAuditServiceApp", StackProps.builder().build());
     }

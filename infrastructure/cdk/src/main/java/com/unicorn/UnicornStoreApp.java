@@ -15,10 +15,10 @@ public class UnicornStoreApp {
     public static void main(final String[] args) {
         App app = new App();
 
+        // Infra stack: VsCode IDE, VPC, RDS, EventBridge
         var unicornStoreInfraStack = new UnicornStoreInfraStack(app, "UnicornStoreInfraStack", StackProps.builder().build());
 
-        var ideStack = new IdeStack(app, "ide-stack");
-
+        // App stack: Lambdas, Api Gateway
         var unicornStoreAppStack = new UnicornStoreAppStack(app, "UnicornStoreAppStack", StackProps.builder().build());
 
         //Add CDK-NAG checks: https://github.com/cdklabs/cdk-nag
@@ -57,7 +57,6 @@ public class UnicornStoreApp {
         );
 
         NagSuppressions.addStackSuppressions(unicornStoreInfraStack, suppression);
-        NagSuppressions.addStackSuppressions(ideStack, suppression);
         NagSuppressions.addStackSuppressions(unicornStoreAppStack, suppression);
 
         app.synth();

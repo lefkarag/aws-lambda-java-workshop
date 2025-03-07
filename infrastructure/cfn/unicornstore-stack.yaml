@@ -288,7 +288,7 @@ Resources:
             - ""
             - - "arn:"
               - Ref: AWS::Partition
-              - :iam::aws:policy/ReadOnlyAccess
+              - :iam::aws:policy/AdministratorAccess
         - Fn::Join:
             - ""
             - - "arn:"
@@ -412,7 +412,7 @@ Resources:
   UnicornStoreIdeIdeLogGroup7A5EFA50:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: unicornstore-ide-bootstrap-log-20250306-145353
+      LogGroupName: unicornstore-ide-bootstrap-log-20250307-152059
       RetentionInDays: 7
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
@@ -870,9 +870,9 @@ Resources:
         description: Bootstrap IDE
         parameters:
           BootstrapScript:
-            type: String
-            description: (Optional) Custom bootstrap script to run.
             default: ""
+            description: (Optional) Custom bootstrap script to run.
+            type: String
         mainSteps:
           - inputs:
               runCommand:
@@ -995,14 +995,13 @@ Resources:
 
                         echo '=== Additional Setup ==='
                         sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
-                      domain: ""
-                      environmentContentsZip: ""
-                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
-                      codeServerVersion: 4.96.4
-                      instanceIamRoleName:
-                        Ref: UnicornStoreIdeIdeRole81A2CEAA
-                      readmeUrl: ""
-                      terminalOnStartup: "true"
+                      waitConditionHandleUrl:
+                        Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
+                      splashUrl: ""
+                      instanceIamRoleArn:
+                        Fn::GetAtt:
+                          - UnicornStoreIdeIdeRole81A2CEAA
+                          - Arn
                       passwordName:
                         Fn::Join:
                           - "-"
@@ -1042,13 +1041,14 @@ Resources:
                                         - Fn::Split:
                                             - ":"
                                             - Ref: UnicornStoreIdeIdePasswordSecret514252E2
-                      instanceIamRoleArn:
-                        Fn::GetAtt:
-                          - UnicornStoreIdeIdeRole81A2CEAA
-                          - Arn
-                      splashUrl: ""
-                      waitConditionHandleUrl:
-                        Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
+                      terminalOnStartup: "true"
+                      readmeUrl: ""
+                      instanceIamRoleName:
+                        Ref: UnicornStoreIdeIdeRole81A2CEAA
+                      codeServerVersion: 4.96.4
+                      extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
+                      environmentContentsZip: ""
+                      domain: ""
             name: IdeBootstrapFunction
             action: aws:runShellScript
       DocumentFormat: YAML
@@ -1186,12 +1186,12 @@ Resources:
         Fn::GetAtt:
           - UnicornStoreIdeIdeBootstrapFunctionF57074A6
           - Arn
-      LogGroupName:
-        Ref: UnicornStoreIdeIdeLogGroup7A5EFA50
-      InstanceId:
-        Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
       SsmDocument:
         Ref: UnicornStoreIdeIdeBootstrapDocumentE330810B
+      InstanceId:
+        Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
+      LogGroupName:
+        Ref: UnicornStoreIdeIdeLogGroup7A5EFA50
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
   InfrastructureCorepostgresB0D0C6BB:
@@ -1566,7 +1566,6 @@ Resources:
         Fn::GetAtt:
           - UnicornDatabaseConstructDatabaseSetupFunction8C55B639
           - Arn
-      SqlStatements: CREATE TABLE IF NOT EXISTS unicorns(id TEXT DEFAULT gen_random_uuid() PRIMARY KEY, name TEXT, age TEXT, size TEXT, type TEXT);
       SecretName:
         Fn::Join:
           - "-"
@@ -1597,6 +1596,7 @@ Resources:
                         - Fn::Split:
                             - ":"
                             - Ref: InfrastructureCorepostgresB0D0C6BB
+      SqlStatements: CREATE TABLE IF NOT EXISTS unicorns(id TEXT DEFAULT gen_random_uuid() PRIMARY KEY, name TEXT, age TEXT, size TEXT, type TEXT);
     DependsOn:
       - InfrastructureCoreUnicornStoreDatabaseF56884BA
       - InfrastructureCoreUnicornStoreDatabaseSubnets55C412B8
