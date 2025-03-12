@@ -16,13 +16,13 @@ public class UnicornStoreInfraStack extends Stack {
             
             echo '=== Clone Git repository ==='
             sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/environment/aws-lambda-java-workshop/"
-            sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring"
+            sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring-split"
             
             echo '=== Setup IDE ==='
             sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/setup-ide.sh"
             
             echo '=== Additional Setup ==='
-            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/build.sh"
+            
             """;
 
     public UnicornStoreInfraStack(final Construct scope, final String id, final StackProps props) {
