@@ -29,7 +29,12 @@ public class InfrastructureStack extends Stack {
     private final Secret secretPassword;
 
     public InfrastructureStack(final Construct scope, final String id, final StackProps props) {
-        super(scope, id, props);
+        super(scope, id, StackProps.builder()
+                .env(Environment.builder()
+                        .account(System.getenv("ACCOUNT_ID"))
+                        .region(System.getenv("AWS_REGION"))
+                        .build())
+                .build());
 
         vpc = findVpc();
         databaseSecret = createDatabaseSecret();

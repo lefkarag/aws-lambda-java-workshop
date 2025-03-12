@@ -22,7 +22,7 @@ public class UnicornStoreInfraStack extends Stack {
             sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup/setup-ide.sh"
             
             echo '=== Additional Setup ==='
-            
+            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/labs/unicorn-store/infrastructure/scripts/setup/build.sh"
             """;
 
     public UnicornStoreInfraStack(final Construct scope, final String id, final StackProps props) {

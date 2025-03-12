@@ -54,6 +54,7 @@ public class UnicornStoreApp {
                 new NagPackSuppression.Builder().id("AwsSolutions-APIG3").reason("Workshop API Gateways do not need AWS WAF assigned").build(),
                 new NagPackSuppression.Builder().id("AwsSolutions-EC23").reason("Not needed").build(),
                 new NagPackSuppression.Builder().id("AwsSolutions-RDS13").reason("Workshop Database does not need backups").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-RDS6").reason("The RDS Aurora MySQL/PostgresSQL cluster does not have IAM Database Authentication enabled").build(),
                 new NagPackSuppression.Builder().id("CdkNagValidationFailure").reason("Suppress warnings see: https://github.com/cdklabs/cdk-nag/issues/817").build()
         );
 
