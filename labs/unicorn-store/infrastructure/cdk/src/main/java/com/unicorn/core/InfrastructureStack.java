@@ -50,6 +50,10 @@ public class InfrastructureStack extends Stack {
 
         paramDBConnectionString = createParamDBConnectionString();
         secretPassword = createSecretPassword();
+
+        // Execute Database setup
+        var databaseSetup = new DatabaseSetup(this, "UnicornDatabaseConstruct", this);
+        databaseSetup.getNode().addDependency(getDatabase());
     }
 
     private IVpc findVpc() {
