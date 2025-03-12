@@ -18,7 +18,7 @@ public class DatabaseSetup extends Construct{
     private CustomResource databaseSetupResource;
 
     public DatabaseSetup(final Construct scope, final String id,
-                         final InfrastructureCore infrastructureCore) {
+                         final InfrastructureStack infrastructureStack) {
         super(scope, id);
 
         if (databaseSetupResource == null) {
@@ -28,21 +28,21 @@ public class DatabaseSetup extends Construct{
                     .runtime(Runtime.PYTHON_3_13)
                     .functionName("unicornstore-db-setup-lambda")
                     .timeout(Duration.minutes(3))
-                    .vpc(infrastructureCore.getVpc())
-                    .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
+                    .vpc(infrastructureStack.getVpc())
+                    .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
                     .build();
 
-            infrastructureCore.getDatabaseSecret().grantRead(databaseSetupFunction);
-            infrastructureCore.getDatabase().grantDataApiAccess(databaseSetupFunction);
+            infrastructureStack.getDatabaseSecret().grantRead(databaseSetupFunction);
+            infrastructureStack.getDatabase().grantDataApiAccess(databaseSetupFunction);
 
             databaseSetupResource = CustomResource.Builder.create(this, "DatabaseSetupResource")
                     .serviceToken(databaseSetupFunction.getFunctionArn())
                     .properties(Map.of(
-                            "SecretName", infrastructureCore.getDatabaseSecret().getSecretName(),
+                            "SecretName", infrastructureStack.getDatabaseSecret().getSecretName(),
                             "SqlStatements", loadFile("/schema.sql")
                     ))
                     .build();
-            databaseSetupResource.getNode().addDependency(infrastructureCore.getDatabase());
+            databaseSetupResource.getNode().addDependency(infrastructureStack.getDatabase());
         }
     }
 

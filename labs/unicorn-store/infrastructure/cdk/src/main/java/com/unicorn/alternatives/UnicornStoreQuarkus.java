@@ -1,6 +1,6 @@
 package com.unicorn.alternatives;
 
-import com.unicorn.core.InfrastructureCore;
+import com.unicorn.core.InfrastructureStack;
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.RestApi;
@@ -12,18 +12,18 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
 public class UnicornStoreQuarkus extends Stack {
 
-    private final InfrastructureCore infrastructureCore;
+    private final InfrastructureStack infrastructureStack;
 
-    public UnicornStoreQuarkus(final Construct scope, final String id, final StackProps props,
-                               final InfrastructureCore infrastructureCore) {
+    public UnicornStoreQuarkus(final Construct scope, final String id, final StackProps props, final InfrastructureStack infrastructureStack) {
         super(scope, id, props);
-        this.infrastructureCore = infrastructureCore;
+        this.infrastructureStack = infrastructureStack;
 
         //Quarkus app
         var unicornStoreQuarkus = createUnicornLambdaFunction();
-        infrastructureCore.getEventBridge().grantPutEventsTo(unicornStoreQuarkus);
+        infrastructureStack.getEventBridge().grantPutEventsTo(unicornStoreQuarkus);
 
         var restApi = setupRestApi(unicornStoreQuarkus);
 
@@ -40,19 +40,19 @@ public class UnicornStoreQuarkus extends Stack {
     }
 
     private Version createUnicornLambdaFunction() {
-        var lambda = Function.Builder.create(this, "UnicornStoreQuarkusFunction")
+        var lambda =  Function.Builder.create(this, "UnicornStoreQuarkusFunction")
                 .runtime(Runtime.JAVA_21)
                 .functionName("unicorn-store-quarkus")
                 .memorySize(2048)
                 .timeout(Duration.seconds(29))
-                .code(Code.fromAsset("../../labs/unicorn-store/software/alternatives/unicorn-store-quarkus/target/function.zip"))
+                .code(Code.fromAsset("../../software/alternatives/unicorn-store-quarkus/target/function.zip"))
                 .handler("io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest")
-                .vpc(infrastructureCore.getVpc())
-                .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
+                .vpc(infrastructureStack.getVpc())
+                .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
                 .snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS)
                 .environment(new HashMap<>() {{
-                    put("QUARKUS_DATASOURCE_PASSWORD", infrastructureCore.getDatabaseSecretString());
-                    put("QUARKUS_DATASOURCE_JDBC_URL", infrastructureCore.getDatabaseConnectionString());
+                    put("QUARKUS_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString());
+                    put("QUARKUS_DATASOURCE_JDBC_URL", infrastructureStack.getDatabaseJDBCConnectionString());
                     put("QUARKUS_DATASOURCE_JDBC_INITIAL_SIZE", "1");
                     put("QUARKUS_DATASOURCE_JDBC_MIN_SIZE", "0");
                     put("QUARKUS_DATASOURCE_JDBC_MAX_SIZE", "1");

@@ -1,16 +1,13 @@
 package com.unicorn.core;
 
-import com.unicorn.common.CfnExports;
+import com.unicorn.core.InfrastructureStack;
 import software.amazon.awscdk.CfnOutput;
 import software.amazon.awscdk.CfnOutputProps;
 import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
 import software.amazon.awscdk.services.apigateway.RestApi;
-import software.amazon.awscdk.services.ec2.ISecurityGroup;
-import software.amazon.awscdk.services.ec2.IVpc;
-import software.amazon.awscdk.services.ec2.Vpc;
-import software.amazon.awscdk.services.ec2.VpcLookupOptions;
-import software.amazon.awscdk.services.events.IEventBus;
 import software.amazon.awscdk.services.lambda.Alias;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
@@ -22,54 +19,63 @@ import java.util.Map;
 
 public class UnicornStoreSpring extends Construct {
 
-    private Construct scope;
+    private final InfrastructureStack infrastructureStack;
 
     public UnicornStoreSpring(final Construct scope, final String id,
-                              IEventBus eventBridge, IVpc vpc, ISecurityGroup securityGroup,
-                              String dbSecretString, String dbConnectionString) {
+                             final InfrastructureStack infrastructureStack) {
         super(scope, id);
 
-        this.scope = scope;
+        //Get previously created infrastructure stack
+        this.infrastructureStack = infrastructureStack;
+        var eventBridge = infrastructureStack.getEventBridge();
 
         //Create Spring Lambda function
-        var unicornStoreSpringLambda = createUnicornLambdaFunction(vpc, securityGroup, dbSecretString, dbConnectionString);
+        var unicornStoreSpringLambda = createUnicornLambdaFunction();
 
         //Permission for Spring Boot Lambda Function
         eventBridge.grantPutEventsTo(unicornStoreSpringLambda);
 
         //Setup a Proxy-Rest API to access the Spring Lambda function
         var restApi = setupRestApi(unicornStoreSpringLambda);
+
+        //Create output values for later reference
+        new CfnOutput(this, "unicorn-store-spring-function-arn", CfnOutputProps.builder()
+                .value(unicornStoreSpringLambda.getFunctionArn())
+                .build());
+
+        new CfnOutput(this, "ApiEndpointSpring", CfnOutputProps.builder()
+                .value(restApi.getUrl())
+                .build());
     }
 
     private RestApi setupRestApi(Alias unicornStoreSpringLambdaAlias) {
-        return LambdaRestApi.Builder.create(scope, "UnicornStoreSpringApi")
+        return LambdaRestApi.Builder.create(this, "UnicornStoreSpringApi")
                 .restApiName("UnicornStoreSpringApi")
                 .handler(unicornStoreSpringLambdaAlias)
                 .build();
     }
 
-    private Alias createUnicornLambdaFunction(IVpc vpc, ISecurityGroup securityGroup,
-                                              String dbSecretString, String dbConnectionString) {
-        var lambda = Function.Builder.create(scope, "UnicornStoreSpringFunction")
+    private Alias createUnicornLambdaFunction() {
+        var lambda = Function.Builder.create(this, "UnicornStoreSpringFunction")
                 .runtime(Runtime.JAVA_21)
                 .functionName("unicorn-store-spring")
                 .memorySize(512)
                 .timeout(Duration.seconds(29))
-                .code(Code.fromAsset("../../labs/unicorn-store/software/unicorn-store-spring/target/store-spring-1.0.0.jar"))
+                .code(Code.fromAsset("../../software/unicorn-store-spring/target/store-spring-1.0.0.jar"))
                 .handler("com.amazonaws.serverless.proxy.spring.SpringDelegatingLambdaContainerHandler")
-                .vpc(vpc)
-                .securityGroups(List.of(securityGroup))
+                .vpc(infrastructureStack.getVpc())
+                .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
                 .environment(Map.of(
                         "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                        "SPRING_DATASOURCE_PASSWORD", dbSecretString,
-                        "SPRING_DATASOURCE_URL", dbConnectionString,
+                        "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
+                        "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
                         "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1",
                         "AWS_SERVERLESS_JAVA_CONTAINER_INIT_GRACE_TIME", "500"
                 ))
                 .build();
 
         // Create an alias for the latest version
-        var alias = Alias.Builder.create(scope, "UnicornStoreSpringFunctionAlias")
+        var alias = Alias.Builder.create(this, "UnicornStoreSpringFunctionAlias")
                 .aliasName("live")
                 .version(lambda.getLatestVersion())
                 .build();

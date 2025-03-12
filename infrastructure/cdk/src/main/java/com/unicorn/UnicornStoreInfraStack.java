@@ -2,8 +2,6 @@ package com.unicorn;
 
 import com.unicorn.constructs.VSCodeIde;
 import com.unicorn.constructs.WorkshopVpc;
-import com.unicorn.core.DatabaseSetup;
-import com.unicorn.core.InfrastructureCore;
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.ec2.InstanceType;
@@ -50,13 +48,6 @@ public class UnicornStoreInfraStack extends Stack {
                 "vscjava.vscode-java-pack"
         ));
         new VSCodeIde(this, "UnicornStoreIde", ideProps);
-
-        // Create Core infrastructure
-        var infrastructureCore = new InfrastructureCore(this, "InfrastructureCore", vpc);
-
-        // Execute Database setup
-        var databaseSetup = new DatabaseSetup(this, "UnicornDatabaseConstruct", infrastructureCore);
-        databaseSetup.getNode().addDependency(infrastructureCore.getDatabase());
     }
 
 }

@@ -3,7 +3,7 @@ package com.unicorn.alternatives;
 import java.util.HashMap;
 import java.util.List;
 
-import com.unicorn.core.InfrastructureCore;
+import com.unicorn.core.InfrastructureStack;
 
 import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.apigateway.LambdaRestApi;
@@ -14,16 +14,15 @@ import software.constructs.Construct;
 
 public class UnicornStoreMicronaut extends Stack {
 
-    private final InfrastructureCore infrastructureCore;
+    private final InfrastructureStack infrastructureStack;
 
-    public UnicornStoreMicronaut(final Construct scope, final String id, final StackProps props,
-                                 final InfrastructureCore infrastructureCore) {
+    public UnicornStoreMicronaut(final Construct scope, final String id, final StackProps props, final InfrastructureStack infrastructureStack) {
         super(scope, id, props);
-        this.infrastructureCore = infrastructureCore;
+        this.infrastructureStack = infrastructureStack;
 
         //Micronaut app
         var unicornStoreMicronaut = createUnicornLambdaFunction();
-        infrastructureCore.getEventBridge().grantPutEventsTo(unicornStoreMicronaut);
+        infrastructureStack.getEventBridge().grantPutEventsTo(unicornStoreMicronaut);
 
         var restApi = setupRestApi(unicornStoreMicronaut);
 
@@ -45,14 +44,14 @@ public class UnicornStoreMicronaut extends Stack {
                 .functionName("unicorn-store-micronaut")
                 .memorySize(2048)
                 .timeout(Duration.seconds(29))
-                .code(Code.fromAsset("../../labs/unicorn-store/software/alternatives/unicorn-store-micronaut/target/store-micronaut-2.0.0.jar"))
+                .code(Code.fromAsset("../../software/alternatives/unicorn-store-micronaut/target/store-micronaut-2.0.0.jar"))
                 .handler("io.micronaut.function.aws.proxy.payload1.ApiGatewayProxyRequestEventFunction")
-                .vpc(infrastructureCore.getVpc())
+                .vpc(infrastructureStack.getVpc())
                 .snapStart(SnapStartConf.ON_PUBLISHED_VERSIONS)
-                .securityGroups(List.of(infrastructureCore.getApplicationSecurityGroup()))
+                .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
                 .environment(new HashMap<>() {{
-                    put("DATASOURCES_DEFAULT_PASSWORD", infrastructureCore.getDatabaseSecretString());
-                    put("DATASOURCES_DEFAULT_URL", infrastructureCore.getDatabaseConnectionString());
+                    put("DATASOURCES_DEFAULT_PASSWORD", infrastructureStack.getDatabaseSecretString());
+                    put("DATASOURCES_DEFAULT_URL", infrastructureStack.getDatabaseJDBCConnectionString());
                     put("DATASOURCES_DEFAULT_maxPoolSize", "1");
                 }})
                 .build();

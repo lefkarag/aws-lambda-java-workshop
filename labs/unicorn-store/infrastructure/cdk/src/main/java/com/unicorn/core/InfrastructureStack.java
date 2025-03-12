@@ -1,15 +1,7 @@
 package com.unicorn.core;
 
-import com.unicorn.common.CfnExports;
 import software.amazon.awscdk.*;
-import software.amazon.awscdk.services.ec2.IVpc;
-import software.amazon.awscdk.services.ec2.Port;
-import software.amazon.awscdk.services.ec2.Peer;
-import software.amazon.awscdk.services.ec2.SecurityGroup;
-import software.amazon.awscdk.services.ec2.SubnetSelection;
-import software.amazon.awscdk.services.ec2.SubnetType;
-import software.amazon.awscdk.services.ec2.ISecurityGroup;
-import software.amazon.awscdk.services.ec2.SecurityGroupProps;
+import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.events.EventBus;
 import software.amazon.awscdk.services.rds.AuroraPostgresClusterEngineProps;
 import software.amazon.awscdk.services.rds.ServerlessV2ClusterInstanceProps;
@@ -26,7 +18,7 @@ import software.constructs.Construct;
 
 import java.util.List;
 
-public class InfrastructureCore extends Construct {
+public class InfrastructureStack extends Stack {
 
     private final DatabaseSecret databaseSecret;
     private final DatabaseCluster database;
@@ -36,10 +28,10 @@ public class InfrastructureCore extends Construct {
     private final StringParameter paramDBConnectionString;
     private final Secret secretPassword;
 
-    public InfrastructureCore(final Construct scope, final String id, final IVpc vpc) {
-        super(scope, id);
+    public InfrastructureStack(final Construct scope, final String id, final StackProps props) {
+        super(scope, id, props);
 
-        this.vpc = vpc;
+        vpc = findVpc();
         databaseSecret = createDatabaseSecret();
         database = createDatabase(vpc, databaseSecret);
         eventBridge = createEventBus();
@@ -53,21 +45,14 @@ public class InfrastructureCore extends Construct {
 
         paramDBConnectionString = createParamDBConnectionString();
         secretPassword = createSecretPassword();
+    }
 
-        new CfnOutput(this, "ExportedEventBridgeArn", CfnOutputProps.builder()
-                .value(eventBridge.getEventBusArn())
-                .exportName(CfnExports.UNICORN_STORE_EVENT_BRIDGE_ARN)
+    private IVpc findVpc() {
+        var vpc = Vpc.fromLookup(this, "ImportedVpcId", VpcLookupOptions.builder()
+                .vpcId(System.getenv("VPC_ID"))
                 .build());
 
-        new CfnOutput(this, "ExportedSecurityGroupId", CfnOutputProps.builder()
-                .value(applicationSecurityGroup.getSecurityGroupId())
-                .exportName(CfnExports.UNICORN_STORE_SECURITY_GROUP_ID)
-                .build());
-
-        new CfnOutput(this, "ExportedDatabaseConnection", CfnOutputProps.builder()
-                .value(paramDBConnectionString.getStringValue())
-                .exportName(CfnExports.UNICORN_STORE_DATABASE_CONNECTION)
-                .build());
+        return vpc;
     }
 
     private EventBus createEventBus() {
@@ -144,12 +129,12 @@ public class InfrastructureCore extends Construct {
                 .allowedPattern(".*")
                 .description("Database Connection String")
                 .parameterName("unicornstore-db-connection-string")
-                .stringValue(getDatabaseConnectionString())
+                .stringValue(getDatabaseJDBCConnectionString())
                 .tier(ParameterTier.STANDARD)
                 .build();
     }
 
-    public String getDatabaseConnectionString(){
+    public String getDatabaseJDBCConnectionString(){
         return "jdbc:postgresql://" + database.getClusterEndpoint().getHostname() + ":5432/unicorns";
     }
 

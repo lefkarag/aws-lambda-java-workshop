@@ -420,7 +420,6 @@ public class VSCodeIde extends Construct {
                         Map.entry("codeServerVersion", props.getCodeServerVersion()),
                         Map.entry("waitConditionHandleUrl", waitHandle.getRef()),
                         Map.entry("customBootstrapScript", props.getBootstrapScript()),
-//                        Map.entry("installGitea", addGiteaToSSMTemplate(props.isEnableGitea())),
                         Map.entry("splashUrl", props.getSplashUrl()),
                         Map.entry("readmeUrl", props.getReadmeUrl()),
                         Map.entry("environmentContentsZip", props.getEnvironmentContentsZip()),
@@ -517,15 +516,6 @@ public class VSCodeIde extends Construct {
             return Files.readString(Path.of(getClass().getResource(filePath).getPath()));
         } catch (IOException e) {
             throw new RuntimeException("Failed to load file " + filePath, e);
-        }
-    }
-
-    private String addGiteaToSSMTemplate(Boolean enableGitea) {
-        if (!enableGitea) {
-            return "echo bootstrapGitea was not provided";
-        }
-        else {
-            return loadFile("/bootstrapGitea.sh");
         }
     }
 }
