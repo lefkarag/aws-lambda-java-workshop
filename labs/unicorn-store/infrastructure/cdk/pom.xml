@@ -31,7 +31,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>com.unicorn.UnicornStoreInfraApp</mainClass>
+                    <mainClass>com.unicorn.UnicornStoreApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>
