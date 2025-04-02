@@ -2,11 +2,6 @@ package com.unicorn;
 
 import java.util.List;
 
-import com.unicorn.alternatives.UnicornStoreMicronaut;
-import com.unicorn.alternatives.UnicornStoreQuarkus;
-import com.unicorn.alternatives.UnicornStoreSpringGraalVM;
-import com.unicorn.core.InfrastructureStack;
-
 import io.github.cdklabs.cdknag.AwsSolutionsChecks;
 import io.github.cdklabs.cdknag.NagPackSuppression;
 import io.github.cdklabs.cdknag.NagSuppressions;
@@ -14,25 +9,12 @@ import software.amazon.awscdk.App;
 import software.amazon.awscdk.Aspects;
 import software.amazon.awscdk.StackProps;
 
-public class UnicornStoreApp {
+public class UnicornStoreInfraApp {
 
     public static void main(final String[] args) {
         App app = new App();
 
-        var infrastructureStack = new InfrastructureStack(app, "UnicornStoreInfrastructure", StackProps.builder()
-                .build());
-
-        var unicornStoreSpring = new UnicornStoreStack(app, "UnicornStoreSpringApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-        var unicornStoreMicronaut = new UnicornStoreMicronaut(app, "UnicornStoreMicronautApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-        var unicornStoreSpringGraalVM = new UnicornStoreSpringGraalVM(app, "UnicornStoreSpringGraalVMApp", StackProps.builder()
-                .build(), infrastructureStack);
-
-        var unicornStoreQuarkus = new UnicornStoreQuarkus(app, "UnicornStoreQuarkusApp", StackProps.builder()
-                .build(), infrastructureStack);
+        var unicornStoreInfraStack = new UnicornStoreInfraStack(app, "UnicornStoreInfraStack", StackProps.builder().build());
 
         //Add CDK-NAG checks: https://github.com/cdklabs/cdk-nag
         //Add suppression to exclude certain findings that are not needed for Workshop environment
@@ -54,15 +36,22 @@ public class UnicornStoreApp {
                 new NagPackSuppression.Builder().id("AwsSolutions-APIG3").reason("Workshop API Gateways do not need AWS WAF assigned").build(),
                 new NagPackSuppression.Builder().id("AwsSolutions-EC23").reason("Not needed").build(),
                 new NagPackSuppression.Builder().id("AwsSolutions-RDS13").reason("Workshop Database does not need backups").build(),
-                new NagPackSuppression.Builder().id("AwsSolutions-RDS6").reason("The RDS Aurora MySQL/PostgresSQL cluster does not have IAM Database Authentication enabled").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-S1").reason("Workshop S3 bucket does not need Access Logs").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-L1").reason("Workshop environment use CDK default Lambdas" ).build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-RDS6").reason("Workshop environment uses user/password authentication").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-EC28").reason("Workshop instance doesn't need autoscaling").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-EC29").reason("Workshop instance doesn't need autoscaling").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-CFR1").reason("Workshop environment should be accessible from any Geo").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-CFR2").reason("Ephemeral workshop environment does not need WAF").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-CFR3").reason("Ephemeral workshop environment does not need logging").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-CFR4").reason("Workshop instance uses http").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-CFR5").reason("Workshop instance uses http").build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-EKS1").reason("Workshop non-sensitive EKS cluster uses public access" ).build(),
+                new NagPackSuppression.Builder().id("AwsSolutions-CB4").reason("CodeBuild uses default AWS-managed CMK for S3" ).build(),
                 new NagPackSuppression.Builder().id("CdkNagValidationFailure").reason("Suppress warnings see: https://github.com/cdklabs/cdk-nag/issues/817").build()
         );
 
-        NagSuppressions.addStackSuppressions(infrastructureStack, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreSpring, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreMicronaut, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreSpringGraalVM, suppression);
-        NagSuppressions.addStackSuppressions(unicornStoreQuarkus, suppression);
+        NagSuppressions.addStackSuppressions(unicornStoreInfraStack, suppression);
 
         app.synth();
     }

@@ -17,7 +17,13 @@ public class UnicornStoreSpringGraalVM extends Stack {
     private final InfrastructureStack infrastructureStack;
 
     public UnicornStoreSpringGraalVM(final Construct scope, final String id, final StackProps props, final InfrastructureStack infrastructureStack) {
-        super(scope, id, props);
+        super(scope, id, StackProps.builder()
+                .env(Environment.builder()
+                        .account(System.getenv("ACCOUNT_ID"))
+                        .region(System.getenv("AWS_REGION"))
+                        .build())
+                .build());
+
         this.infrastructureStack = infrastructureStack;
 
         var unicornStoreSpringGraalVM = createUnicornLambdaFunction();
@@ -53,10 +59,10 @@ public class UnicornStoreSpringGraalVM extends Stack {
                 .vpc(infrastructureStack.getVpc())
                 .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
                 .environment(Map.of(
-                    "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                    "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
-                    "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
-                    "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1")
+                        "MAIN_CLASS", "com.unicorn.store.StoreApplication",
+                        "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
+                        "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
+                        "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1")
                 )
                 .build();
     }

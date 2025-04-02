@@ -6,7 +6,8 @@ target
 .settings
 .vscode
 *.iml
-.mvn
+package-lock.json
+node_modules
 
 # CDK asset staging directory
 .cdk.staging

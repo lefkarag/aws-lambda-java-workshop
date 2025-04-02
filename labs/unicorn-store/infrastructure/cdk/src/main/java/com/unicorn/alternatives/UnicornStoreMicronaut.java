@@ -17,7 +17,13 @@ public class UnicornStoreMicronaut extends Stack {
     private final InfrastructureStack infrastructureStack;
 
     public UnicornStoreMicronaut(final Construct scope, final String id, final StackProps props, final InfrastructureStack infrastructureStack) {
-        super(scope, id, props);
+        super(scope, id, StackProps.builder()
+                .env(Environment.builder()
+                        .account(System.getenv("ACCOUNT_ID"))
+                        .region(System.getenv("AWS_REGION"))
+                        .build())
+                .build());
+
         this.infrastructureStack = infrastructureStack;
 
         //Micronaut app
