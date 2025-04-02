@@ -67,11 +67,11 @@ public class UnicornStoreStack extends Stack {
                 .vpc(infrastructureStack.getVpc())
                 .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
                 .environment(Map.of(
-                        "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                        "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
-                        "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
-                        "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1",
-                        "AWS_SERVERLESS_JAVA_CONTAINER_INIT_GRACE_TIME", "500"
+                    "MAIN_CLASS", "com.unicorn.store.StoreApplication",
+                    "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
+                    "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
+                    "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1",
+                    "AWS_SERVERLESS_JAVA_CONTAINER_INIT_GRACE_TIME", "500"
                 ))
                 .build();
 

@@ -59,10 +59,10 @@ public class UnicornStoreSpringGraalVM extends Stack {
                 .vpc(infrastructureStack.getVpc())
                 .securityGroups(List.of(infrastructureStack.getApplicationSecurityGroup()))
                 .environment(Map.of(
-                        "MAIN_CLASS", "com.unicorn.store.StoreApplication",
-                        "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
-                        "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
-                        "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1")
+                    "MAIN_CLASS", "com.unicorn.store.StoreApplication",
+                    "SPRING_DATASOURCE_PASSWORD", infrastructureStack.getDatabaseSecretString(),
+                    "SPRING_DATASOURCE_URL", infrastructureStack.getDatabaseJDBCConnectionString(),
+                    "SPRING_DATASOURCE_HIKARI_maximumPoolSize", "1")
                 )
                 .build();
     }
