@@ -1,4 +1,5 @@
 #bin/sh
+set -e
 
 cd /tmp
 
@@ -56,6 +57,9 @@ yq --version
 TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 export AWS_REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')
 export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account --region $AWS_REGION)
+MAC_ADDRESS=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/network/interfaces/macs)
+export VPC_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/network/interfaces/macs/$MAC_ADDRESS/vpc-id)
+
 echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile
 echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bashrc
 echo "export CDK_DEFAULT_ACCOUNT=${ACCOUNT_ID}" | tee -a ~/.bash_profile
@@ -64,15 +68,11 @@ echo "export AWS_REGION=${AWS_REGION}" | tee -a ~/.bash_profile
 echo "export AWS_REGION=${AWS_REGION}" | tee -a ~/.bashrc
 echo "export AWS_DEFAULT_REGION=${AWS_REGION}" | tee -a ~/.bash_profile
 echo "export AWS_DEFAULT_REGION=${AWS_REGION}" | tee -a ~/.bashrc
+echo "export VPC_ID=${VPC_ID}" | tee -a ~/.bashrc
+
 aws configure set default.region ${AWS_REGION}
 aws configure get default.region
 test -n "$AWS_REGION" && echo AWS_REGION is "$AWS_REGION" || echo AWS_REGION is not set
-
-## Build the unicorn application
-cd ~/environment/aws-lambda-java-workshop/labs/unicorn-store
-./mvnw clean package -f software/unicorn-store-spring/pom.xml
-./mvnw clean package -f software/alternatives/unicorn-store-micronaut/pom.xml
-./mvnw clean package -f software/alternatives/unicorn-store-quarkus/pom.xml
 
 ##  Download & install Session Manager plugin
 curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" -o "session-manager-plugin.rpm"
