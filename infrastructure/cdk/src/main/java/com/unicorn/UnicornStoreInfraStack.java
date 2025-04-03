@@ -19,10 +19,10 @@ public class UnicornStoreInfraStack extends Stack {
             sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring-split"
             
             echo '=== Setup IDE ==='
-            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup-ide.sh"
+            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup-ide.sh >> /home/ec2-user/setup-ide.log"
             
             echo '=== Additional Setup ==='
-            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/labs/unicorn-store/setup-infrastructure.sh"
+            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/labs/unicorn-store/setup-infrastructure.sh >> /home/ec2-user/setup-infra.log"
             """;
 
     public UnicornStoreInfraStack(final Construct scope, final String id, final StackProps props) {

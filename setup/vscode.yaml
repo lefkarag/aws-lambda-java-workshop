@@ -412,7 +412,7 @@ Resources:
   UnicornStoreIdeIdeLogGroup7A5EFA50:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: unicornstore-ide-bootstrap-log-20250402-152115
+      LogGroupName: unicornstore-ide-bootstrap-log-20250403-112540
       RetentionInDays: 7
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
@@ -983,7 +983,19 @@ Resources:
                       /opt/aws/bin/cfn-signal -e $exit_code '${waitConditionHandleUrl}'
 
                       exit $exit_code
-                    - waitConditionHandleUrl:
+                    - customBootstrapScript: |
+                        date
+
+                        echo '=== Clone Git repository ==='
+                        sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/environment/aws-lambda-java-workshop/"
+                        sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring-split"
+
+                        echo '=== Setup IDE ==='
+                        sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup-ide.sh >> /home/ec2-user/setup-ide.log"
+
+                        echo '=== Additional Setup ==='
+                        sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/labs/unicorn-store/setup-infrastructure.sh >> /home/ec2-user/setup-infra.log"
+                      waitConditionHandleUrl:
                         Ref: UnicornStoreIdeIdeBootstrapWaitConditionHandle3D9B67F1
                       splashUrl: ""
                       instanceIamRoleArn:
@@ -1037,18 +1049,6 @@ Resources:
                       extensions: amazonwebservices.aws-toolkit-vscode,amazonwebservices.amazon-q-vscode,vscjava.vscode-java-pack
                       environmentContentsZip: ""
                       domain: ""
-                      customBootstrapScript: |
-                        date
-
-                        echo '=== Clone Git repository ==='
-                        sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/environment/aws-lambda-java-workshop/"
-                        sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring-split"
-
-                        echo '=== Setup IDE ==='
-                        sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup-ide.sh"
-
-                        echo '=== Additional Setup ==='
-                        sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/labs/unicorn-store/setup-infrastructure.sh"
             name: IdeBootstrapFunction
             action: aws:runShellScript
       DocumentFormat: YAML
@@ -1186,12 +1186,12 @@ Resources:
         Fn::GetAtt:
           - UnicornStoreIdeIdeBootstrapFunctionF57074A6
           - Arn
-      LogGroupName:
-        Ref: UnicornStoreIdeIdeLogGroup7A5EFA50
       SsmDocument:
         Ref: UnicornStoreIdeIdeBootstrapDocumentE330810B
       InstanceId:
         Ref: UnicornStoreIdeIdeEC2Instance5F393FC5
+      LogGroupName:
+        Ref: UnicornStoreIdeIdeLogGroup7A5EFA50
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
 Outputs:
