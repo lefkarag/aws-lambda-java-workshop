@@ -1,5 +1,4 @@
 #bin/sh
-set -e
 
 # Build the unicorn application
 cd ~/environment/aws-lambda-java-workshop/labs/unicorn-store
