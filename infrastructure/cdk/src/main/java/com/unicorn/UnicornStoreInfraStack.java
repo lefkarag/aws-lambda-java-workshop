@@ -13,16 +13,16 @@ public class UnicornStoreInfraStack extends Stack {
 
     private final static String BOOTSTRAP_SCRIPT = """
             date
-            
+    
             echo '=== Clone Git repository ==='
-            sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git ~/environment/aws-lambda-java-workshop/"
-            sudo -H -u ec2-user bash -c "cd ~/environment/aws-lambda-java-workshop && git checkout cdk-refactoring-split"
-            
+            sudo -H -u ec2-user bash -c "git clone https://github.com/lefkarag/aws-lambda-java-workshop.git /home/ec2-user/environment/aws-lambda-java-workshop/"
+            sudo -H -u ec2-user bash -c "cd /home/ec2-user/environment/aws-lambda-java-workshop && git checkout cdk-refactoring-split"
+    
             echo '=== Setup IDE ==='
-            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/infrastructure/scripts/setup-ide.sh >> /home/ec2-user/setup-ide.log"
-            
+            sudo -H -i -u ec2-user bash -c "/home/ec2-user/environment/aws-lambda-java-workshop/infrastructure/scripts/setup-ide.sh >> /home/ec2-user/setup-ide.log"
+    
             echo '=== Additional Setup ==='
-            sudo -H -i -u ec2-user bash -c "~/environment/aws-lambda-java-workshop/labs/unicorn-store/setup-infrastructure.sh >> /home/ec2-user/setup-infra.log"
+            sudo -H -i -u ec2-user bash -c "/home/ec2-user/environment/aws-lambda-java-workshop/labs/unicorn-store/setup-infrastructure.sh >> /home/ec2-user/setup-infra.log"
             """;
 
     public UnicornStoreInfraStack(final Construct scope, final String id, final StackProps props) {
